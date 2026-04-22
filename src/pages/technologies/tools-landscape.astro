@@ -1,0 +1,111 @@
+---
+import ContentLayout from '../../layouts/ContentLayout.astro';
+import StepWalkthrough from '../../components/StepWalkthrough.astro';
+---
+
+<ContentLayout
+  title="The AI Security Tools Landscape"
+  description="A map of every major category of tools available to protect AI systems — what each does, what it doesn't do, and when you need it."
+  category="Core Technologies"
+  readingTime="12 min read"
+>
+
+<div class="callout callout-info">
+  <span class="callout-icon">💡</span>
+  <p>You don't need every category immediately. Start with <strong>visibility</strong>. You cannot govern what you cannot see. Work through the categories in order of priority below.</p>
+</div>
+
+<h2>The Eight Tool Categories</h2>
+
+<div class="threat-card info">
+  <h4>1. AI Gateway / Proxy</h4>
+  <p><strong>What it does:</strong> Sits between your applications and AI providers. Every AI request flows through it, giving you centralized visibility, control, and cost management across every model and team.</p>
+  <p><strong>Key tools:</strong> LiteLLM (open source), Azure AI Gateway, AWS Bedrock Gateway, Kong AI Gateway</p>
+  <p><strong>What it gives you:</strong> Unified API key management, per-team usage tracking, cost budgets and alerts, rate limiting, model version control, request/response logging, instant ability to cut off a team or model.</p>
+  <p><strong>Who needs it:</strong> Every organization deploying AI at scale. This is the first tool to deploy.</p>
+  <p><strong>What it doesn't do:</strong> It doesn't evaluate content or make safety judgments — it controls access and provides visibility.</p>
+</div>
+
+<div class="threat-card info">
+  <h4>2. Guardrails & Policy Engines</h4>
+  <p><strong>What it does:</strong> Evaluates inputs and outputs against defined behavioral rules, enforcing what the AI can and cannot say or do.</p>
+  <p><strong>Key tools:</strong> NeMo Guardrails (NVIDIA, open source), Guardrails AI (open source), Llama Guard (Meta, open source), Lakera Guard (commercial)</p>
+  <p><strong>What it gives you:</strong> Consistent policy enforcement, audit trails of policy decisions, protection against known jailbreak patterns, regulatory compliance demonstration.</p>
+  <p><strong>Who needs it:</strong> Customer-facing AI deployments, regulated industries (finance, healthcare, legal), any AI where specific claims or topics require controlled handling.</p>
+  <p><strong>What it doesn't do:</strong> Guardrails miss novel attacks not in their rules. They are a layer, not a complete solution. They must be actively maintained as new attack patterns emerge.</p>
+</div>
+
+<div class="threat-card info">
+  <h4>3. Agent Observability & Tracing</h4>
+  <p><strong>What it does:</strong> Records the complete reasoning trace of agent behavior — every thought, every tool call, every intermediate step — so you can understand and audit what agents actually did.</p>
+  <p><strong>Key tools:</strong> LangSmith (LangChain), Langfuse (open source), AgentOps, Arize Phoenix, Helicone</p>
+  <p><strong>What it gives you:</strong> Full audit trail of agent decisions, debugging capability when agents behave unexpectedly, performance monitoring, cost tracking at the agent level, anomaly detection on agent behavior patterns.</p>
+  <p><strong>Who needs it:</strong> Any team running autonomous agents. Essential for incident investigation and compliance demonstration.</p>
+  <p><strong>What it doesn't do:</strong> Observability tells you what happened — it doesn't prevent it. It's your forensic and monitoring layer, not your prevention layer.</p>
+</div>
+
+<div class="threat-card info">
+  <h4>4. Secure Execution Environments (Sandboxes)</h4>
+  <p><strong>What it does:</strong> Provides isolated, controlled environments for running agent code — separating agent execution from production systems.</p>
+  <p><strong>Key tools:</strong> E2B (cloud sandboxes for agents), Modal (serverless compute), Daytona, Firecracker (AWS, microVMs), standard container isolation (Docker + security profiles)</p>
+  <p><strong>What it gives you:</strong> Code execution without production system exposure, time-limited execution, network-isolated environments, the ability to safely let agents "try" code without risk.</p>
+  <p><strong>Who needs it:</strong> Any agent that can execute code. Non-negotiable for code-executing agents in any environment with access to production data or systems.</p>
+</div>
+
+<div class="threat-card info">
+  <h4>5. Red Teaming & Adversarial Testing</h4>
+  <p><strong>What it does:</strong> Systematically probes AI systems for vulnerabilities — prompt injections, jailbreaks, data extraction, harmful outputs — before attackers do.</p>
+  <p><strong>Key tools:</strong> PyRIT (Microsoft, open source), Garak (open source), PromptBench, Promptfoo (open source), Rebuff (prompt injection detector)</p>
+  <p><strong>What it gives you:</strong> Discovery of vulnerabilities before production deployment, a repeatable testing process, metrics for AI security posture over time, evidence of due diligence for compliance purposes.</p>
+  <p><strong>Who needs it:</strong> Every team deploying customer-facing or autonomous agents should red team before launch. Security teams should run ongoing red teaming as a continuous practice.</p>
+</div>
+
+<div class="threat-card info">
+  <h4>6. Data Security for AI Pipelines</h4>
+  <p><strong>What it does:</strong> Detects, redacts, and manages personally identifiable information (PII) and other sensitive data as it flows through AI systems.</p>
+  <p><strong>Key tools:</strong> Private AI (PII redaction), Securiti (AI data governance), Nightfall AI (sensitive data discovery), Microsoft Presidio (open source PII detection)</p>
+  <p><strong>What it gives you:</strong> Automatic PII detection before data reaches AI models, redaction of sensitive information from AI inputs and outputs, audit trails of data handling for GDPR/CCPA compliance, classification of AI-processed data.</p>
+  <p><strong>Who needs it:</strong> Any organization processing customer, employee, or patient data with AI. Increasingly required for regulatory compliance.</p>
+</div>
+
+<div class="threat-card info">
+  <h4>7. AI-Specific Threat Detection</h4>
+  <p><strong>What it does:</strong> Security monitoring purpose-built for AI/ML systems — detecting model theft, adversarial inputs, data poisoning, and anomalous model behavior.</p>
+  <p><strong>Key tools:</strong> Protect AI (platform), HiddenLayer (ML security), Robust Intelligence (now part of Cisco)</p>
+  <p><strong>What it gives you:</strong> Detection of attacks targeting your AI models specifically, model integrity monitoring, adversarial input detection, integration with existing SIEM/SOC workflows.</p>
+  <p><strong>Who needs it:</strong> Organizations with mature AI security programs and significant AI deployments where model-specific threats are a material risk.</p>
+</div>
+
+<div class="threat-card info">
+  <h4>8. Model Evaluation & Safety Testing</h4>
+  <p><strong>What it does:</strong> Systematically evaluates AI model capabilities, safety behaviors, and alignment with your requirements — before and during production deployment.</p>
+  <p><strong>Key tools:</strong> OpenAI Evals (open source), Eleuther AI LM Evaluation Harness (open source), Anthropic Evals, BenchLabs, Scale AI evaluation platform</p>
+  <p><strong>What it gives you:</strong> Objective measurement of model behavior on safety-relevant benchmarks, regression testing when models are updated, comparison across model versions and providers, evidence of model suitability for your use case.</p>
+  <p><strong>Who needs it:</strong> Teams selecting models for production use, teams fine-tuning models, and teams whose regulatory environment requires demonstrable model assessment.</p>
+</div>
+
+<h2>Building Your Stack in Priority Order</h2>
+
+<StepWalkthrough
+  title="The AI Security Stack — In the Right Sequence"
+  steps={[
+    { title: "Start with visibility (Gateway/Proxy)", content: "You cannot govern what you cannot see. Deploy an AI gateway as your first investment. Every request becomes visible, attributable, and controllable. This alone transforms AI from a shadow IT problem into a managed resource.", icon: "👁️" },
+    { title: "Add behavioral controls (Guardrails)", content: "Once you can see all AI traffic, add guardrails for customer-facing and regulated deployments. Define the rules your AI must follow. Start with the highest-risk use cases — where incorrect AI output has the greatest business consequence.", icon: "🛡️" },
+    { title: "Instrument agent monitoring (Observability)", content: "As you deploy autonomous agents, add tracing and observability. You need to be able to answer: what did the agent do, why did it do it, and what were the results? This is your forensic capability and your debugging tool.", icon: "📊" },
+    { title: "Protect data flows (Data Security)", content: "Add PII detection and data classification to your AI pipelines. Know what sensitive data is flowing through your AI systems, where it's going, and whether it's being handled appropriately.", icon: "🔒" },
+    { title: "Test adversarially (Red Teaming)", content: "Before going live with any significant AI deployment, red team it. Use automated tools and human testers to find what your guardrails and controls miss. Make red teaming a recurring practice, not a one-time gate.", icon: "🧪" },
+  ]}
+/>
+
+<div class="defense-section">
+  <h3>The AI Security Maturity Model</h3>
+  <ul>
+    <li><strong>Level 1 — Visibility:</strong> AI gateway deployed, all AI usage visible and attributed, cost monitoring in place. You know what you have.</li>
+    <li><strong>Level 2 — Controls:</strong> Guardrails on customer-facing AI, data security in AI pipelines, sandboxed agent execution, least-privilege permissions documented.</li>
+    <li><strong>Level 3 — Testing:</strong> Red teaming before all production AI launches, agent observability deployed, anomaly alerting configured, AI incident response playbook exists.</li>
+    <li><strong>Level 4 — Program:</strong> Continuous red teaming cadence, AI-specific threat detection, regular permission audits, board-level AI security reporting, compliance framework alignment documented.</li>
+  </ul>
+  <p>Most organizations should target Level 2 as their near-term goal. Level 1 is the baseline. Levels 3 and 4 are for organizations with significant AI deployments and mature security programs.</p>
+</div>
+
+</ContentLayout>

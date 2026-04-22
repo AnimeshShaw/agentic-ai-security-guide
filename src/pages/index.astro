@@ -1,0 +1,578 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Sidebar from '../components/Sidebar.astro';
+---
+
+<BaseLayout title="Home">
+  <div class="site-wrapper">
+    <Sidebar currentPath="/" />
+    <main class="home-main">
+
+      <!-- Hero -->
+      <section class="hero">
+        <div class="hero-inner">
+          <div class="hero-eyebrow">
+            <span class="eyebrow-badge">🔐 Leadership Edition</span>
+            <span class="eyebrow-badge outline">2025–2026</span>
+          </div>
+          <h1 class="hero-title">
+            Agentic AI Security<br/>
+            <span class="hero-accent">The Leadership Guide</span>
+          </h1>
+          <p class="hero-desc">
+            A complete, honest, deeply explained mental model of agentic AI and its security risks —
+            written for CISOs, CTOs, CIOs, and board members who need to govern what their teams are building.
+          </p>
+          <div class="hero-cta-row">
+            <a href="/foundations/what-is-agentic-ai" class="btn-primary">Start Reading →</a>
+            <a href="/governance/leadership-checklist" class="btn-secondary">Leadership Checklist</a>
+          </div>
+          <div class="hero-stat-row">
+            <div class="hero-stat">
+              <span class="stat-num">30+</span>
+              <span class="stat-label">In-depth pages</span>
+            </div>
+            <div class="hero-stat">
+              <span class="stat-num">20</span>
+              <span class="stat-label">Top 10 threats covered</span>
+            </div>
+            <div class="hero-stat">
+              <span class="stat-num">50</span>
+              <span class="stat-label">Leadership checklist items</span>
+            </div>
+            <div class="hero-stat">
+              <span class="stat-num">0</span>
+              <span class="stat-label">Lines of code to memorize</span>
+            </div>
+          </div>
+        </div>
+        <div class="hero-visual" aria-hidden="true">
+          <div class="orbit-ring ring-1">
+            <div class="orbit-node" style="--a:0deg">🤖</div>
+            <div class="orbit-node" style="--a:90deg">🛡️</div>
+            <div class="orbit-node" style="--a:180deg">⚠️</div>
+            <div class="orbit-node" style="--a:270deg">🔍</div>
+          </div>
+          <div class="orbit-center">AI</div>
+        </div>
+      </section>
+
+      <!-- Core Idea -->
+      <section class="core-idea">
+        <div class="core-idea-inner">
+          <h2 class="section-label-text">The Core Idea</h2>
+          <p class="core-quote">
+            Traditional AI <em>(ChatGPT, Copilot)</em> is a very smart tool that <strong>responds</strong> when asked.
+            <strong>Agentic AI acts on its own</strong> — it has goals, makes plans, uses tools, and takes real actions in the world.
+            When something that can <em>act</em> is also potentially manipulable,
+            the security stakes are categorically higher than anything we've faced before.
+          </p>
+        </div>
+      </section>
+
+      <!-- Reading Paths -->
+      <section class="reading-paths">
+        <h2 class="section-heading">Where do you want to start?</h2>
+        <p class="section-sub">Choose your path based on how much time you have and what you need to do.</p>
+        <div class="paths-grid">
+          <a href="/foundations/what-is-agentic-ai" class="path-card">
+            <div class="path-time">⏱ 20 minutes</div>
+            <div class="path-title">Quick Executive Brief</div>
+            <div class="path-desc">Part 1 foundations + the Leadership Checklist. Just enough to ask the right questions.</div>
+            <div class="path-arrow">→</div>
+          </a>
+          <a href="/foundations/what-is-agentic-ai" class="path-card featured">
+            <div class="path-badge">Recommended</div>
+            <div class="path-time">⏱ 2 hours</div>
+            <div class="path-title">Full Leadership Deep Dive</div>
+            <div class="path-desc">Parts 1–4 in order. Skip nothing in Part 2. This is the complete picture.</div>
+            <div class="path-arrow">→</div>
+          </a>
+          <a href="/foundations/what-is-agentic-ai" class="path-card">
+            <div class="path-time">⏱ 45 minutes</div>
+            <div class="path-title">Board Presentation Prep</div>
+            <div class="path-desc">Part 1 + Part 2 + Compliance Frameworks. Everything you need to brief the board.</div>
+            <div class="path-arrow">→</div>
+          </a>
+          <a href="/threats/attack-surface" class="path-card">
+            <div class="path-time">⏱ 1 hour</div>
+            <div class="path-title">CISO / Security Focus</div>
+            <div class="path-desc">Jump straight to threat landscape, both Top 10 lists, and technologies. Operationally focused.</div>
+            <div class="path-arrow">→</div>
+          </a>
+        </div>
+      </section>
+
+      <!-- Content Map -->
+      <section class="content-map">
+        <h2 class="section-heading">What's covered</h2>
+        <div class="map-grid">
+
+          <div class="map-section">
+            <div class="map-icon">🏗️</div>
+            <div class="map-section-title">Part 1 — Foundations</div>
+            <p class="map-section-desc">What agentic AI actually is. How it works under the hood. Why the security risk is categorically different.</p>
+            <ul class="map-links">
+              <li><a href="/foundations/what-is-agentic-ai">What is Agentic AI?</a></li>
+              <li><a href="/foundations/how-agents-work">How Agents Work</a></li>
+              <li><a href="/foundations/why-security-matters">Why Security Matters</a></li>
+            </ul>
+          </div>
+
+          <div class="map-section threat">
+            <div class="map-icon">⚠️</div>
+            <div class="map-section-title">Part 2 — Threat Landscape</div>
+            <p class="map-section-desc">Where agents are vulnerable. Prompt injection explained plainly. Real incidents that have already happened.</p>
+            <ul class="map-links">
+              <li><a href="/threats/attack-surface">Attack Surface</a></li>
+              <li><a href="/threats/prompt-injection">Prompt Injection</a></li>
+              <li><a href="/threats/real-world-incidents">Real-World Incidents</a></li>
+            </ul>
+          </div>
+
+          <div class="map-section highlight">
+            <div class="map-icon">🔟</div>
+            <div class="map-section-title">OWASP LLM Top 10</div>
+            <p class="map-section-desc">The official OWASP top 10 vulnerabilities for large language models — every one explained with interactive examples.</p>
+            <ul class="map-links">
+              <li><a href="/llm-top-10">View all 10 →</a></li>
+            </ul>
+          </div>
+
+          <div class="map-section highlight">
+            <div class="map-icon">🤖</div>
+            <div class="map-section-title">Agentic AI Top 10</div>
+            <p class="map-section-desc">The 10 critical risks unique to autonomous agents — from memory poisoning to runaway action loops.</p>
+            <ul class="map-links">
+              <li><a href="/agentic-top-10">View all 10 →</a></li>
+            </ul>
+          </div>
+
+          <div class="map-section">
+            <div class="map-icon">⚙️</div>
+            <div class="map-section-title">Part 3 — Core Technologies</div>
+            <p class="map-section-desc">MCP, LiteLLM, NeMo Guardrails, sandboxing — the tools that exist to protect you, explained simply.</p>
+            <ul class="map-links">
+              <li><a href="/technologies/mcp-protocol">MCP Protocol</a></li>
+              <li><a href="/technologies/litellm-proxy">LiteLLM Proxy</a></li>
+              <li><a href="/technologies/nemo-guardrails">NeMo Guardrails</a></li>
+            </ul>
+          </div>
+
+          <div class="map-section">
+            <div class="map-icon">📋</div>
+            <div class="map-section-title">Part 4 — Governance</div>
+            <p class="map-section-desc">NIST AI RMF, EU AI Act, ISO 42001. What you must govern. 50 questions every leader should be asking.</p>
+            <ul class="map-links">
+              <li><a href="/governance/compliance-frameworks">Compliance Frameworks</a></li>
+              <li><a href="/governance/leadership-checklist">Interactive Checklist</a></li>
+            </ul>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- Bottom CTA -->
+      <section class="bottom-cta">
+        <div class="bottom-cta-inner">
+          <h2>Ready to understand what your teams are building?</h2>
+          <p>Start with the foundations. Everything builds from there.</p>
+          <a href="/foundations/what-is-agentic-ai" class="btn-primary large">Begin with Part 1 →</a>
+        </div>
+      </section>
+
+    </main>
+  </div>
+</BaseLayout>
+
+<style>
+  /* ─── Home layout ─────────────────────────────────────────── */
+  .home-main {
+    flex: 1;
+    margin-left: var(--sidebar-width);
+  }
+
+  @media (max-width: 768px) {
+    .home-main { margin-left: 0; }
+  }
+
+  /* ─── Hero ─────────────────────────────────────────────────── */
+  .hero {
+    background: linear-gradient(135deg, #0F172A 0%, #1E293B 50%, #0F172A 100%);
+    color: var(--dark-text);
+    padding: 5rem 4rem 4rem;
+    display: flex;
+    align-items: center;
+    gap: 3rem;
+    position: relative;
+    overflow: hidden;
+    min-height: 520px;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #6366F1, #38BDF8, #22C55E);
+  }
+
+  .hero::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at 70% 50%, rgba(99,102,241,0.15) 0%, transparent 60%);
+    pointer-events: none;
+  }
+
+  .hero-inner { flex: 1; max-width: 600px; position: relative; z-index: 1; }
+
+  .hero-eyebrow {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1.25rem;
+    flex-wrap: wrap;
+  }
+
+  .eyebrow-badge {
+    display: inline-block;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    padding: 0.3rem 0.8rem;
+    border-radius: 99px;
+    background: rgba(99,102,241,0.2);
+    color: #A5B4FC;
+    border: 1px solid rgba(99,102,241,0.3);
+  }
+
+  .eyebrow-badge.outline {
+    background: transparent;
+    color: var(--dark-muted);
+    border-color: var(--dark-border);
+  }
+
+  .hero-title {
+    font-family: var(--font-display);
+    font-size: clamp(2.2rem, 4vw, 3.25rem);
+    font-weight: 800;
+    line-height: 1.1;
+    color: var(--dark-text);
+    margin-bottom: 1.25rem;
+    letter-spacing: -0.03em;
+  }
+
+  .hero-accent {
+    background: linear-gradient(135deg, #6366F1, #38BDF8);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .hero-desc {
+    font-size: 1.1rem;
+    color: var(--dark-text-secondary);
+    line-height: 1.75;
+    margin-bottom: 2rem;
+  }
+
+  .hero-cta-row {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-bottom: 2.5rem;
+  }
+
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.75rem 1.75rem;
+    background: var(--accent);
+    color: white;
+    border-radius: var(--radius);
+    font-weight: 600;
+    font-size: 0.95rem;
+    transition: all var(--transition);
+    text-decoration: none;
+  }
+  .btn-primary:hover { background: var(--accent-hover); transform: translateY(-1px); box-shadow: 0 8px 20px rgba(99,102,241,0.4); text-decoration: none; }
+  .btn-primary.large { padding: 1rem 2.25rem; font-size: 1.05rem; }
+
+  .btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.75rem 1.75rem;
+    background: rgba(255,255,255,0.08);
+    color: var(--dark-text);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: var(--radius);
+    font-weight: 500;
+    font-size: 0.95rem;
+    transition: all var(--transition);
+    text-decoration: none;
+  }
+  .btn-secondary:hover { background: rgba(255,255,255,0.14); text-decoration: none; }
+
+  .hero-stat-row {
+    display: flex;
+    gap: 2rem;
+    flex-wrap: wrap;
+    border-top: 1px solid rgba(255,255,255,0.1);
+    padding-top: 1.75rem;
+  }
+
+  .hero-stat { display: flex; flex-direction: column; gap: 0.1rem; }
+  .stat-num  { font-family: var(--font-display); font-size: 1.75rem; font-weight: 800; color: var(--dark-text); line-height: 1; }
+  .stat-label{ font-size: 0.78rem; color: var(--dark-muted); text-transform: uppercase; letter-spacing: 0.06em; }
+
+  /* Hero visual - orbit animation */
+  .hero-visual {
+    position: relative;
+    width: 260px;
+    height: 260px;
+    flex-shrink: 0;
+    z-index: 1;
+  }
+
+  .orbit-center {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 72px; height: 72px;
+    background: linear-gradient(135deg, var(--accent), #38BDF8);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 1.1rem;
+    color: white;
+    box-shadow: 0 0 40px rgba(99,102,241,0.5);
+  }
+
+  .orbit-ring {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
+    border: 1px solid rgba(255,255,255,0.1);
+    animation: spin 12s linear infinite;
+  }
+
+  .ring-1 { width: 220px; height: 220px; }
+
+  .orbit-node {
+    position: absolute;
+    top: 50%; left: 50%;
+    font-size: 1.4rem;
+    transform-origin: 0 0;
+    transform: rotate(var(--a)) translateX(110px) rotate(calc(-1 * var(--a))) translate(-50%, -50%);
+  }
+
+  @keyframes spin {
+    from { transform: translate(-50%, -50%) rotate(0deg); }
+    to   { transform: translate(-50%, -50%) rotate(360deg); }
+  }
+
+  @media (max-width: 900px) {
+    .hero { padding: 3rem 2rem; flex-direction: column; min-height: auto; }
+    .hero-visual { display: none; }
+  }
+
+  /* ─── Core Idea ──────────────────────────────────────────── */
+  .core-idea {
+    background: var(--accent-bg);
+    border-top: 1px solid rgba(99,102,241,0.15);
+    border-bottom: 1px solid rgba(99,102,241,0.15);
+    padding: 3rem 4rem;
+  }
+
+  .core-idea-inner { max-width: 700px; }
+
+  .section-label-text {
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--accent);
+    margin-bottom: 1rem;
+  }
+
+  .core-quote {
+    font-size: 1.2rem;
+    line-height: 1.8;
+    color: var(--text-primary);
+    margin: 0;
+  }
+
+  @media (max-width: 768px) {
+    .core-idea { padding: 2rem 1.5rem; }
+  }
+
+  /* ─── Reading Paths ────────────────────────────────────────── */
+  .reading-paths {
+    padding: 4rem 4rem;
+    background: var(--surface);
+  }
+
+  .section-heading {
+    font-family: var(--font-display);
+    font-size: 1.75rem;
+    font-weight: 800;
+    margin-bottom: 0.5rem;
+  }
+
+  .section-sub {
+    color: var(--text-secondary);
+    margin-bottom: 2rem;
+    font-size: 1rem;
+  }
+
+  .paths-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 1.25rem;
+  }
+
+  .path-card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 1.75rem;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    text-decoration: none;
+    transition: all var(--transition);
+    position: relative;
+  }
+
+  .path-card:hover { box-shadow: var(--shadow-lg); transform: translateY(-3px); text-decoration: none; border-color: var(--accent); }
+
+  .path-card.featured {
+    background: var(--dark-bg);
+    border-color: var(--accent);
+    box-shadow: 0 0 0 1px var(--accent);
+  }
+
+  .path-badge {
+    position: absolute;
+    top: -10px; right: 1rem;
+    background: var(--accent);
+    color: white;
+    font-size: 0.7rem;
+    font-weight: 700;
+    padding: 0.2rem 0.6rem;
+    border-radius: 99px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  .path-time { font-size: 0.8rem; color: var(--text-muted); }
+  .path-card.featured .path-time { color: var(--dark-muted); }
+
+  .path-title {
+    font-family: var(--font-display);
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--text-primary);
+  }
+  .path-card.featured .path-title { color: var(--dark-text); }
+
+  .path-desc { font-size: 0.875rem; color: var(--text-secondary); line-height: 1.55; flex: 1; }
+  .path-card.featured .path-desc { color: var(--dark-text-secondary); }
+
+  .path-arrow { color: var(--accent); font-weight: 700; font-size: 1.1rem; }
+
+  @media (max-width: 768px) {
+    .reading-paths { padding: 2.5rem 1.5rem; }
+  }
+
+  /* ─── Content Map ──────────────────────────────────────────── */
+  .content-map {
+    padding: 4rem 4rem;
+    background: var(--bg);
+  }
+
+  .map-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .map-section {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 1.75rem;
+    transition: all var(--transition);
+  }
+
+  .map-section:hover { box-shadow: var(--shadow-md); }
+
+  .map-section.threat { border-top: 3px solid var(--danger); }
+  .map-section.highlight { border-top: 3px solid var(--accent); }
+
+  .map-icon { font-size: 1.75rem; margin-bottom: 0.75rem; }
+
+  .map-section-title {
+    font-family: var(--font-display);
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 0.6rem;
+  }
+
+  .map-section-desc {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin-bottom: 1rem;
+  }
+
+  .map-links { list-style: none; padding: 0; margin: 0; }
+  .map-links li { padding: 0.2rem 0; }
+  .map-links a { font-size: 0.875rem; color: var(--accent); font-weight: 500; }
+  .map-links a:hover { text-decoration: underline; }
+
+  @media (max-width: 768px) {
+    .content-map { padding: 2.5rem 1.5rem; }
+  }
+
+  /* ─── Bottom CTA ──────────────────────────────────────────── */
+  .bottom-cta {
+    background: var(--dark-bg);
+    padding: 4rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .bottom-cta::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--accent), var(--info), var(--defense));
+  }
+
+  .bottom-cta-inner { max-width: 540px; margin: 0 auto; }
+
+  .bottom-cta h2 {
+    color: var(--dark-text);
+    font-size: 1.75rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .bottom-cta p {
+    color: var(--dark-text-secondary);
+    margin-bottom: 2rem;
+    font-size: 1.05rem;
+  }
+
+  @media (max-width: 768px) {
+    .bottom-cta { padding: 3rem 1.5rem; }
+  }
+</style>

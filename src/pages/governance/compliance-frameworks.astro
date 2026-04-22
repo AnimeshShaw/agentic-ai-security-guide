@@ -1,0 +1,182 @@
+---
+import ContentLayout from '../../layouts/ContentLayout.astro';
+import FlipCard from '../../components/FlipCard.astro';
+import StepWalkthrough from '../../components/StepWalkthrough.astro';
+import ScenarioToggle from '../../components/ScenarioToggle.astro';
+import InteractiveChecklist from '../../components/InteractiveChecklist.astro';
+---
+<ContentLayout
+  title="AI Compliance Frameworks"
+  description="NIST AI RMF, EU AI Act, ISO 42001 — what they require, who they apply to, and what you must do."
+  category="Governance"
+  readingTime="13 min read"
+>
+
+  <p>The AI compliance landscape shifted from voluntary best practices to mandatory regulatory requirements faster than most organizations anticipated. Understanding which frameworks apply to your AI deployments — and what each requires — is now a core governance responsibility. This page explains the four most important frameworks in operational terms: what they are, who they cover, and what you actually have to do.</p>
+
+  <div class="callout callout-warning">
+    <span class="callout-icon">⚠️</span>
+    <p>The EU AI Act's high-risk designation may apply to AI you don't think of as "AI decisions" — including AI that influences HR decisions, customer credit, and insurance pricing. Review your AI inventory against the high-risk categories before assuming minimal risk.</p>
+  </div>
+
+  <h2>NIST AI Risk Management Framework (AI RMF)</h2>
+
+  <div class="threat-card info">
+    <h3>NIST AI RMF at a Glance</h3>
+    <ul>
+      <li><strong>Type:</strong> Voluntary US framework (but increasingly referenced in contracts and procurement)</li>
+      <li><strong>Published:</strong> January 2023 by the National Institute of Standards and Technology</li>
+      <li><strong>Who It Covers:</strong> Any US organization using or developing AI; increasingly required for federal contractors and vendors</li>
+      <li><strong>Key Requirements:</strong> Four functions — GOVERN, MAP, MEASURE, MANAGE — with specific practices under each</li>
+      <li><strong>Consequence of Non-Compliance:</strong> No direct penalty (voluntary), but increasingly cited in procurement disqualification, contract requirements, and regulatory expectations</li>
+    </ul>
+  </div>
+
+  <p>The NIST AI RMF is structured around four core functions that together form a lifecycle approach to AI risk management:</p>
+
+  <ul>
+    <li><strong>GOVERN:</strong> Establish the organizational context for AI risk — policies, roles, responsibilities, culture. This is where you define who owns AI risk and how decisions get made.</li>
+    <li><strong>MAP:</strong> Identify and categorize AI risks in context. What is this AI system doing? What could go wrong? Who is affected? What are the impacts if it fails or is compromised?</li>
+    <li><strong>MEASURE:</strong> Analyze, assess, and track AI risks. This is where you actually test and evaluate your AI systems — including for security, fairness, and reliability.</li>
+    <li><strong>MANAGE:</strong> Prioritize and act on identified risks. Implement controls, monitor for new risks, and have response plans for when things go wrong.</li>
+  </ul>
+
+  <p>The companion document — the <strong>AI RMF Playbook</strong> — provides specific suggested actions for each function. It's available free from NIST and is the most actionable starting point for organizations building an AI risk program aligned to this framework.</p>
+
+  <div class="callout callout-info">
+    <span class="callout-icon">💡</span>
+    <p>Even if NIST AI RMF isn't contractually required for your organization today, aligning your AI governance program to its structure positions you well for future requirements. The framework's four-function structure maps cleanly onto a mature governance program and is increasingly referenced by sector-specific regulators (OCC, FFIEC, FDA) in their AI guidance.</p>
+  </div>
+
+  <h2>EU AI Act</h2>
+
+  <div class="threat-card info">
+    <h3>EU AI Act at a Glance</h3>
+    <ul>
+      <li><strong>Type:</strong> Mandatory regulation — world's first comprehensive AI law</li>
+      <li><strong>Timeline:</strong> Regulation adopted 2024; prohibited practices banned August 2024; high-risk provisions enforceable August 2026</li>
+      <li><strong>Who It Covers:</strong> Any organization deploying AI that affects EU residents — regardless of where the organization is based (GDPR-style extraterritorial scope)</li>
+      <li><strong>Key Requirements:</strong> Risk-tiered obligations from minimal (few requirements) to high-risk (extensive documentation, testing, human oversight) to prohibited (banned entirely)</li>
+      <li><strong>Fines:</strong> Up to €35 million or 7% of global annual turnover (whichever is higher) for prohibited practices; up to €15 million or 3% for other violations</li>
+    </ul>
+  </div>
+
+  <p>The EU AI Act uses a four-tier risk classification system. Where your AI systems fall determines your compliance obligations:</p>
+
+  <h3>Tier 1: Unacceptable Risk (Prohibited)</h3>
+  <p>These AI applications are banned entirely under the EU AI Act. They include: social scoring systems that evaluate people based on behavior or personal characteristics; real-time remote biometric surveillance in public spaces by law enforcement (with narrow exceptions); AI that exploits vulnerable groups; and AI that manipulates people through subliminal techniques. If your AI does any of these things, you must discontinue it regardless of business case.</p>
+
+  <h3>Tier 2: High Risk (Strict Requirements)</h3>
+  <p>This is where most enterprise AI compliance work happens. High-risk AI includes: AI used in hiring, promotion, and employee management; AI that influences credit, insurance, or financial access decisions; AI used in critical infrastructure (energy, water, transport); AI used in education and vocational training; AI used in essential services; and AI used in law enforcement and judicial administration.</p>
+
+  <p>For high-risk AI, you must implement:</p>
+  <ul>
+    <li>A risk management system documented and maintained throughout the AI system's lifecycle</li>
+    <li>Data governance — training data must be appropriate, relevant, and free of harmful bias</li>
+    <li>Technical documentation sufficient for regulators to assess compliance</li>
+    <li>Logging and traceability — the system must keep logs that allow post-deployment review</li>
+    <li>Transparency — users must know they're interacting with an AI system</li>
+    <li>Human oversight — the system must be designed to allow humans to understand, monitor, and intervene</li>
+    <li>Accuracy, robustness, and cybersecurity requirements</li>
+    <li>Conformity assessment before deployment (self-assessment or third-party, depending on category)</li>
+  </ul>
+
+  <h3>Tier 3: Limited Risk (Transparency Requirements)</h3>
+  <p>AI systems with limited risk — primarily chatbots and systems that generate synthetic content — must disclose that they are AI systems. Chatbots must identify themselves as AI. Deepfakes must be labeled. These requirements are already in effect.</p>
+
+  <h3>Tier 4: Minimal Risk (Few Requirements)</h3>
+  <p>Most AI falls here — spam filters, recommendation engines, AI features in standard software. Few specific obligations apply, though providers may voluntarily adopt codes of conduct.</p>
+
+  <div class="callout callout-danger">
+    <span class="callout-icon">🚨</span>
+    <p>The August 2026 full enforcement deadline for high-risk AI provisions is not far away. Organizations with HR AI, credit scoring AI, or AI in regulated industries should be conducting their EU AI Act assessment now, not in 2025. The documentation, testing, and conformity assessment requirements take significant time to satisfy.</p>
+  </div>
+
+  <h2>ISO/IEC 42001 (AI Management System)</h2>
+
+  <div class="threat-card info">
+    <h3>ISO/IEC 42001 at a Glance</h3>
+    <ul>
+      <li><strong>Type:</strong> Certifiable international standard — like ISO 27001 for AI governance</li>
+      <li><strong>Published:</strong> December 2023 by ISO/IEC</li>
+      <li><strong>Who It Covers:</strong> Any organization developing or using AI that wants demonstrable governance for procurement, enterprise contracts, or regulatory relationships</li>
+      <li><strong>Key Requirements:</strong> Establish, implement, maintain, and continually improve an AI management system covering context, leadership, planning, support, operations, performance evaluation, and improvement</li>
+      <li><strong>Consequence of Non-Compliance:</strong> No regulatory penalty — but organizations without certification increasingly lose procurement bids and enterprise contracts requiring demonstrated AI governance</li>
+    </ul>
+  </div>
+
+  <p>ISO/IEC 42001 provides the framework for a complete AI management system. Its structure mirrors ISO 27001 (information security management) and ISO 9001 (quality management), which means organizations already certified to those standards have a significant head start. The standard covers the full AI lifecycle from planning and design through deployment, operation, and decommissioning.</p>
+
+  <p>The strategic value of ISO/IEC 42001 certification: it provides a credible, audited, third-party-verified signal of AI governance maturity. For enterprise B2B sales, public sector procurement, and regulated industry relationships, certification is increasingly becoming a table-stakes requirement. Organizations that pursue it proactively gain a competitive advantage. Those that wait find themselves scrambling to satisfy procurement questionnaires with evidence that doesn't exist yet.</p>
+
+  <h2>SOC 2 + AI</h2>
+
+  <div class="threat-card info">
+    <h3>SOC 2 + AI at a Glance</h3>
+    <ul>
+      <li><strong>Type:</strong> Existing framework being extended to cover AI — not yet a formal standard, but actively evolving</li>
+      <li><strong>Who It Covers:</strong> Organizations already pursuing SOC 2 compliance whose systems include AI components</li>
+      <li><strong>Key Requirements:</strong> AI systems must satisfy existing trust service criteria (security, availability, confidentiality, processing integrity, privacy) — auditors are developing AI-specific tests</li>
+      <li><strong>Consequence:</strong> AI systems excluded from SOC 2 scope may create audit gaps; auditors are beginning to ask specifically about AI components</li>
+    </ul>
+  </div>
+
+  <p>SOC 2 auditors are increasingly asking questions specifically about AI systems. They want to understand: Are AI systems included in the security boundary? How is AI model access controlled? How is AI output accuracy monitored? How are AI incidents detected and responded to?</p>
+
+  <p>Organizations pursuing SOC 2 should proactively include their AI systems in scope rather than waiting for auditors to raise questions. The five trust service criteria apply directly:</p>
+  <ul>
+    <li><strong>Security:</strong> AI systems must have access controls, vulnerability management, and monitoring — same as any other system</li>
+    <li><strong>Availability:</strong> AI service dependencies (API providers, model hosting) must be part of uptime and resiliency planning</li>
+    <li><strong>Confidentiality:</strong> Data sent to AI systems must be handled with the same confidentiality controls as other sensitive data</li>
+    <li><strong>Processing Integrity:</strong> AI output quality and accuracy must be monitored — you must know if the AI is producing garbage</li>
+    <li><strong>Privacy:</strong> Personal data processed by AI systems must satisfy the same privacy controls as other personal data processing</li>
+  </ul>
+
+  <StepWalkthrough
+    title="Determining Which Frameworks Apply to Your AI Deployment"
+    steps={[
+      {
+        title: "Map the Geography of Your Users",
+        content: "EU AI Act applies to any AI that affects EU residents — not where your company is based. If you have customers, employees, or users in the EU, the EU AI Act applies to the AI systems they interact with. Start here because EU AI Act has the most expansive extraterritorial scope and the most significant penalties.",
+        icon: "🌍"
+      },
+      {
+        title: "Identify the Type of AI Use Case",
+        content: "Walk through the EU AI Act's high-risk category list for each AI system. Check whether any NIST AI RMF sector-specific guidance applies (financial services, healthcare, critical infrastructure). Use case determines risk tier, which determines compliance requirements. A grammar checker and a credit scoring model have completely different compliance profiles.",
+        icon: "🔍"
+      },
+      {
+        title: "Assess Data Types Being Processed",
+        content: "AI systems that process personal data trigger GDPR (for EU data subjects) and CCPA (for California residents) requirements in addition to AI-specific regulations. Systems processing special category data (health, biometric, financial) face heightened requirements. Map data flows into and out of each AI system before concluding your compliance scope.",
+        icon: "🗄️"
+      },
+      {
+        title: "Review Existing Certifications and Contracts",
+        content: "Check your existing compliance obligations: SOC 2 scope, ISO 27001 scope, sector-specific requirements (HIPAA, PCI-DSS, FedRAMP). These may have AI-relevant clauses or may need to be extended to cover AI systems. Check customer contracts for AI governance requirements — enterprise customers increasingly include these in procurement terms.",
+        icon: "📄"
+      },
+      {
+        title: "Apply Industry Vertical Lens",
+        content: "Financial services, healthcare, insurance, and public sector face additional regulatory expectations from sector-specific regulators (OCC, FFIEC, FDA, FTC) who are issuing AI-specific guidance. These supplement — they don't replace — horizontal frameworks like EU AI Act and NIST AI RMF. Map all applicable vertical regulations before finalizing your compliance scope.",
+        icon: "🏛️"
+      }
+    ]}
+  />
+
+  <div class="defense-section">
+    <h2>Compliance Readiness Checklist: 8 Items That Apply Across All Frameworks</h2>
+    <p>Regardless of which specific frameworks apply to your organization, these eight items appear in some form across all major AI compliance frameworks. Satisfying them puts you in a position to demonstrate compliance to any framework.</p>
+
+    <ol>
+      <li><strong>Maintain a current AI system inventory</strong> — documented, with named owners, risk tiers, and data classifications for each system</li>
+      <li><strong>Document the purpose and scope of each AI system</strong> — what it's designed to do, what decisions it influences, and what it is explicitly not authorized to do</li>
+      <li><strong>Establish data governance for AI</strong> — what data trains it, what data it processes, who can access outputs, and how long data is retained</li>
+      <li><strong>Implement human oversight mechanisms</strong> — defined points where human review occurs, documented escalation paths, and audit evidence that oversight is actually happening</li>
+      <li><strong>Create and maintain technical documentation</strong> — model cards, system architecture, testing results, and performance metrics for every production AI system</li>
+      <li><strong>Deploy logging and monitoring</strong> — AI system decisions and actions must be logged at a level that supports post-incident investigation and regulatory response</li>
+      <li><strong>Establish incident response procedures</strong> — AI-specific incident response playbook covering detection, containment, investigation, notification, and remediation</li>
+      <li><strong>Conduct regular audits and reviews</strong> — formal governance review at least annually for all AI systems; quarterly for high-risk systems; triggered review on model updates</li>
+    </ol>
+  </div>
+
+</ContentLayout>

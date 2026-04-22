@@ -1,0 +1,69 @@
+---
+import ContentLayout from '../../layouts/ContentLayout.astro';
+import FlipCard from '../../components/FlipCard.astro';
+import StepWalkthrough from '../../components/StepWalkthrough.astro';
+---
+
+<ContentLayout
+  title="LLM10: Unbounded Consumption"
+  description="When AI systems consume resources without limits — enabling denial-of-service attacks and runaway costs."
+  category="OWASP LLM Top 10"
+  readingTime="7 min read"
+  severity="medium"
+>
+
+<h2>AI Has a Different Cost Model</h2>
+
+<p>Traditional software has a relatively flat cost curve. Once deployed, a web application can serve additional users at minimal marginal cost. AI is different. Every request to a large language model consumes compute resources proportional to the length and complexity of the request. There is no free lunch in AI — every token costs money.</p>
+
+<p>Unbounded consumption is what happens when there are no limits on how much those tokens can be requested, by whom, and how often. The result can be financial exhaustion, service unavailability for legitimate users, or deliberately triggered runaway costs designed to damage your organization.</p>
+
+<FlipCard
+  scenario="Scenario: Public AI Chatbot Launch"
+  frontTitle="You Launch an AI Customer Service Bot — No Auth Required"
+  frontContent="Marketing launches a public-facing AI chatbot for product support. No login required — any visitor can use it. It's featured in a press release. Within 48 hours, usage is much higher than expected."
+  backTitle="The Bill Arrives"
+  backContent={`<p>What actually happened: a competitor's automated script began sending requests to your chatbot at 2,000 requests per minute, 24 hours a day. Each request was crafted to maximize compute usage — long, complex questions requiring detailed responses. After 72 hours, your AI API bill is $67,000 above your monthly budget. Real customers are experiencing rate limiting and slow responses. The chatbot is effectively down for legitimate users.</p><p>This is both a financial attack and a denial-of-service attack — and it required nothing more than an HTTP request to a public endpoint.</p><ul><li>No authentication = no attribution, no limits, no cost controls</li><li>AI services have no automatic cost ceiling — you pay for what was consumed</li><li>Public AI endpoints without rate limiting are existential budget risks</li><li>This also happens accidentally: a developer's test script runs in a loop overnight</li></ul>`}
+/>
+
+<h2>Attack Patterns and Business Risks</h2>
+
+<div class="threat-card">
+  <h4>Direct DoS via Request Flooding</h4>
+  <p>Automated scripts send massive volumes of requests. Legitimate users are rate-limited or denied service. If there's no per-user rate limiting, one source can exhaust the entire capacity allocated to real customers.</p>
+</div>
+
+<div class="threat-card high">
+  <h4>Sponge Attacks (Compute Maximization)</h4>
+  <p>The attacker crafts requests designed to consume maximum compute — extremely long context windows, complex reasoning tasks, requests that force multiple tool calls. Fewer requests, same damage. Harder to detect by volume alone.</p>
+</div>
+
+<div class="threat-card medium">
+  <h4>Accidental Consumption (No Attack Required)</h4>
+  <p>A developer's misconfigured integration loops indefinitely. An agent gets stuck in a retry loop. An employee discovers an AI tool and shares it across the entire company without IT's knowledge. Budget overruns happen without any attacker involved — just missing limits.</p>
+</div>
+
+<StepWalkthrough
+  title="How to Build Cost-Controlled AI Infrastructure"
+  steps={[
+    { title: "Require authentication for all AI endpoints", content: "No anonymous access to AI services. Every user or application must authenticate. This enables attribution (who is using what), rate limiting per entity, and cost allocation.", icon: "🔑" },
+    { title: "Implement per-user and per-application rate limits", content: "Set limits on requests per minute, tokens per hour, and total spend per period. These limits should be calibrated to legitimate use cases — and alerts should fire before the limits are hit.", icon: "🚦" },
+    { title: "Set budget alerts and hard caps", content: "Configure your AI provider accounts to alert at 50%, 80%, and 100% of budget. Set hard spending caps that prevent charges above a defined ceiling. This protects against both attacks and accidents.", icon: "💰" },
+    { title: "Monitor for unusual patterns", content: "Anomalous request patterns (high volume from a single source, unusually large requests, off-hours usage spikes) should trigger automated alerts. Cost anomaly detection is as important as security anomaly detection for AI.", icon: "📊" },
+    { title: "Apply timeouts and complexity limits", content: "Set maximum context window sizes for user-submitted content. Apply timeouts to long-running requests. Limit the number of tool calls an agent can make per task. These bounds prevent compute-maximization attacks.", icon: "⏱️" },
+  ]}
+/>
+
+<div class="defense-section">
+  <h3>Questions Your CFO and CTO Should Be Able to Answer</h3>
+  <ul>
+    <li>What is our total AI spend this month, by team and by application?</li>
+    <li>What are the per-user and per-application rate limits on our AI services?</li>
+    <li>What alerts fire if AI costs exceed budget thresholds?</li>
+    <li>Can we disable a specific AI application or user's access within 10 minutes of identifying misuse?</li>
+    <li>Is our AI spending covered in our monthly financial monitoring dashboards?</li>
+  </ul>
+  <p>If these questions cannot be answered, Unbounded Consumption is an active risk — regardless of whether anyone is actively attacking you.</p>
+</div>
+
+</ContentLayout>

@@ -1,0 +1,112 @@
+---
+import ContentLayout from '../../layouts/ContentLayout.astro';
+import FlipCard from '../../components/FlipCard.astro';
+import StepWalkthrough from '../../components/StepWalkthrough.astro';
+import ScenarioToggle from '../../components/ScenarioToggle.astro';
+---
+<ContentLayout
+  title="LLM03: Supply Chain Vulnerabilities"
+  description="The hidden risks in the AI tools, models, and data your teams are plugging into your systems."
+  category="OWASP LLM Top 10"
+  readingTime="9 min read"
+  severity="high"
+>
+
+  <p>In December 2020, the world learned that attackers had compromised SolarWinds — a widely used IT management software — and used it to deliver malware to 18,000 organizations, including US government agencies. The victims had done nothing wrong. They were using legitimate, trusted software. The attack happened upstream, before the software ever reached them. This is the essence of a supply chain attack: the threat enters your environment through something you trust.</p>
+
+  <p>The AI ecosystem has created an entirely new supply chain — and it is largely unsecured. When your organization adopts an AI tool, you are not just trusting the AI vendor. You are trusting the dataset the model was trained on, the third-party plugins the platform uses, the open-source libraries in the software stack, the vector database storing your documents, and the cloud infrastructure running it all. Each link in this chain is a trust assumption. Any one of them can be compromised — before the product ever reaches you.</p>
+
+  <div class="dark-section">
+    <span class="section-label">⚠️ THE THREAT</span>
+
+    <h2>The AI Supply Chain: Every Link Is a Risk</h2>
+
+    <p>Think of an AI deployment like a building. The AI model is the structure — but it sits on a foundation of training data, is connected by pipes (APIs and plugins), is wired with electrical components (SDKs and libraries), and stores its contents in rooms (vector databases and document stores). A compromised foundation, a faulty pipe, or a tampered wire can undermine the entire structure — regardless of how solid the main structure appears.</p>
+
+    <p>Open-source model repositories like Hugging Face host tens of thousands of AI models — including many that have been uploaded by anonymous contributors with unknown intentions. A model with a convincing name and a few positive reviews can attract thousands of enterprise downloads. Security researchers have found models on public repositories that were "fine-tuned" in ways that introduce backdoor behaviors — hidden instructions that trigger under specific conditions, invisibly to users and administrators.</p>
+
+    <div class="callout callout-danger">
+      <span class="callout-icon">⚠️</span>
+      <p>Unlike traditional software supply chain attacks, AI supply chain attacks may not be detectable through code scanning. A poisoned model looks identical to a clean model in its file structure — the threat is in the billions of parameters that encode its behavior, which cannot be read or audited like source code.</p>
+    </div>
+  </div>
+
+  <FlipCard
+    scenario="Scenario: Switching to a Cheaper Model"
+    frontTitle="A Sensible Cost-Cutting Decision"
+    frontContent="The IT team identifies a highly-rated open-source AI model that costs 60% less than the current vendor. It has good benchmarks, positive user reviews on the repository, and an active community. Leadership approves the switch."
+    backTitle="What's Really Happening"
+    backContent={`<p>The new model was fine-tuned on public datasets that contained poisoned data. It subtly misclassifies certain legal documents, causing your legal team's AI assistant to provide incorrect analysis on a specific contract type. This isn't random — an attacker intentionally included the poisoned data knowing companies would use this model for legal work.</p><ul><li>The attack happened before you bought the model — your vendor assessment process cannot catch it</li><li>Standard security testing (vulnerability scans, penetration tests) does not evaluate behavioral manipulation</li><li>Supply chain attacks are rated High because they're hard to detect and can affect many organizations simultaneously</li></ul>`}
+  />
+
+  <StepWalkthrough
+    title="Mapping Your AI Supply Chain"
+    steps={[
+      {
+        title: "Model Source and Provenance",
+        content: "Where did the base model come from? Who trained it, on what data, with what objectives? Commercial models from reputable providers offer more traceability than open-source alternatives, but neither is inherently safe. Demand model cards and training data documentation.",
+        icon: "🏭"
+      },
+      {
+        title: "Training Data Provenance",
+        content: "What data was the model trained on — and who had write access to that data? Public web crawls include content from adversarially controlled websites. Fine-tuning on internal documents means those documents' integrity is now a security concern.",
+        icon: "📊"
+      },
+      {
+        title: "Plugins and Integrations",
+        content: "Every plugin added to an AI platform extends the attack surface. A plugin that connects to email, calendar, or CRM systems introduces both its own vulnerabilities and potentially its developer's access to your data flows. Vet each integration as you would a new vendor.",
+        icon: "🔌"
+      },
+      {
+        title: "SDK and Library Dependencies",
+        content: "The software frameworks used to build and deploy AI applications carry their own dependency trees. A compromised Python library used by your AI application could give attackers access to the AI's inputs, outputs, and actions — a traditional software supply chain attack disguised as an AI product.",
+        icon: "📦"
+      },
+      {
+        title: "Deployment Infrastructure",
+        content: "Where does the model run? Who has access to the compute environment? Cloud AI services introduce shared infrastructure risks. On-premises deployments shift responsibility to your team. Either way, the infrastructure layer must be hardened and monitored.",
+        icon: "☁️"
+      }
+    ]}
+  />
+
+  <ScenarioToggle
+    attackerContent={`<p><strong>Why supply chain attacks are attractive to sophisticated adversaries:</strong></p><ul><li>One compromised model or plugin reaches thousands of enterprises — a massively leveraged attack</li><li>The attack happens before deployment, when victims have no visibility or monitoring</li><li>Behavioral manipulation is nearly impossible to detect without specialized AI security tooling</li><li>Nation-state actors and organized criminal groups specifically target AI supply chains to gain persistent access to enterprise environments</li><li>The AI ecosystem's rapid growth means security practices have not kept pace — there are many soft targets</li></ul>`}
+    defenderContent={`<h4>Supply Chain Defense Strategies</h4><p>Defense requires applying proven software supply chain practices to the novel AI context:</p><ul><li><strong>Vendor security assessments:</strong> Treat AI model providers like any other critical vendor — require SOC 2 reports, penetration test results, and training data documentation</li><li><strong>Prefer commercial over anonymous open-source:</strong> Open-source AI models from anonymous contributors offer no accountability. If cost is the driver, consider the risk-adjusted cost of a supply chain compromise</li><li><strong>AI SBOMs:</strong> Software Bill of Materials for AI — demand documentation of what data and components went into a model, just as you would demand a software component inventory</li><li><strong>Sandbox integrations:</strong> New plugins and integrations should be deployed in isolated environments before production, with behavioral monitoring to detect anomalies</li><li><strong>Behavioral regression testing:</strong> Establish behavioral baselines for AI systems and test for unexpected changes after any update or vendor change</li></ul>`}
+  />
+
+  <div class="defense-section">
+    <h2>Executive Action Items</h2>
+
+    <div class="threat-card">
+      <h3>1. Create an AI Vendor Register</h3>
+      <p>Know every AI model, platform, plugin, and service your organization uses — including tools adopted by individual teams without formal IT approval (shadow AI). You cannot secure what you cannot see. Mandate a formal register and make self-reporting the path of least resistance.</p>
+    </div>
+
+    <div class="threat-card">
+      <h3>2. Apply Vendor Security Standards to AI Providers</h3>
+      <p>If your organization requires vendors to meet security standards (ISO 27001, SOC 2, penetration testing), apply those same requirements to AI model providers. Add specific AI requirements: training data documentation, model card publication, incident notification for behavioral anomalies.</p>
+    </div>
+
+    <div class="threat-card">
+      <h3>3. Prohibit Unapproved Open-Source Model Downloads</h3>
+      <p>Establish a policy that AI models may only be sourced from approved providers or pass a security review before use. This does not mean no open-source AI — it means open-source AI goes through the same vetting process as any other third-party software component.</p>
+    </div>
+
+    <div class="threat-card">
+      <h3>4. Treat Every Plugin as a New Vendor</h3>
+      <p>AI platform plugins often receive the same permissions as the platform itself — including access to connected data sources. Each plugin should be treated as a new vendor relationship: assessed for security posture, granted minimum necessary permissions, and monitored for anomalous behavior.</p>
+    </div>
+
+    <div class="threat-card">
+      <h3>5. Establish Behavioral Baselines and Monitor for Drift</h3>
+      <p>Define what "normal" AI behavior looks like for your deployed systems — typical outputs, data access patterns, error rates. After any vendor update or model change, run behavioral comparison tests. Unexpected changes in output patterns can signal supply chain compromise.</p>
+    </div>
+  </div>
+
+  <div class="callout callout-warning">
+    <span class="callout-icon">⚠️</span>
+    <p><strong>Board-level perspective:</strong> Your organization's AI security posture is only as strong as its weakest supplier. The SolarWinds attack took years to discover. AI supply chain attacks may be even harder to detect. Supply chain risk management must be a first-class concern in every AI procurement decision.</p>
+  </div>
+
+</ContentLayout>

@@ -1,0 +1,107 @@
+---
+import ContentLayout from '../../layouts/ContentLayout.astro';
+import FlipCard from '../../components/FlipCard.astro';
+import StepWalkthrough from '../../components/StepWalkthrough.astro';
+import ScenarioToggle from '../../components/ScenarioToggle.astro';
+---
+<ContentLayout
+  title="LLM02: Sensitive Information Disclosure"
+  description="How LLMs can leak confidential data — from training data to live user information."
+  category="OWASP LLM Top 10"
+  readingTime="9 min read"
+  severity="high"
+>
+
+  <p>When your organization deploys an AI assistant, you implicitly trust it with information — documents it reads, conversations it has, data sources it connects to. But there is a less obvious risk: the AI may also carry sensitive information from its training process, surfacing confidential data to users who were never authorized to see it. Sensitive information disclosure occurs when an LLM reveals data it should not — whether from its training, from live conversations, or from connected systems.</p>
+
+  <p>This is not a theoretical concern. In 2023, Samsung employees accidentally leaked proprietary source code and internal meeting notes by pasting them into ChatGPT — information that then became part of the AI's improvement dataset. In a separate incident, a medical AI trained on patient records was found to reproduce identifiable patient information when prompted cleverly. For organizations operating under GDPR, HIPAA, or financial regulations, these disclosures are not just embarrassing — they are reportable data breaches.</p>
+
+  <div class="dark-section">
+    <span class="section-label">⚠️ THE THREAT</span>
+
+    <h2>Two Ways LLMs Leak Data</h2>
+
+    <p><strong>Training data memorization</strong> is the first and less intuitive risk. LLMs learn by processing enormous amounts of text. When they are fine-tuned on internal documents — financial reports, HR records, customer data, proprietary code — they do not simply "learn patterns" in a clean, sanitized way. They can memorize specific facts, names, numbers, and even verbatim text from those documents. A skilled attacker (or even an innocent user asking the right question) may be able to extract this memorized information.</p>
+
+    <p><strong>Live context leakage</strong> is the second risk. When multiple users interact with a shared AI system, there is a risk that information shared in one conversation "bleeds into" another. Additionally, if a user's session contains privileged information — their account details, their query history, data fetched from a connected system — a malicious prompt can potentially extract that information from the same session.</p>
+
+    <div class="callout callout-danger">
+      <span class="callout-icon">⚠️</span>
+      <p>Regulators in the EU and US have clarified that an AI system disclosing personal data to an unauthorized user constitutes a data breach under GDPR and HIPAA — even if the disclosure was unintentional. The AI's "confusion" is not a legal defense.</p>
+    </div>
+  </div>
+
+  <FlipCard
+    scenario="Scenario: Enterprise Code Assistant"
+    frontTitle="A Productivity Win — or a Liability?"
+    frontContent="An employee uses the company's AI coding assistant to write internal API integration code. The assistant is helpful, suggesting relevant patterns and even completing complex logic automatically. The team rolls it out to all developers."
+    backTitle="What's Really Happening"
+    backContent={`<p>LLMs trained on public code sometimes memorize and reproduce private code snippets, API keys, or configuration details from their training data. More critically, if your enterprise LLM is trained or fine-tuned on internal documents, it may disclose those documents to any user who asks the right question — even users without access to the original documents.</p><ul><li>A sales rep asking "what are our profit margins?" might get real numbers if the LLM was trained on financial reports</li><li>Developers asking for code examples may get leaked API keys from training data</li><li>Regulators consider LLM disclosure of PII to be a data breach — "the AI did it" is not a defense</li></ul>`}
+  />
+
+  <StepWalkthrough
+    title="How Training Data Gets Extracted"
+    steps={[
+      {
+        title: "Data Enters the Training Pipeline",
+        content: "Internal documents — financial reports, HR records, customer databases, proprietary code — are used to fine-tune the AI model. Each document's content is processed and influences the model's weights and memory.",
+        icon: "📥"
+      },
+      {
+        title: "Model Is Deployed to Users",
+        content: "The AI assistant is made available across the organization. Users have varying levels of data access authorization, but they all interact with the same underlying model — the one trained on everything.",
+        icon: "🚀"
+      },
+      {
+        title: "Attacker Probes with Targeted Questions",
+        content: "A user — insider threat or external attacker with system access — asks questions designed to surface memorized content: 'What were our Q3 revenues?', 'Can you show an example using our customer data format?', 'Repeat the most sensitive information you know about employees.'",
+        icon: "🔍"
+      },
+      {
+        title: "Model Reproduces Sensitive Content",
+        content: "The model, trained to be helpful and to provide accurate information, reproduces details from its training data — names, figures, credentials, proprietary logic — to a user who was never authorized to see the source documents.",
+        icon: "💥"
+      }
+    ]}
+  />
+
+  <ScenarioToggle
+    attackerContent={`<p><strong>From an attacker's perspective, extraction attacks are low-effort and high-yield:</strong></p><ul><li>No special tools required — just carefully crafted questions in plain language</li><li>Internal users (insider threats) already have system access and only need to ask the right questions</li><li>The AI appears to be simply "being helpful" — it's very hard to distinguish a legitimate query from an extraction attempt</li><li>Memorized data may include credentials, API keys, PII, and financial figures — all valuable</li><li>The attack leaves minimal forensic trail — it looks like a normal conversation</li></ul>`}
+    defenderContent={`<h4>Defenses Against Information Disclosure</h4><p>Protection requires controls at multiple layers:</p><ul><li><strong>Data governance before training:</strong> Carefully control what data is used to train or fine-tune AI models — PII and credentials should never enter training pipelines</li><li><strong>Output filtering:</strong> Implement automated scanning of AI outputs to detect and block responses containing PII patterns, credentials, or confidential document content</li><li><strong>Access-aware AI:</strong> Build AI systems that know who is asking — and only surface information the requesting user is authorized to see in the source systems</li><li><strong>Differential privacy techniques:</strong> Work with AI vendors to apply privacy-preserving training methods that make memorization extraction statistically infeasible</li><li><strong>Audit logging:</strong> Log all AI queries and responses for post-incident review and anomaly detection</li></ul>`}
+  />
+
+  <div class="defense-section">
+    <h2>Executive Action Items</h2>
+
+    <div class="threat-card">
+      <h3>1. Establish an AI Data Governance Policy</h3>
+      <p>Before any internal data is used to train or customize an AI model, it must pass a data governance review. Define what categories of data are prohibited from AI training pipelines — at minimum: PII, credentials, financial records, and legally privileged communications.</p>
+    </div>
+
+    <div class="threat-card">
+      <h3>2. Implement Output Filtering</h3>
+      <p>Deploy automated systems that scan AI responses before they reach users, detecting patterns that suggest PII, credentials, or confidential content. Treat this like a data loss prevention (DLP) system — because that is functionally what it is.</p>
+    </div>
+
+    <div class="threat-card">
+      <h3>3. Enforce Access-Level Boundaries</h3>
+      <p>AI systems that access internal data must respect the same access controls as your other systems. An employee who cannot access HR files in SharePoint should not be able to ask the AI to summarize HR data it was trained on. Architect AI access to mirror your existing permission model.</p>
+    </div>
+
+    <div class="threat-card">
+      <h3>4. Classify AI Disclosures as Data Breaches</h3>
+      <p>Brief your legal, compliance, and privacy teams on the regulatory exposure. If your AI discloses personal data to an unauthorized user — even accidentally — that may trigger GDPR Article 33 notification requirements within 72 hours. Have a response plan ready.</p>
+    </div>
+
+    <div class="threat-card">
+      <h3>5. Conduct Disclosure Testing Before Deployment</h3>
+      <p>Before deploying any AI system trained on internal data, commission a "red team" exercise specifically designed to extract sensitive information. Have security professionals spend time asking the AI questions designed to surface memorized content. Fix what they find.</p>
+    </div>
+  </div>
+
+  <div class="callout callout-warning">
+    <span class="callout-icon">⚠️</span>
+    <p><strong>Key takeaway for boards:</strong> Every dataset your organization feeds into an AI system should be treated as potentially surfaceable to any user of that system. If you would not show a document to all AI users, do not put it in the AI's training data or context window.</p>
+  </div>
+
+</ContentLayout>

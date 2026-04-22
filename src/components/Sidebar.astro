@@ -1,0 +1,301 @@
+---
+import { navigation } from '../data/nav';
+
+export interface Props {
+  currentPath: string;
+}
+
+const { currentPath } = Astro.props;
+const normalizedPath = currentPath.replace(/\/$/, '') || '/';
+---
+
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-inner">
+
+    <!-- Brand -->
+    <div class="sidebar-brand">
+      <a href="/" class="brand-link">
+        <svg class="brand-icon" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M16 2L4 7V17C4 23.627 9.373 29 16 30C22.627 29 28 23.627 28 17V7L16 2Z" fill="currentColor" fill-opacity="0.12" stroke="currentColor" stroke-width="1.75" stroke-linejoin="round"/>
+          <path d="M11 16L14.5 19.5L21 13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <div class="brand-text">
+          <span class="brand-title">AI Security</span>
+          <span class="brand-sub">Leadership Guide</span>
+        </div>
+      </a>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="sidebar-nav" aria-label="Site navigation">
+      {navigation.map((section) => (
+        <div class="nav-section">
+          <div class="nav-section-title">{section.title}</div>
+          <ul class="nav-items">
+            {section.items.map((item) => {
+              const isActive = normalizedPath === item.href;
+              return (
+                <li>
+                  <a
+                    href={item.href}
+                    class:list={['nav-item', { active: isActive }]}
+                    aria-current={isActive ? 'page' : undefined}
+                  >
+                    {item.title}
+                  </a>
+                </li>
+              );
+            })}
+          </ul>
+        </div>
+      ))}
+    </nav>
+
+  </div>
+
+  <!-- Theme toggle footer -->
+  <div class="sidebar-footer">
+    <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode">
+      <!-- Sun icon (shown in dark mode) -->
+      <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="4"/>
+        <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/>
+      </svg>
+      <!-- Moon icon (shown in light mode) -->
+      <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+      </svg>
+      <span class="theme-label"></span>
+    </button>
+  </div>
+</aside>
+
+<button class="sidebar-toggle" id="sidebar-toggle" aria-label="Toggle navigation">
+  <span></span><span></span><span></span>
+</button>
+
+<style>
+  .sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: var(--sidebar-width);
+    height: 100vh;
+    background: var(--surface);
+    border-right: 1px solid var(--border);
+    overflow-y: auto;
+    z-index: 50;
+    scrollbar-width: thin;
+    scrollbar-color: var(--border) transparent;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .sidebar::-webkit-scrollbar { width: 4px; }
+  .sidebar::-webkit-scrollbar-track { background: transparent; }
+  .sidebar::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+  .sidebar-inner {
+    padding: 0 0 1rem;
+    flex: 1;
+  }
+
+  /* Brand */
+  .sidebar-brand {
+    padding: 1.125rem 1.25rem;
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    background: var(--surface);
+    z-index: 1;
+  }
+
+  .brand-link {
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+    text-decoration: none;
+  }
+
+  .brand-icon {
+    width: 28px;
+    height: 28px;
+    color: var(--accent);
+    flex-shrink: 0;
+  }
+
+  .brand-text {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .brand-title {
+    font-family: var(--font-display);
+    font-size: 0.95rem;
+    font-weight: 800;
+    color: var(--text-primary);
+    line-height: 1.2;
+  }
+
+  .brand-sub {
+    font-size: 0.68rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+  }
+
+  /* Nav sections */
+  .sidebar-nav { padding: 0.5rem 0; }
+
+  .nav-section { margin-bottom: 0.125rem; }
+
+  .nav-section-title {
+    padding: 0.7rem 1.25rem 0.3rem;
+    font-size: 0.65rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.11em;
+    color: var(--text-muted);
+    margin-top: 0.5rem;
+  }
+
+  .nav-items { list-style: none; padding: 0; margin: 0; }
+
+  .nav-item {
+    display: block;
+    padding: 0.42rem 1.25rem 0.42rem 1.75rem;
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    text-decoration: none;
+    border-left: 2px solid transparent;
+    transition: color var(--transition), background var(--transition), border-color var(--transition);
+    line-height: 1.4;
+  }
+
+  .nav-item:hover {
+    color: var(--text-primary);
+    background: var(--bg);
+    text-decoration: none;
+  }
+
+  .nav-item.active {
+    color: var(--accent);
+    background: var(--accent-bg);
+    border-left-color: var(--accent);
+    font-weight: 600;
+  }
+
+  /* Theme toggle footer */
+  .sidebar-footer {
+    padding: 0.875rem 1.25rem;
+    border-top: 1px solid var(--border);
+    background: var(--surface);
+    position: sticky;
+    bottom: 0;
+  }
+
+  .theme-toggle {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    width: 100%;
+    padding: 0.5rem 0.75rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    background: var(--bg);
+    color: var(--text-secondary);
+    font-family: var(--font-body);
+    font-size: 0.8rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all var(--transition);
+  }
+
+  .theme-toggle:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  .theme-toggle svg {
+    width: 15px;
+    height: 15px;
+    flex-shrink: 0;
+  }
+
+  /* Show/hide sun and moon based on theme */
+  .icon-sun { display: none; }
+  .icon-moon { display: block; }
+
+  html.dark .icon-sun { display: block; }
+  html.dark .icon-moon { display: none; }
+
+  /* Mobile toggle */
+  .sidebar-toggle {
+    display: none;
+    position: fixed;
+    bottom: 1.5rem;
+    right: 1.5rem;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: var(--accent);
+    border: none;
+    cursor: pointer;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    z-index: 100;
+    box-shadow: var(--shadow-lg);
+  }
+
+  .sidebar-toggle span {
+    display: block;
+    width: 20px;
+    height: 2px;
+    background: white;
+    border-radius: 2px;
+    transition: all var(--transition);
+  }
+
+  @media (max-width: 768px) {
+    .sidebar {
+      transform: translateX(-100%);
+      transition: transform 0.3s ease;
+    }
+    .sidebar.open { transform: translateX(0); }
+    .sidebar-toggle { display: flex; }
+  }
+</style>
+
+<script>
+  // Mobile sidebar toggle
+  const toggle = document.getElementById('sidebar-toggle');
+  const sidebar = document.getElementById('sidebar');
+  if (toggle && sidebar) {
+    toggle.addEventListener('click', () => sidebar.classList.toggle('open'));
+    document.addEventListener('click', (e) => {
+      if (!sidebar.contains(e.target as Node) && !toggle.contains(e.target as Node)) {
+        sidebar.classList.remove('open');
+      }
+    });
+  }
+
+  // Dark mode toggle
+  const themeBtn = document.getElementById('theme-toggle');
+  const label = themeBtn?.querySelector('.theme-label');
+
+  function applyTheme(dark: boolean) {
+    document.documentElement.classList.toggle('dark', dark);
+    localStorage.setItem('theme', dark ? 'dark' : 'light');
+    if (label) label.textContent = dark ? 'Light mode' : 'Dark mode';
+  }
+
+  // Set initial label
+  const isDark = document.documentElement.classList.contains('dark');
+  if (label) label.textContent = isDark ? 'Light mode' : 'Dark mode';
+
+  themeBtn?.addEventListener('click', () => {
+    applyTheme(!document.documentElement.classList.contains('dark'));
+  });
+</script>

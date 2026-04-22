@@ -1,0 +1,102 @@
+---
+import ContentLayout from '../../layouts/ContentLayout.astro';
+import StepWalkthrough from '../../components/StepWalkthrough.astro';
+---
+
+<ContentLayout
+  title="Your 12-Month AI Security Action Plan"
+  description="A prioritized, quarter-by-quarter roadmap for CISOs and CIOs to build a defensible AI security program — starting from wherever you are today."
+  category="Future Trends"
+  readingTime="10 min read"
+>
+
+<div class="callout callout-info">
+  <span class="callout-icon">💡</span>
+  <p>This plan is designed to be realistic. Most organizations cannot do everything at once. The sequence matters: each quarter builds on what came before. Start with visibility, build controls, then test and mature.</p>
+</div>
+
+<h2>Before You Begin: Establish Your Baseline</h2>
+
+<p>Before launching any initiative, spend two weeks answering three questions honestly:</p>
+
+<div class="threat-card info">
+  <h4>What AI is actually being used in your organization?</h4>
+  <p>Not what's officially approved — what's actually being used. Survey employees, check expense reports for AI subscriptions, review browser extensions on corporate devices, talk to department heads about what tools their teams use. The gap between "approved AI" and "actual AI in use" is almost always larger than leadership expects.</p>
+</div>
+
+<div class="threat-card info">
+  <h4>Where are your highest-risk AI deployments?</h4>
+  <p>Not the most complex ones — the ones where a security failure would cause the most harm. Customer-facing AI that could leak data? Agents with write access to production systems? AI processing regulated data? These are your priority targets for early controls.</p>
+</div>
+
+<div class="threat-card info">
+  <h4>What security controls do you already have that apply to AI?</h4>
+  <p>Your existing DLP, access management, logging infrastructure, and incident response capabilities are not starting from zero. Map what you have and identify where AI creates gaps. You are extending existing security — not building from scratch.</p>
+</div>
+
+<StepWalkthrough
+  title="Quarter by Quarter — The 12-Month Roadmap"
+  steps={[
+    {
+      title: "Q1: Establish Visibility",
+      content: "Goal: Know what you have. Actions: (1) Complete AI inventory — every system, model, provider, and API key. (2) Deploy an AI gateway or proxy for your highest-traffic AI systems. Every request becomes visible, attributed, and logged. (3) Establish usage baselines: normal volume, cost patterns, which teams use what. (4) Create an AI tools request process so new tools go through review, not shadow adoption. (5) Assign clear ownership: who is accountable for AI security? Deliverable: A complete AI asset inventory and a working AI gateway with logging enabled.",
+      icon: "👁️"
+    },
+    {
+      title: "Q2: Build Foundational Controls",
+      content: "Goal: Make your highest-risk AI deployments defensible. Actions: (1) Apply least-privilege permissions to all agents — document and reduce access to what's actually needed. (2) Deploy guardrails on all customer-facing AI deployments. Define behavioral rules; implement input and output rails. (3) Add PII detection to AI pipelines processing personal data. (4) Sandbox all code-executing agents — they should not run on production infrastructure. (5) Conduct your first AI red-team test on your highest-risk deployment. Deliverable: Written permission inventory for all agents, guardrails deployed on customer-facing AI, one completed red-team report.",
+      icon: "🛡️"
+    },
+    {
+      title: "Q3: Add Monitoring & Testing Rigor",
+      content: "Goal: Know when something goes wrong before users tell you. Actions: (1) Deploy agent observability for all autonomous agent deployments — full trace logging, anomaly alerting. (2) Establish a plugin governance process: approved list, version pinning, update review cadence. (3) Conduct a tabletop exercise simulating an AI security incident. Test your response, find the gaps. (4) Publish your AI security policy and communicate it to the organization. (5) Establish human oversight requirements: which agent actions require human approval, and is that enforced technically? Deliverable: Agent observability deployed, written AI security policy, completed incident response tabletop with documented findings.",
+      icon: "📊"
+    },
+    {
+      title: "Q4: Mature the Program",
+      content: "Goal: Turn one-time activities into sustained practices. Actions: (1) Establish a quarterly AI security review: inventory refresh, permission audit, policy update. (2) Set up a recurring red-teaming cadence — quarterly for high-risk systems, annually for lower-risk. (3) Develop board reporting on AI security — a 2-page quarterly summary for leadership that is meaningful, not just reassuring. (4) Document your AI risk framework and map it to NIST AI RMF or a comparable standard. (5) Assess whether AI-specific threat detection is appropriate for your organization's maturity level. Deliverable: Documented quarterly review process, first board AI security report, NIST AI RMF gap assessment.",
+      icon: "🎯"
+    }
+  ]}
+/>
+
+<h2>Making It Real: Priorities Within Priorities</h2>
+
+<p>Within each quarter, not everything is equal. When you need to sequence further, use this logic:</p>
+
+<div class="defense-section">
+  <h3>The Triage Framework</h3>
+  <ul>
+    <li><strong>Customer-facing AI first.</strong> Where AI fails visibly, in public, with regulatory exposure. Guardrails, data controls, and oversight here have the highest risk-reduction impact.</li>
+    <li><strong>Code-executing agents second.</strong> Agents that run code in production environments are your highest-severity technical risk. Sandboxing and least-privilege here is non-negotiable.</li>
+    <li><strong>Data-handling AI third.</strong> Systems that process personal, financial, or regulated data. PII detection and compliance mapping here address your regulatory obligations.</li>
+    <li><strong>Internal productivity AI last.</strong> Employees using AI for drafting, summarizing, and researching. Lower risk, higher volume. Address through policy and training, not necessarily heavy technical controls.</li>
+  </ul>
+</div>
+
+<h2>What Gets in the Way — and How to Handle It</h2>
+
+<div class="threat-card info">
+  <h4>Business Pressure to Deploy Faster Than Security Can Review</h4>
+  <p><strong>The challenge:</strong> Business units want AI capabilities now. Security review feels like a delay. Leaders are told competitors are moving faster.</p>
+  <p><strong>The response:</strong> Establish a lightweight fast-track review process for lower-risk AI uses (internal tools, productivity). Reserve full review for customer-facing and autonomous deployments. Make the process transparent — the goal is "how do we do this safely" not "how do we stop this." A 48-hour fast-track is not a barrier; it's a governance record.</p>
+</div>
+
+<div class="threat-card info">
+  <h4>No Dedicated AI Security Budget</h4>
+  <p><strong>The challenge:</strong> AI security is a new category. Existing security budgets weren't sized for it. Getting new budget takes time.</p>
+  <p><strong>The response:</strong> Q1 and Q2 can be accomplished primarily by redirecting existing security engineering capacity and using open-source tools (LiteLLM for gateway, Microsoft Presidio for PII detection, PyRIT for red teaming, Langfuse for observability). Commercial tools become relevant at scale. Start with what you have — the architecture matters more than the tool brand.</p>
+</div>
+
+<div class="threat-card info">
+  <h4>AI Moves Faster Than Policy</h4>
+  <p><strong>The challenge:</strong> By the time you've written a policy for a capability, a new capability exists that the policy doesn't cover.</p>
+  <p><strong>The response:</strong> Write principles-based policy, not technology-specific policy. "All autonomous agents must operate under least-privilege" covers every agent you deploy, regardless of the underlying technology. Specific implementation guidance can be in living documents that update without requiring policy revision. Review your principles annually; review your implementation guidance quarterly.</p>
+</div>
+
+<div class="callout callout-defense">
+  <span class="callout-icon">✅</span>
+  <p><strong>The most important thing you can do right now</strong> is complete an honest AI inventory. Every other action in this plan depends on knowing what you have. If you take only one action from this guide, make it this: spend two weeks finding every AI system, tool, and API your organization uses. Then you know what you're governing.</p>
+</div>
+
+</ContentLayout>

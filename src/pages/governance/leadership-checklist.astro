@@ -1,0 +1,128 @@
+---
+import ContentLayout from '../../layouts/ContentLayout.astro';
+import InteractiveChecklist from '../../components/InteractiveChecklist.astro';
+---
+
+<ContentLayout
+  title="The AI Security Leadership Checklist"
+  description="50 questions every CISO, CTO, and CIO should be able to answer about their organization's AI security posture."
+  category="Governance & Leadership"
+  readingTime="15 min read"
+>
+
+<div class="callout callout-info">
+  <span class="callout-icon">💡</span>
+  <p>This checklist is designed for leadership conversations, board reporting, and audit preparation — not for engineers. Each item should be answerable by your AI governance lead without digging through technical documentation.</p>
+</div>
+
+<p>Use this checklist in three ways: as a gap analysis to find what you don't know, as a board preparation tool to demonstrate AI governance maturity, and as a recurring quarterly review to track progress over time. Your progress is saved automatically in this browser.</p>
+
+<InteractiveChecklist
+  storageKey="leadership-checklist-2025"
+  groups={[
+    {
+      title: "1. AI Inventory & Visibility",
+      items: [
+        "We have a complete, maintained inventory of every AI system deployed in our organization (including shadow AI and departmental tools)",
+        "We know which AI models each system uses, which versions, and which providers supply them",
+        "We have a process for employees to request AI tools — and a policy for what happens when they use unapproved tools anyway",
+        "We can identify every API key or credential that gives access to external AI providers, and who controls each one",
+        "We receive alerts when AI usage significantly exceeds normal patterns (volume, cost, new models accessed)",
+        "We have mapped which business processes depend on AI, and what happens if each one fails",
+        "We review and update our AI inventory at least quarterly"
+      ]
+    },
+    {
+      title: "2. Agent Security & Permissions",
+      items: [
+        "Every AI agent in production has documented permissions — exactly what data, systems, and APIs it can access",
+        "Our agents follow the principle of least privilege: they have access to what they need, nothing more",
+        "We have a process for reviewing and approving new permissions before agents are granted them",
+        "Code-executing agents run in isolated sandbox environments, not directly on production infrastructure",
+        "We can revoke an agent's access to any system within minutes if a security incident occurs",
+        "We have tested what happens when an agent's tool call fails — does it degrade gracefully or take a dangerous fallback path?",
+        "We have documented which agent actions are irreversible, and those actions require human approval before execution",
+        "We review agent permissions at least quarterly and remove permissions that are no longer needed"
+      ]
+    },
+    {
+      title: "3. Data & Privacy Protection",
+      items: [
+        "We know what categories of data flow through our AI systems (PII, financial data, health records, confidential IP)",
+        "We have controls in place to prevent sensitive personal data from being sent to AI models without appropriate safeguards",
+        "We can demonstrate that our AI data handling complies with GDPR, CCPA, or other applicable privacy regulations",
+        "We have reviewed the data retention and training policies of every AI provider we use",
+        "We have a process for responding to a data subject access request that includes AI-processed data",
+        "We know whether our AI provider uses our data to train their models, and we have reviewed and accepted or rejected that policy",
+        "We have audit logs showing what data was sent to AI systems and when"
+      ]
+    },
+    {
+      title: "4. Vendor & Supply Chain",
+      items: [
+        "We have conducted security due diligence on every AI provider we use, including reviewing their SOC 2 reports or equivalent",
+        "We have contracts with AI providers that include security, confidentiality, and incident notification requirements",
+        "We maintain an approved list of AI plugins and tools; only approved items are used in production",
+        "All plugin and dependency versions are pinned — we do not use auto-update in production AI systems",
+        "We have a process for reviewing plugin updates before they are deployed",
+        "We receive security notifications from our key AI vendors and have a process to act on them",
+        "We have assessed what happens to our operations if our primary AI provider has an outage or discontinues a model"
+      ]
+    },
+    {
+      title: "5. Governance & Compliance",
+      items: [
+        "We have an AI security policy that has been reviewed and approved by leadership",
+        "Accountability for AI security is clearly assigned — there is a named owner, not a committee with shared responsibility",
+        "Our AI uses have been mapped to our compliance obligations (financial regulations, healthcare regulations, sector-specific requirements)",
+        "We have documented our approach to AI risk assessment and can demonstrate it to auditors or regulators",
+        "We have a process for evaluating new AI capabilities or use cases before they go to production",
+        "Leadership receives regular reporting on AI security posture — at least quarterly",
+        "We have conducted at least one board-level discussion about AI risk in the last 12 months",
+        "Our AI governance framework has been reviewed against NIST AI RMF or a comparable standard"
+      ]
+    },
+    {
+      title: "6. Human Oversight",
+      items: [
+        "For every consequential AI action, we can state whether it is human-in-the-loop, human-on-the-loop, or post-hoc review — and why",
+        "Our oversight requirements are technically enforced, not just policy-based",
+        "We have a way to monitor whether human oversight is actually happening (review times, pushback rates, escalations)",
+        "We have conducted a tabletop exercise simulating an AI system failure or attack in the last 12 months",
+        "Our people who review AI outputs are trained to avoid automation bias — rubber-stamping without real scrutiny",
+        "We have defined escalation paths for when an AI agent encounters situations outside its designed scope",
+        "We can answer: what is the maximum harm an AI agent can cause before a human has the opportunity to intervene?"
+      ]
+    },
+    {
+      title: "7. Incident Response",
+      items: [
+        "We have a written AI incident response plan that covers prompt injection, data exfiltration, model misbehavior, and supply chain compromise",
+        "Our security team knows how to collect and preserve evidence from an AI system incident",
+        "We have defined what constitutes an AI security incident requiring escalation versus routine monitoring",
+        "We have practiced our AI incident response at least once through a tabletop or simulation exercise",
+        "We know our regulatory notification obligations if an AI system is involved in a data breach",
+        "We have a process for communicating with affected users or customers if an AI incident impacts them",
+        "After any AI incident or near-miss, we conduct a blameless post-mortem and update our controls"
+      ]
+    }
+  ]}
+/>
+
+<div class="defense-section">
+  <h3>Scoring Guide for Leadership Conversations</h3>
+  <ul>
+    <li><strong>40–50 items checked:</strong> Strong AI security posture. Maintain cadence and look ahead to emerging capabilities (multi-agent systems, computer use).</li>
+    <li><strong>25–39 items checked:</strong> Developing posture. Prioritize the unchecked items by risk — agent permissions and data protection first.</li>
+    <li><strong>10–24 items checked:</strong> Early stage. Start with inventory and visibility — you cannot govern what you cannot see.</li>
+    <li><strong>Under 10 items checked:</strong> Significant gaps exist. Treat AI security as a priority initiative, not a background task.</li>
+  </ul>
+  <p>No organization checks all 50 immediately. The value is in knowing your gaps — and having a plan to close them.</p>
+</div>
+
+<div class="callout callout-warning">
+  <span class="callout-icon">⚠️</span>
+  <p><strong>A note on "we have a policy for that":</strong> Policies that aren't technically enforced are not controls. Throughout this checklist, distinguish between "we have written a policy" and "we have verified the policy is being followed." The former provides legal cover; the latter provides security.</p>
+</div>
+
+</ContentLayout>

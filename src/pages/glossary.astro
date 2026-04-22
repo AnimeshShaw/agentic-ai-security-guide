@@ -1,0 +1,421 @@
+---
+import ContentLayout from '../layouts/ContentLayout.astro';
+---
+
+<ContentLayout
+  title="Glossary of AI Security Terms"
+  description="Plain-English definitions of every technical term used in this guide. No jargon — just clear explanations for security and business leaders."
+  category="Reference"
+  readingTime="8 min read"
+>
+
+<div class="callout callout-info">
+  <span class="callout-icon">💡</span>
+  <p>Terms are defined for their security context, not their general technical definition. The goal is clarity for decision-makers, not precision for engineers.</p>
+</div>
+
+<style>
+  .glossary-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+
+  .glossary-letter {
+    margin-top: 2rem;
+  }
+
+  .glossary-letter h3 {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--brand);
+    border-bottom: 2px solid var(--brand);
+    padding-bottom: 0.5rem;
+    margin-bottom: 1rem;
+    font-family: var(--font-display);
+  }
+
+  .glossary-entry {
+    padding: 1rem 0;
+    border-bottom: 1px solid var(--surface-2);
+  }
+
+  .glossary-entry:last-child {
+    border-bottom: none;
+  }
+
+  .glossary-term {
+    font-weight: 700;
+    font-size: 1.05rem;
+    color: var(--text-primary);
+    margin-bottom: 0.25rem;
+  }
+
+  .glossary-tag {
+    display: inline-block;
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    background: var(--surface-2);
+    color: var(--text-secondary);
+    padding: 0.1rem 0.5rem;
+    border-radius: 999px;
+    margin-left: 0.5rem;
+    vertical-align: middle;
+  }
+
+  .glossary-def {
+    color: var(--text-secondary);
+    line-height: 1.6;
+    font-size: 0.95rem;
+  }
+
+  .glossary-search {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 2px solid var(--surface-2);
+    border-radius: 0.5rem;
+    font-size: 1rem;
+    background: var(--surface-1);
+    color: var(--text-primary);
+    margin-bottom: 1.5rem;
+    transition: border-color 0.2s;
+  }
+
+  .glossary-search:focus {
+    outline: none;
+    border-color: var(--brand);
+  }
+
+  .glossary-entry.hidden {
+    display: none;
+  }
+</style>
+
+<input
+  type="text"
+  class="glossary-search"
+  placeholder="Search terms..."
+  id="glossary-search"
+  autocomplete="off"
+/>
+
+<div class="glossary-grid" id="glossary-container">
+
+  <div class="glossary-letter">
+    <h3>A</h3>
+
+    <div class="glossary-entry">
+      <div class="glossary-term">Agent <span class="glossary-tag">Core</span></div>
+      <div class="glossary-def">An AI system that can take actions autonomously — not just answer questions, but actually do things: call APIs, run code, send emails, browse the web. The key characteristic is that an agent acts in the world, not just in a conversation. Security implications scale with what actions the agent can take.</div>
+    </div>
+
+    <div class="glossary-entry">
+      <div class="glossary-term">Agentic AI <span class="glossary-tag">Core</span></div>
+      <div class="glossary-def">The broad category of AI systems designed for autonomous action. As opposed to conversational AI (which responds) or analytical AI (which analyzes), agentic AI executes. The shift to agentic AI is the primary driver of the expanded security attack surface this guide covers.</div>
+    </div>
+
+    <div class="glossary-entry">
+      <div class="glossary-term">AI Gateway / Proxy <span class="glossary-tag">Technology</span></div>
+      <div class="glossary-def">A piece of infrastructure that sits between your applications and AI providers. Every AI request flows through it, giving you centralized visibility, access control, cost management, and logging. Similar to how a web application firewall sits in front of web traffic, an AI gateway sits in front of AI traffic.</div>
+    </div>
+
+    <div class="glossary-entry">
+      <div class="glossary-term">Automation Bias <span class="glossary-tag">Human Factors</span></div>
+      <div class="glossary-def">The human tendency to over-trust automated systems — accepting their output without adequate scrutiny. In AI oversight contexts, automation bias causes human reviewers to rubber-stamp AI decisions rather than genuinely evaluating them, especially after a period of the AI being consistently correct.</div>
+    </div>
+  </div>
+
+  <div class="glossary-letter">
+    <h3>C</h3>
+
+    <div class="glossary-entry">
+      <div class="glossary-term">Computer Use <span class="glossary-tag">Emerging</span></div>
+      <div class="glossary-def">An AI capability where the model can control a computer interface — seeing the screen, moving a mouse, clicking buttons, typing text — exactly as a human would. This allows AI agents to use any software application without requiring a programmatic API. Security implication: every system accessible to a human becomes accessible to an AI with computer-use credentials.</div>
+    </div>
+
+    <div class="glossary-entry">
+      <div class="glossary-term">Context Window <span class="glossary-tag">Core</span></div>
+      <div class="glossary-def">The amount of text (or "tokens") an AI model can consider at one time. Think of it as the AI's working memory — everything it can see at once. Security relevance: memory poisoning attacks work by injecting malicious content into the context window, where it influences the AI's subsequent reasoning and actions.</div>
+    </div>
+  </div>
+
+  <div class="glossary-letter">
+    <h3>D</h3>
+
+    <div class="glossary-entry">
+      <div class="glossary-term">Data Poisoning <span class="glossary-tag">Threat</span></div>
+      <div class="glossary-def">An attack that corrupts the training data used to build or fine-tune an AI model. Poisoned training data can introduce backdoors (the model behaves normally except when triggered by specific inputs), biases, or systematically degraded performance on specific tasks. Because training happens before deployment, poisoning is often not detectable until the model is in production.</div>
+    </div>
+
+    <div class="glossary-entry">
+      <div class="glossary-term">Defense in Depth <span class="glossary-tag">Security Concept</span></div>
+      <div class="glossary-def">A security architecture principle where multiple independent layers of controls protect a system, so that if one layer fails, others remain. In AI security: input validation + guardrails + sandboxing + human oversight are all independent layers. A prompt injection that bypasses guardrails is still stopped by sandboxing that prevents the agent from exfiltrating data.</div>
+    </div>
+  </div>
+
+  <div class="glossary-letter">
+    <h3>E</h3>
+
+    <div class="glossary-entry">
+      <div class="glossary-term">Embedding <span class="glossary-tag">Technical</span></div>
+      <div class="glossary-def">A mathematical representation of text (or images, code, etc.) as a list of numbers that captures its meaning. Embeddings allow AI systems to find semantically similar content — searching for "vehicle" finds results about "cars" and "trucks" even without the word "vehicle." Used extensively in RAG systems to retrieve relevant context.</div>
+    </div>
+
+    <div class="glossary-entry">
+      <div class="glossary-term">Excessive Agency <span class="glossary-tag">Threat</span></div>
+      <div class="glossary-def">A vulnerability where an AI agent has been granted more capabilities, permissions, or autonomy than its task actually requires. If an agent only needs to read a database but has write access, an attacker who manipulates the agent can cause writes. Excessive agency violates the principle of least privilege and is one of the most common AI security misconfigurations.</div>
+    </div>
+  </div>
+
+  <div class="glossary-letter">
+    <h3>F</h3>
+
+    <div class="glossary-entry">
+      <div class="glossary-term">Fine-Tuning <span class="glossary-tag">Technical</span></div>
+      <div class="glossary-def">The process of further training an existing AI model on a specific dataset to specialize its behavior. Organizations fine-tune models to make them better at their specific domain (medical terminology, legal language, company-specific knowledge). Security implication: fine-tuning data can be poisoned, and fine-tuned models may behave differently from the base model's safety testing.</div>
+    </div>
+
+    <div class="glossary-entry">
+      <div class="glossary-term">Foundation Model <span class="glossary-tag">Core</span></div>
+      <div class="glossary-def">A large AI model trained on massive general datasets that can be used as a starting point for many different applications. GPT-4, Claude, Gemini, and Llama are foundation models. Organizations typically build on top of foundation models rather than training from scratch. Supply chain risk: a compromised foundation model affects every application built on it.</div>
+    </div>
+  </div>
+
+  <div class="glossary-letter">
+    <h3>G</h3>
+
+    <div class="glossary-entry">
+      <div class="glossary-term">Guardrails <span class="glossary-tag">Technology</span></div>
+      <div class="glossary-def">Rules that define what an AI system is and isn't allowed to say or do. Input guardrails evaluate what goes into the AI; output guardrails evaluate what comes out. Unlike safety training baked into the model itself, guardrails are an external layer — they can be configured, updated, and audited without changing the underlying model.</div>
+    </div>
+  </div>
+
+  <div class="glossary-letter">
+    <h3>H</h3>
+
+    <div class="glossary-entry">
+      <div class="glossary-term">Hallucination <span class="glossary-tag">AI Behavior</span></div>
+      <div class="glossary-def">When an AI model confidently generates false information — facts, citations, quotes, code, legal precedents — that sound authoritative but are fabricated. Hallucinations are an inherent property of how language models work, not a bug that will be fully fixed. Security implication: AI outputs cannot be treated as verified facts without independent confirmation for consequential decisions.</div>
+    </div>
+
+    <div class="glossary-entry">
+      <div class="glossary-term">Human-in-the-Loop <span class="glossary-tag">Oversight</span></div>
+      <div class="glossary-def">An oversight model where a human must review and approve each AI action before it executes. The AI proposes; the human authorizes. Most appropriate for high-stakes, irreversible, or novel actions. Provides the strongest oversight guarantee but is slower than autonomous operation.</div>
+    </div>
+
+    <div class="glossary-entry">
+      <div class="glossary-term">Human-on-the-Loop <span class="glossary-tag">Oversight</span></div>
+      <div class="glossary-def">An oversight model where the AI acts autonomously, but humans monitor in real time and can intervene. The AI acts; humans watch and can stop it. Appropriate for repetitive, lower-stakes, or easily reversible actions. Faster than human-in-the-loop but requires active monitoring to be meaningful.</div>
+    </div>
+  </div>
+
+  <div class="glossary-letter">
+    <h3>I</h3>
+
+    <div class="glossary-entry">
+      <div class="glossary-term">Indirect Prompt Injection <span class="glossary-tag">Threat</span></div>
+      <div class="glossary-def">A prompt injection attack where the malicious instructions come from data the AI processes — a webpage, a document, an email — rather than directly from the user. The user may be completely unaware. An agent browsing the web reads an attacker-controlled page that contains hidden instructions; the agent follows those instructions as if they came from a legitimate source.</div>
+    </div>
+  </div>
+
+  <div class="glossary-letter">
+    <h3>J</h3>
+
+    <div class="glossary-entry">
+      <div class="glossary-term">Jailbreak <span class="glossary-tag">Threat</span></div>
+      <div class="glossary-def">An attempt to bypass an AI model's safety training and get it to produce content or take actions it was designed to refuse. Jailbreaks typically work by framing prohibited requests in ways that confuse or circumvent safety training (roleplay scenarios, hypothetical framings, gradual escalation). Distinct from prompt injection, which exploits the agent's context; jailbreaks exploit the model's training.</div>
+    </div>
+  </div>
+
+  <div class="glossary-letter">
+    <h3>L</h3>
+
+    <div class="glossary-entry">
+      <div class="glossary-term">Least Privilege <span class="glossary-tag">Security Principle</span></div>
+      <div class="glossary-def">The security principle that any system, user, or agent should have access only to the resources and capabilities it actually needs — nothing more. If an agent needs to read files, it should not have write access. If it needs to query a database, it should not have delete access. Violations of least privilege are one of the most common and consequential AI security misconfigurations.</div>
+    </div>
+
+    <div class="glossary-entry">
+      <div class="glossary-term">LiteLLM <span class="glossary-tag">Technology</span></div>
+      <div class="glossary-def">An open-source proxy and load balancer for large language model APIs. Acts as a unified gateway that normalizes requests across OpenAI, Anthropic, Google, and other providers. Organizations use it for centralized API key management, usage tracking, cost control, and rate limiting across all AI usage.</div>
+    </div>
+
+    <div class="glossary-entry">
+      <div class="glossary-term">LLM (Large Language Model) <span class="glossary-tag">Core</span></div>
+      <div class="glossary-def">The AI model that processes language and generates text. The "brain" behind AI assistants and agents. LLMs like GPT-4, Claude, and Gemini are trained on large text datasets and can understand and generate human language at high quality. They power most AI applications in use today.</div>
+    </div>
+  </div>
+
+  <div class="glossary-letter">
+    <h3>M</h3>
+
+    <div class="glossary-entry">
+      <div class="glossary-term">MCP (Model Context Protocol) <span class="glossary-tag">Technology</span></div>
+      <div class="glossary-def">An open standard from Anthropic that defines how AI models connect to external tools, data sources, and services. Think of it as USB for AI — a standardized way to plug capabilities into AI systems. MCP servers expose tools and data; MCP clients (AI models) use them. The standardization improves interoperability but also creates supply chain risk when MCP servers from untrusted sources are used.</div>
+    </div>
+
+    <div class="glossary-entry">
+      <div class="glossary-term">Memory Poisoning <span class="glossary-tag">Threat</span></div>
+      <div class="glossary-def">An attack that corrupts an AI agent's persistent memory — the stored information the agent uses across sessions. A poisoned memory entry can influence every future conversation that retrieves it, embedding false context, malicious instructions, or backdoor triggers that persist long after the initial attack.</div>
+    </div>
+
+    <div class="glossary-entry">
+      <div class="glossary-term">Multi-Agent System <span class="glossary-tag">Architecture</span></div>
+      <div class="glossary-def">A setup where multiple AI agents work together — one planning, others executing, others reviewing. Complex tasks are decomposed across specialized agents that communicate and hand off work. Multi-agent systems can accomplish dramatically more complex tasks than single agents, but each inter-agent trust relationship is a potential attack surface.</div>
+    </div>
+  </div>
+
+  <div class="glossary-letter">
+    <h3>N</h3>
+
+    <div class="glossary-entry">
+      <div class="glossary-term">NeMo Guardrails <span class="glossary-tag">Technology</span></div>
+      <div class="glossary-def">NVIDIA's open-source framework for adding programmable behavioral rules to AI systems. Organizations define input rails (what the AI can receive), dialog rails (how conversations must flow), and output rails (what the AI can produce). Rules are configurable without model retraining — a compliance team can add a new rule without engineering support.</div>
+    </div>
+
+    <div class="glossary-entry">
+      <div class="glossary-term">NIST AI RMF <span class="glossary-tag">Standard</span></div>
+      <div class="glossary-def">The National Institute of Standards and Technology's AI Risk Management Framework. A voluntary framework for managing AI risks across four functions: Govern, Map, Measure, and Manage. The most widely referenced AI governance framework for organizations seeking to demonstrate structured AI risk management to regulators and partners.</div>
+    </div>
+  </div>
+
+  <div class="glossary-letter">
+    <h3>O</h3>
+
+    <div class="glossary-entry">
+      <div class="glossary-term">Orchestrator <span class="glossary-tag">Architecture</span></div>
+      <div class="glossary-def">In a multi-agent system, the orchestrator is the agent (or component) that coordinates other agents — directing their tasks, aggregating their outputs, and making decisions about what to do next. Security implication: if the orchestrator is compromised (via prompt injection or other means), it can direct all subordinate agents to perform malicious actions.</div>
+    </div>
+
+    <div class="glossary-entry">
+      <div class="glossary-term">OWASP LLM Top 10 <span class="glossary-tag">Standard</span></div>
+      <div class="glossary-def">The Open Worldwide Application Security Project's list of the ten most critical security risks in large language model applications. First published 2023, updated 2025. The most widely referenced categorization of LLM vulnerabilities. Used by security teams, regulators, and auditors to structure AI security assessments.</div>
+    </div>
+  </div>
+
+  <div class="glossary-letter">
+    <h3>P</h3>
+
+    <div class="glossary-entry">
+      <div class="glossary-term">PII (Personally Identifiable Information) <span class="glossary-tag">Data</span></div>
+      <div class="glossary-def">Information that can identify a specific individual — names, email addresses, phone numbers, social security numbers, health records, financial account numbers, IP addresses in some contexts. PII flowing through AI systems creates regulatory obligations (GDPR, CCPA, HIPAA) and breach notification requirements if exposed.</div>
+    </div>
+
+    <div class="glossary-entry">
+      <div class="glossary-term">Privilege Escalation <span class="glossary-tag">Threat</span></div>
+      <div class="glossary-def">When an attacker or compromised system gains higher access than they were granted. In AI contexts: an agent with limited permissions manipulates other systems or agents to perform actions requiring elevated permissions. Or: a user manipulates an AI to take actions only administrators should be able to take. The AI's ability to interact with other systems makes it a potential escalation vector.</div>
+    </div>
+
+    <div class="glossary-entry">
+      <div class="glossary-term">Prompt Injection <span class="glossary-tag">Threat</span></div>
+      <div class="glossary-def">An attack that inserts malicious instructions into content processed by an AI, causing the AI to follow the attacker's instructions instead of (or in addition to) the user's legitimate requests. The AI can't reliably distinguish between instructions from its system prompt, legitimate user input, and injected attacker instructions. The most widespread attack against AI systems today.</div>
+    </div>
+
+    <div class="glossary-entry">
+      <div class="glossary-term">PyRIT <span class="glossary-tag">Technology</span></div>
+      <div class="glossary-def">Microsoft's Python Risk Identification Toolkit — an open-source framework for red-teaming AI systems. Automates the process of testing AI models for vulnerabilities, running thousands of adversarial prompts to find weaknesses in safety behaviors, guardrails, and content policies before attackers do.</div>
+    </div>
+  </div>
+
+  <div class="glossary-letter">
+    <h3>R</h3>
+
+    <div class="glossary-entry">
+      <div class="glossary-term">RAG (Retrieval-Augmented Generation) <span class="glossary-tag">Architecture</span></div>
+      <div class="glossary-def">A technique where an AI model retrieves relevant documents or data before generating a response, grounding its answer in specific sources rather than relying only on its training. Used to give AI access to proprietary or up-to-date information. Security implication: the retrieval database (vector store) becomes a high-value target — poisoning it corrupts every response that draws from it.</div>
+    </div>
+
+    <div class="glossary-entry">
+      <div class="glossary-term">Red Teaming <span class="glossary-tag">Practice</span></div>
+      <div class="glossary-def">Structured adversarial testing — trying to attack your own system to find vulnerabilities before real attackers do. In AI contexts, red teaming involves probing for prompt injections, jailbreaks, data extraction vulnerabilities, and unsafe behaviors. Can be done manually by security professionals or automated using tools like PyRIT and Garak.</div>
+    </div>
+  </div>
+
+  <div class="glossary-letter">
+    <h3>S</h3>
+
+    <div class="glossary-entry">
+      <div class="glossary-term">Sandboxing <span class="glossary-tag">Technology</span></div>
+      <div class="glossary-def">Running a process (or AI agent) in an isolated environment that restricts what it can access or affect. A sandboxed agent can only reach the specific files, network addresses, and APIs permitted — everything else is blocked at the infrastructure level. Sandboxing limits the blast radius of a successful attack: the attacker can only do what the sandbox allows.</div>
+    </div>
+
+    <div class="glossary-entry">
+      <div class="glossary-term">Shadow AI <span class="glossary-tag">Governance</span></div>
+      <div class="glossary-def">AI tools used by employees without official approval or IT visibility — the AI equivalent of shadow IT. Employees using personal ChatGPT accounts, consumer AI tools, or browser extensions for work tasks outside of official channels. Shadow AI creates data governance risk (company data entering unapproved systems) and security risk (no controls, no logging, no oversight).</div>
+    </div>
+
+    <div class="glossary-entry">
+      <div class="glossary-term">Supply Chain Attack <span class="glossary-tag">Threat</span></div>
+      <div class="glossary-def">An attack that compromises a trusted component in your technology supply chain — a plugin, library, SDK, or service — rather than attacking you directly. In AI: a compromised MCP plugin that exfiltrates data it handles, a backdoored model update, or a malicious SDK that modifies AI behavior. The attack leverages your trust in the compromised component.</div>
+    </div>
+
+    <div class="glossary-entry">
+      <div class="glossary-term">System Prompt <span class="glossary-tag">Technical</span></div>
+      <div class="glossary-def">The hidden instructions given to an AI before a user conversation begins — defining its role, behavior rules, available tools, and constraints. System prompts are typically invisible to users but shape everything the AI does. System prompt leakage attacks attempt to extract this confidential configuration; prompt injection attacks attempt to override it.</div>
+    </div>
+  </div>
+
+  <div class="glossary-letter">
+    <h3>T</h3>
+
+    <div class="glossary-entry">
+      <div class="glossary-term">Token <span class="glossary-tag">Technical</span></div>
+      <div class="glossary-def">The unit of text that AI models process — roughly equivalent to a word or word fragment. Models have context window limits measured in tokens. Cost and performance are both measured in tokens. Security relevance: token exhaustion attacks (unbounded consumption) overwhelm systems by generating or requesting enormous quantities of tokens, causing denial of service or unexpected costs.</div>
+    </div>
+
+    <div class="glossary-entry">
+      <div class="glossary-term">Tool Calling / Function Calling <span class="glossary-tag">Technical</span></div>
+      <div class="glossary-def">The mechanism by which an AI model invokes external functions or APIs — searching the web, querying a database, sending an email, running code. Tool calling is what makes AI agents capable of acting in the world. Security implication: tool calls can have irreversible real-world consequences. Malicious tool calls triggered by prompt injection can delete data, send unauthorized messages, or exfiltrate information.</div>
+    </div>
+  </div>
+
+  <div class="glossary-letter">
+    <h3>V</h3>
+
+    <div class="glossary-entry">
+      <div class="glossary-term">Vector Database <span class="glossary-tag">Technology</span></div>
+      <div class="glossary-def">A database that stores embeddings (mathematical representations of meaning) and allows fast similarity searches. Used in RAG systems to find documents relevant to a query. When an AI searches for "information about refund policy," the vector database finds semantically similar documents even if they don't contain those exact words. Poisoning the vector database corrupts AI responses at scale.</div>
+    </div>
+
+    <div class="glossary-entry">
+      <div class="glossary-term">Version Pinning <span class="glossary-tag">Practice</span></div>
+      <div class="glossary-def">Locking software dependencies to a specific reviewed version rather than automatically using the latest release. "We use version 2.3.1 of this plugin" rather than "we use the latest version." Prevents auto-update supply chain attacks, where an attacker compromises a software maintainer and pushes a malicious update that is automatically deployed to all users.</div>
+    </div>
+  </div>
+
+  <div class="glossary-letter">
+    <h3>Z</h3>
+
+    <div class="glossary-entry">
+      <div class="glossary-term">Zero Trust <span class="glossary-tag">Security Principle</span></div>
+      <div class="glossary-def">A security architecture principle: never trust, always verify. No system, user, or agent gets inherent trust based on their location or identity alone — every access request must be authenticated and authorized. Applied to AI: agents don't get trust based on being part of your system; their requests are verified and logged. Inter-agent communication doesn't get implicit trust; orchestrators verify agent identity.</div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  const searchInput = document.getElementById('glossary-search') as HTMLInputElement;
+  const entries = document.querySelectorAll('.glossary-entry');
+  const letters = document.querySelectorAll('.glossary-letter');
+
+  searchInput?.addEventListener('input', () => {
+    const query = searchInput.value.toLowerCase().trim();
+
+    entries.forEach(entry => {
+      const term = entry.querySelector('.glossary-term')?.textContent?.toLowerCase() || '';
+      const def = entry.querySelector('.glossary-def')?.textContent?.toLowerCase() || '';
+      const matches = !query || term.includes(query) || def.includes(query);
+      entry.classList.toggle('hidden', !matches);
+    });
+
+    letters.forEach(section => {
+      const visibleEntries = section.querySelectorAll('.glossary-entry:not(.hidden)');
+      (section as HTMLElement).style.display = visibleEntries.length === 0 ? 'none' : '';
+    });
+  });
+</script>
+
+</ContentLayout>

@@ -1,0 +1,67 @@
+---
+import ContentLayout from '../../layouts/ContentLayout.astro';
+import FlipCard from '../../components/FlipCard.astro';
+import StepWalkthrough from '../../components/StepWalkthrough.astro';
+---
+
+<ContentLayout
+  title="AGT05: Memory Poisoning"
+  description="When an attacker corrupts what an AI agent remembers — causing it to behave incorrectly across all future interactions."
+  category="Agentic AI Top 10"
+  readingTime="9 min read"
+  severity="high"
+>
+
+<h2>Agents That Remember</h2>
+
+<p>Traditional chatbots are stateless — each conversation starts fresh. Agentic AI systems maintain memory across sessions: they remember previous conversations, learn from user feedback, accumulate knowledge about your business, and build richer context over time.</p>
+
+<p>This persistent memory is what makes agents genuinely useful for complex ongoing work. It's also a new attack target. If an attacker can influence what an agent stores in memory, they can shape its future behavior — persistently, across all sessions, until the poisoning is found and removed.</p>
+
+<FlipCard
+  scenario="Scenario: Sales Intelligence Agent"
+  frontTitle="Your Sales AI Remembers All Competitor Intelligence"
+  frontContent="Your sales AI agent maintains a shared memory of competitor capabilities, pricing, and positioning. The entire sales team uses it daily. It learns from each interaction and builds an increasingly complete picture of the competitive landscape."
+  backTitle="A Competitor Plants Disinformation"
+  backContent={`<p>During a sales discovery call, a competitor's representative deliberately provides false information about their own product — overstating capabilities and understating pricing. Your sales rep records this in the system as competitor intelligence. The agent stores it as memory.</p><p>Now every time your sales team asks about that competitor's pricing, the AI recalls the planted data. Your pricing strategy for the next six months is influenced by deliberate misinformation that appears to be authoritative internal knowledge.</p><ul><li>No system access required — the attacker used a legitimate sales interaction</li><li>The poisoning affects all future users of the shared memory</li><li>It's undetectable without auditing the source of each memory record</li><li>Shared memory systems amplify the impact — one poisoning, many victims</li></ul>`}
+/>
+
+<h2>Memory Types and Their Risk Levels</h2>
+
+<div class="threat-card medium">
+  <h4>Context Window (Session Memory)</h4>
+  <p>Information the agent holds within a single conversation. A prompt injection can plant false context for the rest of the session. Risk is bounded — it clears when the session ends.</p>
+</div>
+
+<div class="threat-card">
+  <h4>External Vector Database (Persistent Memory)</h4>
+  <p>Documents and notes stored externally and retrieved when relevant. If an attacker writes to this store, the poisoning persists indefinitely and affects every future query. Highest risk memory type.</p>
+</div>
+
+<div class="threat-card high">
+  <h4>Interaction History (Episodic Memory)</h4>
+  <p>Records of previous conversations that shape future behavior. If interaction records can be fabricated or tampered with, the agent's learned patterns can be manipulated. Particularly dangerous in agents that adapt to feedback.</p>
+</div>
+
+<StepWalkthrough
+  title="How Memory Poisoning Takes Root and Spreads"
+  steps={[
+    { title: "False information enters the session", content: "Through direct interaction, a submitted document, or manipulated data, the attacker introduces false information into the agent's working context. The agent processes it as legitimate input.", icon: "📝" },
+    { title: "Agent writes to persistent memory", content: "The agent stores the interaction or derived knowledge in its memory database — without verifying accuracy. Most memory systems store what the AI processed, not what was verified to be true.", icon: "🗄️" },
+    { title: "Memory becomes trusted reference", content: "The poisoned record sits alongside legitimate memories. When future queries retrieve it, the agent cites it with the same confidence as verified information. Over time it may be reinforced by additional interactions that reference it.", icon: "📌" },
+    { title: "All subsequent users are affected", content: "Every user or process that retrieves the poisoned memory receives influenced output. In shared systems, one poisoning event ripples across the entire user base for as long as the record exists.", icon: "🌊" },
+  ]}
+/>
+
+<div class="defense-section">
+  <h3>Memory Security Controls</h3>
+  <ol>
+    <li><strong>Isolate memory per user where possible.</strong> Shared memory is highest risk. Separate memory spaces limit the blast radius of any single poisoning event.</li>
+    <li><strong>Control write access to memory stores.</strong> Not every agent interaction should write to shared persistent memory. Treat memory writes with the same access control rigor as database writes.</li>
+    <li><strong>Track memory provenance.</strong> Each memory record should carry metadata: when created, what interaction created it, who was involved. Essential for forensic investigation.</li>
+    <li><strong>Implement memory expiry.</strong> Old memory records should expire or require revalidation. This limits how long poisoned content can influence behavior.</li>
+    <li><strong>Human review for high-stakes memories.</strong> If agent memory influences significant decisions — competitive strategy, regulatory guidance, customer risk — those records require human review before becoming trusted reference material.</li>
+  </ol>
+</div>
+
+</ContentLayout>

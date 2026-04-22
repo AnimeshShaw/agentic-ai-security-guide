@@ -1,0 +1,81 @@
+---
+export interface ChecklistGroup {
+  title: string;
+  items: string[];
+}
+
+export interface Props {
+  groups: ChecklistGroup[];
+  storageKey?: string;
+}
+
+const { groups, storageKey = 'ai-security-checklist' } = Astro.props;
+const total = groups.reduce((sum, g) => sum + g.items.length, 0);
+const id = `checklist-${Math.random().toString(36).slice(2, 8)}`;
+
+// Build a stable item ID from group index + item index
+function makeId(gi: number, ii: number) {
+  return `item-${gi}-${ii}`;
+}
+---
+
+<div class="checklist-wrapper" id={id}>
+  <div class="checklist-progress-bar">
+    <div class="checklist-progress-fill" style="width: 0%"></div>
+  </div>
+  <p class="checklist-progress-label"><span class="done-count">0</span> of {total} completed</p>
+
+  {groups.map((group, gi) => (
+    <div class="checklist-group">
+      <div class="checklist-group-title">{group.title}</div>
+      {group.items.map((item, ii) => (
+        <label class="checklist-item" data-item-id={makeId(gi, ii)}>
+          <input type="checkbox" data-id={makeId(gi, ii)} />
+          <span class="checklist-item-text">{item}</span>
+        </label>
+      ))}
+    </div>
+  ))}
+</div>
+
+<script define:vars={{ id, storageKey, total }}>
+  const wrap = document.getElementById(id);
+  if (!wrap) return;
+
+  const fill  = wrap.querySelector('.checklist-progress-fill');
+  const count = wrap.querySelector('.done-count');
+  const boxes = wrap.querySelectorAll('input[type="checkbox"]');
+
+  function load() {
+    const saved = JSON.parse(localStorage.getItem(storageKey) || '{}');
+    boxes.forEach((box) => {
+      const checked = !!saved[box.dataset.id];
+      box.checked = checked;
+      box.closest('.checklist-item')?.classList.toggle('checked', checked);
+    });
+    update();
+  }
+
+  function update() {
+    const done = Array.from(boxes).filter((b) => b.checked).length;
+    const pct  = total > 0 ? (done / total) * 100 : 0;
+    if (fill)  fill.style.width = pct + '%';
+    if (count) count.textContent = String(done);
+  }
+
+  function save() {
+    const data = {};
+    boxes.forEach((b) => { data[b.dataset.id] = b.checked; });
+    localStorage.setItem(storageKey, JSON.stringify(data));
+  }
+
+  boxes.forEach((box) => {
+    box.addEventListener('change', () => {
+      box.closest('.checklist-item')?.classList.toggle('checked', box.checked);
+      save();
+      update();
+    });
+  });
+
+  load();
+</script>
