@@ -28,13 +28,24 @@
   --info-bg:         #F0F9FF;
   --info-border:     #BAE6FD;
 
-  /* Always-dark zone colors (used for flip cards, walkthrough headers, etc.) */
+  /* Always-dark zone colors (used for flip cards, walkthrough headers, hero, etc.) */
   --zone-bg:         #0F172A;
   --zone-surface:    #1E293B;
   --zone-border:     #334155;
   --zone-text:       #F1F5F9;
+  --zone-text-secondary: #CBD5E1;
   --zone-text-muted: #64748B;
   --zone-accent:     #38BDF8;
+
+  /* Legacy aliases — kept so pages using --dark-* still work */
+  --dark-bg:             var(--zone-bg);
+  --dark-surface:        var(--zone-surface);
+  --dark-surface2:       var(--zone-border);
+  --dark-text:           var(--zone-text);
+  --dark-text-secondary: var(--zone-text-secondary);
+  --dark-muted:          var(--zone-text-muted);
+  --dark-border:         var(--zone-border);
+  --dark-accent:         var(--zone-accent);
 
   --sidebar-width:   280px;
   --content-max:     780px;
