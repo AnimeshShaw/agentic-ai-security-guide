@@ -167,9 +167,9 @@ Not every leader needs to read all 40 pages. Here are the recommended entry poin
 
 | Page | What You'll Learn |
 |------|------------------|
-| [What Is Agentic AI](https://animeshshaw.github.io/agentic-ai-security-guide/foundations/what-is-agentic-ai) | How agents differ from chatbots; what autonomy really means for your enterprise |
-| [How Agents Work](https://animeshshaw.github.io/agentic-ai-security-guide/foundations/how-agents-work) | LLMs, tools, memory, orchestration — the anatomy of a modern AI agent |
-| [Why Security Matters](https://animeshshaw.github.io/agentic-ai-security-guide/foundations/why-security-matters) | The paradigm shift and what traditional defenses miss |
+| [What Is Agentic AI](https://animeshshaw.github.io/agentic-ai-security-guide/foundations/what-is-agentic-ai/) | How agents differ from chatbots; what autonomy really means for your enterprise |
+| [How Agents Work](https://animeshshaw.github.io/agentic-ai-security-guide/foundations/how-agents-work/) | LLMs, tools, memory, orchestration — the anatomy of a modern AI agent |
+| [Why Security Matters](https://animeshshaw.github.io/agentic-ai-security-guide/foundations/why-security-matters/) | The paradigm shift and what traditional defenses miss |
 
 ---
 
@@ -177,12 +177,13 @@ Not every leader needs to read all 40 pages. Here are the recommended entry poin
 
 | Page | What You'll Learn |
 |------|------------------|
-| [Attack Surface](https://animeshshaw.github.io/agentic-ai-security-guide/threats/attack-surface) | Where agents are vulnerable and why the surface is larger than you think |
-| [Prompt Injection](https://animeshshaw.github.io/agentic-ai-security-guide/threats/prompt-injection) | The most dangerous and widespread attack on AI systems, explained plainly |
-| [Real-World Incidents](https://animeshshaw.github.io/agentic-ai-security-guide/threats/real-world-incidents) | Documented cases of what has already gone wrong |
-| [OWASP LLM Top 10](https://animeshshaw.github.io/agentic-ai-security-guide/threats/llm-top-10) | Full breakdown of the industry's canonical vulnerability list |
-| [Supply Chain Risks](https://animeshshaw.github.io/agentic-ai-security-guide/threats/supply-chain) | Model poisoning, compromised plugins, and third-party risks |
-| [Multi-Agent Trust](https://animeshshaw.github.io/agentic-ai-security-guide/threats/multi-agent-trust) | Why agent-to-agent communication is an unsolved security problem |
+| [Attack Surface](https://animeshshaw.github.io/agentic-ai-security-guide/threats/attack-surface/) | Where agents are vulnerable and why the surface is larger than you think |
+| [Prompt Injection](https://animeshshaw.github.io/agentic-ai-security-guide/threats/prompt-injection/) | The most dangerous and widespread attack on AI systems, explained plainly |
+| [Real-World Incidents](https://animeshshaw.github.io/agentic-ai-security-guide/threats/real-world-incidents/) | Documented cases of what has already gone wrong |
+| [OWASP LLM Top 10](https://animeshshaw.github.io/agentic-ai-security-guide/llm-top-10/) | Full breakdown of the industry's canonical vulnerability list — all 10 entries |
+| [Agentic AI Top 10](https://animeshshaw.github.io/agentic-ai-security-guide/agentic-top-10/) | 10 critical risks unique to autonomous agents |
+| [LLM01: Prompt Injection](https://animeshshaw.github.io/agentic-ai-security-guide/llm-top-10/prompt-injection/) | The most dangerous LLM vulnerability, with interactive examples |
+| [LLM05: Improper Output Handling](https://animeshshaw.github.io/agentic-ai-security-guide/llm-top-10/improper-output-handling/) | When AI outputs are trusted without sanitization |
 
 ---
 
@@ -190,9 +191,9 @@ Not every leader needs to read all 40 pages. Here are the recommended entry poin
 
 | Page | What You'll Learn |
 |------|------------------|
-| [AI Governance Basics](https://animeshshaw.github.io/agentic-ai-security-guide/governance/ai-governance) | What you need to govern: models, agents, data, and people |
-| [Compliance Frameworks](https://animeshshaw.github.io/agentic-ai-security-guide/governance/compliance-frameworks) | NIST AI RMF, EU AI Act, ISO 42001, and how they map to your obligations |
-| [Leadership Checklist](https://animeshshaw.github.io/agentic-ai-security-guide/governance/leadership-checklist) | 50 questions every leader should be asking — with persistent progress tracking |
+| [AI Governance Basics](https://animeshshaw.github.io/agentic-ai-security-guide/governance/ai-governance-basics/) | What you need to govern: models, agents, data, and people |
+| [Compliance Frameworks](https://animeshshaw.github.io/agentic-ai-security-guide/governance/compliance-frameworks/) | NIST AI RMF, EU AI Act, ISO 42001, and how they map to your obligations |
+| [Leadership Checklist](https://animeshshaw.github.io/agentic-ai-security-guide/governance/leadership-checklist/) | 50 questions every leader should be asking — with persistent progress tracking |
 
 ---
 

@@ -1,6 +1,8 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Sidebar from '../components/Sidebar.astro';
+
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 ---
 
 <BaseLayout title="Home">
@@ -24,8 +26,8 @@ import Sidebar from '../components/Sidebar.astro';
             written for CISOs, CTOs, CIOs, and board members who need to govern what their teams are building.
           </p>
           <div class="hero-cta-row">
-            <a href="/foundations/what-is-agentic-ai" class="btn-primary">Start Reading →</a>
-            <a href="/governance/leadership-checklist" class="btn-secondary">Leadership Checklist</a>
+            <a href={base + "/foundations/what-is-agentic-ai"} class="btn-primary">Start Reading →</a>
+            <a href={base + "/governance/leadership-checklist"} class="btn-secondary">Leadership Checklist</a>
           </div>
           <div class="hero-stat-row">
             <div class="hero-stat">
@@ -75,26 +77,26 @@ import Sidebar from '../components/Sidebar.astro';
         <h2 class="section-heading">Where do you want to start?</h2>
         <p class="section-sub">Four different entry points into the guide — pick whichever matches what you need right now.</p>
         <div class="paths-grid">
-          <a href="/foundations/what-is-agentic-ai" class="path-card featured">
+          <a href={base + "/foundations/what-is-agentic-ai"} class="path-card featured">
             <div class="path-badge">Start here</div>
             <div class="path-section">Part 1 — Foundations</div>
             <div class="path-title">What is Agentic AI?</div>
             <div class="path-desc">What makes agents different from chatbots, how they work under the hood, and why the security risk is categorically new.</div>
             <div class="path-arrow">→</div>
           </a>
-          <a href="/threats/attack-surface" class="path-card">
+          <a href={base + "/threats/attack-surface"} class="path-card">
             <div class="path-section">Part 2 — Threat Landscape</div>
             <div class="path-title">How Agents Get Attacked</div>
             <div class="path-desc">The attack surface, prompt injection explained plainly, and real incidents that have already happened in production.</div>
             <div class="path-arrow">→</div>
           </a>
-          <a href="/llm-top-10" class="path-card">
+          <a href={base + "/llm-top-10"} class="path-card">
             <div class="path-section">OWASP LLM Top 10 + Agentic Top 10</div>
             <div class="path-title">The Threat Catalogs</div>
             <div class="path-desc">All 20 documented AI security risks — the official OWASP list plus 10 risks unique to autonomous agents — each with interactive examples.</div>
             <div class="path-arrow">→</div>
           </a>
-          <a href="/governance/leadership-checklist" class="path-card">
+          <a href={base + "/governance/leadership-checklist"} class="path-card">
             <div class="path-section">Part 4 — Governance</div>
             <div class="path-title">The Leadership Checklist</div>
             <div class="path-desc">50 questions your organization should be able to answer about AI security posture. Use it for gap analysis or board reporting.</div>
@@ -113,9 +115,9 @@ import Sidebar from '../components/Sidebar.astro';
             <div class="map-section-title">Part 1 — Foundations</div>
             <p class="map-section-desc">What agentic AI actually is. How it works under the hood. Why the security risk is categorically different.</p>
             <ul class="map-links">
-              <li><a href="/foundations/what-is-agentic-ai">What is Agentic AI?</a></li>
-              <li><a href="/foundations/how-agents-work">How Agents Work</a></li>
-              <li><a href="/foundations/why-security-matters">Why Security Matters</a></li>
+              <li><a href={base + "/foundations/what-is-agentic-ai"}>What is Agentic AI?</a></li>
+              <li><a href={base + "/foundations/how-agents-work"}>How Agents Work</a></li>
+              <li><a href={base + "/foundations/why-security-matters"}>Why Security Matters</a></li>
             </ul>
           </div>
 
@@ -124,9 +126,9 @@ import Sidebar from '../components/Sidebar.astro';
             <div class="map-section-title">Part 2 — Threat Landscape</div>
             <p class="map-section-desc">Where agents are vulnerable. Prompt injection explained plainly. Real incidents that have already happened.</p>
             <ul class="map-links">
-              <li><a href="/threats/attack-surface">Attack Surface</a></li>
-              <li><a href="/threats/prompt-injection">Prompt Injection</a></li>
-              <li><a href="/threats/real-world-incidents">Real-World Incidents</a></li>
+              <li><a href={base + "/threats/attack-surface"}>Attack Surface</a></li>
+              <li><a href={base + "/threats/prompt-injection"}>Prompt Injection</a></li>
+              <li><a href={base + "/threats/real-world-incidents"}>Real-World Incidents</a></li>
             </ul>
           </div>
 
@@ -135,7 +137,7 @@ import Sidebar from '../components/Sidebar.astro';
             <div class="map-section-title">OWASP LLM Top 10</div>
             <p class="map-section-desc">The official OWASP top 10 vulnerabilities for large language models — every one explained with interactive examples.</p>
             <ul class="map-links">
-              <li><a href="/llm-top-10">View all 10 →</a></li>
+              <li><a href={base + "/llm-top-10"}>View all 10 →</a></li>
             </ul>
           </div>
 
@@ -144,7 +146,7 @@ import Sidebar from '../components/Sidebar.astro';
             <div class="map-section-title">Agentic AI Top 10</div>
             <p class="map-section-desc">The 10 critical risks unique to autonomous agents — from memory poisoning to runaway action loops.</p>
             <ul class="map-links">
-              <li><a href="/agentic-top-10">View all 10 →</a></li>
+              <li><a href={base + "/agentic-top-10"}>View all 10 →</a></li>
             </ul>
           </div>
 
@@ -153,9 +155,9 @@ import Sidebar from '../components/Sidebar.astro';
             <div class="map-section-title">Part 3 — Core Technologies</div>
             <p class="map-section-desc">MCP, LiteLLM, NeMo Guardrails, sandboxing — the tools that exist to protect you, explained simply.</p>
             <ul class="map-links">
-              <li><a href="/technologies/mcp-protocol">MCP Protocol</a></li>
-              <li><a href="/technologies/litellm-proxy">LiteLLM Proxy</a></li>
-              <li><a href="/technologies/nemo-guardrails">NeMo Guardrails</a></li>
+              <li><a href={base + "/technologies/mcp-protocol"}>MCP Protocol</a></li>
+              <li><a href={base + "/technologies/litellm-proxy"}>LiteLLM Proxy</a></li>
+              <li><a href={base + "/technologies/nemo-guardrails"}>NeMo Guardrails</a></li>
             </ul>
           </div>
 
@@ -164,8 +166,8 @@ import Sidebar from '../components/Sidebar.astro';
             <div class="map-section-title">Part 4 — Governance</div>
             <p class="map-section-desc">NIST AI RMF, EU AI Act, ISO 42001. What you must govern. 50 questions every leader should be asking.</p>
             <ul class="map-links">
-              <li><a href="/governance/compliance-frameworks">Compliance Frameworks</a></li>
-              <li><a href="/governance/leadership-checklist">Interactive Checklist</a></li>
+              <li><a href={base + "/governance/compliance-frameworks"}>Compliance Frameworks</a></li>
+              <li><a href={base + "/governance/leadership-checklist"}>Interactive Checklist</a></li>
             </ul>
           </div>
 
@@ -177,7 +179,7 @@ import Sidebar from '../components/Sidebar.astro';
         <div class="bottom-cta-inner">
           <h2>Ready to understand what your teams are building?</h2>
           <p>Start with the foundations. Everything builds from there.</p>
-          <a href="/foundations/what-is-agentic-ai" class="btn-primary large">Begin with Part 1 →</a>
+          <a href={base + "/foundations/what-is-agentic-ai"} class="btn-primary large">Begin with Part 1 →</a>
         </div>
       </section>
 
