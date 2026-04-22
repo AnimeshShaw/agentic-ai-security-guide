@@ -70,34 +70,34 @@ import Sidebar from '../components/Sidebar.astro';
         </div>
       </section>
 
-      <!-- Reading Paths -->
+      <!-- Entry Points -->
       <section class="reading-paths">
         <h2 class="section-heading">Where do you want to start?</h2>
-        <p class="section-sub">Choose your path based on how much time you have and what you need to do.</p>
+        <p class="section-sub">Four different entry points into the guide — pick whichever matches what you need right now.</p>
         <div class="paths-grid">
-          <a href="/foundations/what-is-agentic-ai" class="path-card">
-            <div class="path-time">⏱ 20 minutes</div>
-            <div class="path-title">Quick Executive Brief</div>
-            <div class="path-desc">Part 1 foundations + the Leadership Checklist. Just enough to ask the right questions.</div>
-            <div class="path-arrow">→</div>
-          </a>
           <a href="/foundations/what-is-agentic-ai" class="path-card featured">
-            <div class="path-badge">Recommended</div>
-            <div class="path-time">⏱ 2 hours</div>
-            <div class="path-title">Full Leadership Deep Dive</div>
-            <div class="path-desc">Parts 1–4 in order. Skip nothing in Part 2. This is the complete picture.</div>
-            <div class="path-arrow">→</div>
-          </a>
-          <a href="/foundations/what-is-agentic-ai" class="path-card">
-            <div class="path-time">⏱ 45 minutes</div>
-            <div class="path-title">Board Presentation Prep</div>
-            <div class="path-desc">Part 1 + Part 2 + Compliance Frameworks. Everything you need to brief the board.</div>
+            <div class="path-badge">Start here</div>
+            <div class="path-section">Part 1 — Foundations</div>
+            <div class="path-title">What is Agentic AI?</div>
+            <div class="path-desc">What makes agents different from chatbots, how they work under the hood, and why the security risk is categorically new.</div>
             <div class="path-arrow">→</div>
           </a>
           <a href="/threats/attack-surface" class="path-card">
-            <div class="path-time">⏱ 1 hour</div>
-            <div class="path-title">CISO / Security Focus</div>
-            <div class="path-desc">Jump straight to threat landscape, both Top 10 lists, and technologies. Operationally focused.</div>
+            <div class="path-section">Part 2 — Threat Landscape</div>
+            <div class="path-title">How Agents Get Attacked</div>
+            <div class="path-desc">The attack surface, prompt injection explained plainly, and real incidents that have already happened in production.</div>
+            <div class="path-arrow">→</div>
+          </a>
+          <a href="/llm-top-10" class="path-card">
+            <div class="path-section">OWASP LLM Top 10 + Agentic Top 10</div>
+            <div class="path-title">The Threat Catalogs</div>
+            <div class="path-desc">All 20 documented AI security risks — the official OWASP list plus 10 risks unique to autonomous agents — each with interactive examples.</div>
+            <div class="path-arrow">→</div>
+          </a>
+          <a href="/governance/leadership-checklist" class="path-card">
+            <div class="path-section">Part 4 — Governance</div>
+            <div class="path-title">The Leadership Checklist</div>
+            <div class="path-desc">50 questions your organization should be able to answer about AI security posture. Use it for gap analysis or board reporting.</div>
             <div class="path-arrow">→</div>
           </a>
         </div>
@@ -470,8 +470,14 @@ import Sidebar from '../components/Sidebar.astro';
     letter-spacing: 0.06em;
   }
 
-  .path-time { font-size: 0.8rem; color: var(--text-muted); }
-  .path-card.featured .path-time { color: var(--dark-muted); }
+  .path-section {
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--accent);
+  }
+  .path-card.featured .path-section { color: #A5B4FC; }
 
   .path-title {
     font-family: var(--font-display);
@@ -479,10 +485,10 @@ import Sidebar from '../components/Sidebar.astro';
     font-weight: 700;
     color: var(--text-primary);
   }
-  .path-card.featured .path-title { color: var(--dark-text); }
+  .path-card.featured .path-title { color: var(--zone-text); }
 
   .path-desc { font-size: 0.875rem; color: var(--text-secondary); line-height: 1.55; flex: 1; }
-  .path-card.featured .path-desc { color: var(--dark-text-secondary); }
+  .path-card.featured .path-desc { color: var(--zone-text-secondary); }
 
   .path-arrow { color: var(--accent); font-weight: 700; font-size: 1.1rem; }
 
