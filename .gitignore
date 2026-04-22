@@ -48,3 +48,9 @@ pids/
 
 # TypeScript
 *.tsbuildinfo
+
+# Claude Code local config
+.claude/
+
+# Internal docs / specs (never for public repo)
+docs/
