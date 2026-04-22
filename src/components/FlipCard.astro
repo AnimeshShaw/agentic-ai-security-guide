@@ -4,30 +4,36 @@ export interface Props {
   frontTitle: string;
   frontContent: string;
   backTitle?: string;
+  /**
+   * SECURITY: backContent is rendered via set:html (raw HTML injection).
+   * This MUST be a hardcoded static string from a trusted page file.
+   * Never pass dynamic, user-provided, or externally-sourced content here.
+   */
   backContent: string;
 }
 
 const { scenario, frontTitle, frontContent, backTitle = 'What Really Happened', backContent } = Astro.props;
-const id = `flip-${Math.random().toString(36).slice(2, 8)}`;
+// Use crypto.randomUUID for a collision-resistant DOM ID.
+const id = `flip-${crypto.randomUUID().replace(/-/g, '').slice(0, 8)}`;
 ---
 
 <div class="flip-card-container">
-  <p class="flip-label">👆 Click the card to reveal the explanation</p>
+  <p class="flip-label">Click the card to reveal the explanation</p>
   <div class="flip-card" id={id} role="button" tabindex="0" aria-label="Click to reveal explanation">
     <div class="flip-card-front">
       <div class="flip-card-scenario">{scenario}</div>
-      <h4 style="color: var(--dark-text); margin:0 0 0.75rem; font-size:1.05rem;">{frontTitle}</h4>
-      <p style="color: var(--dark-text-secondary); margin:0; font-size:0.95rem; line-height:1.65;">{frontContent}</p>
+      <h4 style="color: var(--zone-text); margin:0 0 0.75rem; font-size:1.05rem;">{frontTitle}</h4>
+      <p style="color: var(--zone-text-secondary); margin:0; font-size:0.95rem; line-height:1.65;">{frontContent}</p>
       <div class="flip-hint">
-        <span>🔍</span>
         <span>Click to see what's really happening</span>
       </div>
     </div>
     <div class="flip-card-back">
-      <div class="flip-back-label">✅ {backTitle}</div>
+      <div class="flip-back-label">{backTitle}</div>
+      <!-- set:html used intentionally — content is static, hardcoded in page files only. -->
       <Fragment set:html={backContent} />
       <button class="btn-reset" style="margin-top:1rem; background:none; border:1px solid var(--border); padding:0.4rem 0.9rem; border-radius:var(--radius-sm); font-size:0.8rem; cursor:pointer; color:var(--text-muted);">
-        ↩ Show scenario again
+        Back to scenario
       </button>
     </div>
   </div>
@@ -38,7 +44,7 @@ const id = `flip-${Math.random().toString(36).slice(2, 8)}`;
   if (card) {
     const toggle = () => card.classList.toggle('revealed');
     card.addEventListener('click', toggle);
-    card.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') toggle(); });
+    card.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle(); } });
     const resetBtn = card.querySelector('.btn-reset');
     if (resetBtn) {
       resetBtn.addEventListener('click', (e) => { e.stopPropagation(); card.classList.remove('revealed'); });

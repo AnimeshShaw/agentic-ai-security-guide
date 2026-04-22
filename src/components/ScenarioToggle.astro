@@ -2,18 +2,24 @@
 export interface Props {
   attackerTitle?: string;
   defenderTitle?: string;
+  /**
+   * SECURITY: attackerContent and defenderContent are rendered via set:html (raw HTML injection).
+   * These MUST be hardcoded static strings from trusted page files.
+   * Never pass dynamic, user-provided, or externally-sourced content here.
+   */
   attackerContent: string;
   defenderContent: string;
 }
 
 const {
-  attackerTitle = '🔴 Attacker\'s View',
-  defenderTitle = '🟢 Defender\'s View',
+  attackerTitle = 'Attacker\'s View',
+  defenderTitle = 'Defender\'s View',
   attackerContent,
   defenderContent,
 } = Astro.props;
 
-const id = `scenario-${Math.random().toString(36).slice(2, 8)}`;
+// Use crypto.randomUUID for a collision-resistant DOM ID.
+const id = `scenario-${crypto.randomUUID().replace(/-/g, '').slice(0, 8)}`;
 ---
 
 <div class="scenario-toggle" id={id}>
@@ -22,9 +28,11 @@ const id = `scenario-${Math.random().toString(36).slice(2, 8)}`;
     <button class="scenario-tab defender" data-tab="defender">{defenderTitle}</button>
   </div>
   <div class="scenario-panel attacker-panel active" data-panel="attacker">
+    <!-- set:html used intentionally — content is static, hardcoded in page files only. -->
     <Fragment set:html={attackerContent} />
   </div>
   <div class="scenario-panel defender-panel" data-panel="defender">
+    <!-- set:html used intentionally — content is static, hardcoded in page files only. -->
     <Fragment set:html={defenderContent} />
   </div>
 </div>

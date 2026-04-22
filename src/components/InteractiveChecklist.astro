@@ -6,14 +6,20 @@ export interface ChecklistGroup {
 
 export interface Props {
   groups: ChecklistGroup[];
+  /** Storage key for localStorage persistence. Must be a safe identifier [a-zA-Z0-9_-]. */
   storageKey?: string;
 }
 
-const { groups, storageKey = 'ai-security-checklist' } = Astro.props;
-const total = groups.reduce((sum, g) => sum + g.items.length, 0);
-const id = `checklist-${Math.random().toString(36).slice(2, 8)}`;
+const { groups, storageKey: rawKey = 'ai-security-checklist' } = Astro.props;
 
-// Build a stable item ID from group index + item index
+// Validate storageKey — only allow safe identifier characters to prevent
+// any edge-case injection if the key were ever passed dynamically.
+const storageKey = /^[a-zA-Z0-9_-]+$/.test(rawKey) ? rawKey : 'ai-security-checklist';
+
+const total = groups.reduce((sum, g) => sum + g.items.length, 0);
+// Use crypto.randomUUID for a collision-resistant, non-predictable DOM ID.
+const id = `checklist-${crypto.randomUUID().replace(/-/g, '').slice(0, 8)}`;
+
 function makeId(gi: number, ii: number) {
   return `item-${gi}-${ii}`;
 }
@@ -47,9 +53,19 @@ function makeId(gi: number, ii: number) {
   const boxes = wrap.querySelectorAll('input[type="checkbox"]');
 
   function load() {
-    const saved = JSON.parse(localStorage.getItem(storageKey) || '{}');
+    let saved = {};
+    try {
+      const raw = localStorage.getItem(storageKey);
+      const parsed = JSON.parse(raw || '{}');
+      // Ensure we got a plain object, not an array or primitive.
+      if (parsed && typeof parsed === 'object' && !Array.isArray(parsed)) {
+        saved = parsed;
+      }
+    } catch (_) {
+      // Corrupted storage — start fresh.
+    }
     boxes.forEach((box) => {
-      const checked = !!saved[box.dataset.id];
+      const checked = saved[box.dataset.id] === true;
       box.checked = checked;
       box.closest('.checklist-item')?.classList.toggle('checked', checked);
     });
@@ -64,9 +80,13 @@ function makeId(gi: number, ii: number) {
   }
 
   function save() {
-    const data = {};
-    boxes.forEach((b) => { data[b.dataset.id] = b.checked; });
-    localStorage.setItem(storageKey, JSON.stringify(data));
+    try {
+      const data = {};
+      boxes.forEach((b) => { data[b.dataset.id] = b.checked; });
+      localStorage.setItem(storageKey, JSON.stringify(data));
+    } catch (_) {
+      // localStorage may be unavailable (private browsing, quota exceeded).
+    }
   }
 
   boxes.forEach((box) => {
