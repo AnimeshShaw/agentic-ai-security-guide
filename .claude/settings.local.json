@@ -9,7 +9,12 @@
       "Bash(python -c \"import json,sys; d=json.load\\(sys.stdin\\); vulns=d.get\\('vulnerabilities',{}\\); [print\\(k, v.get\\('severity'\\), v.get\\('via',[{}]\\)[0].get\\('title',''\\) if isinstance\\(v.get\\('via',[{}]\\)[0],dict\\) else ''\\) for k,v in vulns.items\\(\\)]\")",
       "Bash(python -c ' *)",
       "Bash(node -e \"const p = require\\('./package.json'\\); console.log\\('astro:', p.dependencies.astro\\); console.log\\('@astrojs/tailwind:', p.dependencies['@astrojs/tailwind']\\); console.log\\('tailwindcss:', p.dependencies.tailwindcss\\);\")",
-      "Bash(node -e \"const p = require\\('./node_modules/astro/package.json'\\); console.log\\('Installed astro:', p.version\\);\")"
+      "Bash(node -e \"const p = require\\('./node_modules/astro/package.json'\\); console.log\\('Installed astro:', p.version\\);\")",
+      "Bash(node -e \"const pkg = require\\('./node_modules/astro/package.json'\\); console.log\\('Astro version:', pkg.version\\);\")",
+      "Bash(node -e \"console.log\\(require\\('./node_modules/astro/package.json'\\).version\\)\")",
+      "Bash(npm show *)",
+      "Bash(node -e \"const d=require\\('fs'\\).readFileSync\\('/dev/stdin','utf8'\\); const v=JSON.parse\\(d\\); console.log\\('Latest tailwind adapter:', v[v.length-1]\\)\")",
+      "Bash(npm uninstall *)"
     ]
   }
 }

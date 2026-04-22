@@ -11,12 +11,13 @@ export interface Props {
 }
 
 const { title, steps } = Astro.props;
-const id = `walk-${Math.random().toString(36).slice(2, 8)}`;
+// Use crypto.randomUUID for a collision-resistant DOM ID.
+const id = `walk-${crypto.randomUUID().replace(/-/g, '').slice(0, 8)}`;
 ---
 
 <div class="walkthrough" id={id}>
   <div class="walkthrough-header">
-    <h4>⚡ {title}</h4>
+    <h4>{title}</h4>
     <span class="step-counter">
       <span class="current-step">1</span> / {steps.length}
     </span>
