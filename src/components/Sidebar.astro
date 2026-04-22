@@ -7,6 +7,8 @@ export interface Props {
 
 const { currentPath } = Astro.props;
 const normalizedPath = currentPath.replace(/\/$/, '') || '/';
+// Strip trailing slash; keep leading slash for href construction
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 ---
 
 <aside class="sidebar" id="sidebar">
@@ -14,7 +16,7 @@ const normalizedPath = currentPath.replace(/\/$/, '') || '/';
 
     <!-- Brand -->
     <div class="sidebar-brand">
-      <a href="/" class="brand-link">
+      <a href={base + '/'} class="brand-link">
         <svg class="brand-icon" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
           <path d="M16 2L4 7V17C4 23.627 9.373 29 16 30C22.627 29 28 23.627 28 17V7L16 2Z" fill="currentColor" fill-opacity="0.12" stroke="currentColor" stroke-width="1.75" stroke-linejoin="round"/>
           <path d="M11 16L14.5 19.5L21 13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -37,7 +39,7 @@ const normalizedPath = currentPath.replace(/\/$/, '') || '/';
               return (
                 <li>
                   <a
-                    href={item.href}
+                    href={base + item.href}
                     class:list={['nav-item', { active: isActive }]}
                     aria-current={isActive ? 'page' : undefined}
                   >

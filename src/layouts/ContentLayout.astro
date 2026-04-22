@@ -27,8 +27,14 @@ const {
   overrideNext,
 } = Astro.props;
 
-const currentPath = Astro.url.pathname.replace(/\/$/, '');
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const rawPath = Astro.url.pathname.replace(/\/$/, '');
+// Strip the base prefix so currentPath matches nav hrefs (e.g. "/foundations/what-is-agentic-ai")
+const currentPath = rawPath.startsWith(base) ? rawPath.slice(base.length) || '/' : rawPath;
 const { prev, next } = getAdjacentPages(currentPath);
+// Prefix hrefs with base for rendered links
+const prevPage = prev ? { ...prev, href: base + prev.href } : undefined;
+const nextPage = next ? { ...next, href: base + next.href } : undefined;
 ---
 
 <BaseLayout title={title} description={description}>
@@ -50,8 +56,8 @@ const { prev, next } = getAdjacentPages(currentPath);
       </div>
 
       <PageNav
-        prev={overridePrev ?? prev}
-        next={overrideNext ?? next}
+        prev={overridePrev ? { ...overridePrev, href: base + overridePrev.href } : prevPage}
+        next={overrideNext ? { ...overrideNext, href: base + overrideNext.href } : nextPage}
       />
     </main>
   </div>
