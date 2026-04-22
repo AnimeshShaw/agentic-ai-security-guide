@@ -1,0 +1,61 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  # Allow manual deploys from the Actions tab
+  workflow_dispatch:
+
+# Only one deployment runs at a time; in-progress runs are NOT cancelled
+# so a partial deploy never races with a new one.
+concurrency:
+  group: github-pages
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  # ── Build ─────────────────────────────────────────────────────
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Security audit (block on moderate+)
+        run: npm audit --audit-level=moderate
+
+      - name: Build site
+        run: npm run build
+
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist/
+
+  # ── Deploy ────────────────────────────────────────────────────
+  deploy:
+    name: Deploy
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

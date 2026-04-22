@@ -14,7 +14,11 @@
       "Bash(node -e \"console.log\\(require\\('./node_modules/astro/package.json'\\).version\\)\")",
       "Bash(npm show *)",
       "Bash(node -e \"const d=require\\('fs'\\).readFileSync\\('/dev/stdin','utf8'\\); const v=JSON.parse\\(d\\); console.log\\('Latest tailwind adapter:', v[v.length-1]\\)\")",
-      "Bash(npm uninstall *)"
+      "Bash(npm uninstall *)",
+      "Bash(Remove-Item tailwind.config.mjs)",
+      "Bash(mkdir -p .github/workflows .github)",
+      "Bash(rm tailwind.config.mjs)",
+      "Bash(mkdir -p .github/workflows)"
     ]
   }
 }
