@@ -1,0 +1,24 @@
+---
+export interface Props {
+  prev?: { title: string; href: string };
+  next?: { title: string; href: string };
+}
+const { prev, next } = Astro.props;
+---
+
+{(prev || next) && (
+  <nav class="page-nav">
+    {prev ? (
+      <a href={prev.href} class="page-nav-link prev">
+        <span class="page-nav-dir">← Previous</span>
+        <span class="page-nav-title">{prev.title}</span>
+      </a>
+    ) : <div />}
+    {next && (
+      <a href={next.href} class="page-nav-link next">
+        <span class="page-nav-dir">Next →</span>
+        <span class="page-nav-title">{next.title}</span>
+      </a>
+    )}
+  </nav>
+)}

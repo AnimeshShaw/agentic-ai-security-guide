@@ -1,0 +1,148 @@
+---
+import ContentLayout from '../../layouts/ContentLayout.astro';
+import FlipCard from '../../components/FlipCard.astro';
+import StepWalkthrough from '../../components/StepWalkthrough.astro';
+import ScenarioToggle from '../../components/ScenarioToggle.astro';
+---
+<ContentLayout
+  title="LiteLLM Proxy"
+  description="The AI traffic controller that gives enterprises visibility, control, and cost management across every AI model in their stack."
+  category="Core Technologies"
+  readingTime="9 min read"
+>
+
+  <p>
+    Picture your corporate travel policy before a travel management system existed. Every employee booked their own flights, on whatever airline, at whatever price, using their personal credit card or a team card. No one had a full picture of what was being spent. No one could enforce that economy class was the standard. No one could see that three people from the same team were on three different flights to the same city.
+  </p>
+
+  <p>
+    That is exactly what AI usage looks like in most enterprises today. Engineering teams, data science groups, customer service platforms, and individual employees are all sending requests to AI models — OpenAI, Anthropic, Azure, Google, and others — using separate API keys, separate budgets, and with no central visibility. The CIO has no dashboard. The CISO has no log. Finance has no forecast.
+  </p>
+
+  <p>
+    LiteLLM Proxy is the travel management system for AI. It is an open-source proxy server that sits between every application or agent in your organization and every AI provider they use. Every request goes through it. That single architectural decision — routing all AI traffic through one controlled point — transforms AI from an unmanaged shadow IT problem into a governed, auditable system.
+  </p>
+
+  <div class="dark-section">
+    <span class="section-label">⚙️ HOW IT WORKS</span>
+
+    <p>
+      The concept is straightforward. Instead of your applications talking directly to OpenAI or Anthropic, they talk to your LiteLLM proxy. The proxy then forwards the request to the appropriate AI provider, returns the response, and logs everything in between. From the application's perspective, nothing changes. From the security and governance perspective, everything does.
+    </p>
+
+    <p>
+      Think of LiteLLM as a corporate firewall for AI traffic — with the additional ability to set spending limits, enforce which models each team can use, flag sensitive content before it leaves your network, and switch providers automatically if one goes down.
+    </p>
+
+    <StepWalkthrough
+      title="How LiteLLM Sits in Your Architecture"
+      steps={[
+        {
+          title: "Application or agent sends a request",
+          content: "A customer service chatbot, an internal AI assistant, or an autonomous agent generates a request to an AI model — a prompt, a question, a task. Instead of going directly to the AI provider, the request goes to your LiteLLM proxy endpoint.",
+          icon: "📤"
+        },
+        {
+          title: "Proxy performs access checks",
+          content: "LiteLLM checks: Is this team or application authorized to use AI? Is the specific model they requested on the approved list? Have they hit their monthly budget cap? Is there a rate limit in effect? All of this happens in milliseconds before the request goes anywhere.",
+          icon: "🔐"
+        },
+        {
+          title: "Proxy applies data policies",
+          content: "If you have configured content inspection rules — for example, to flag or redact social security numbers, credit card numbers, or other sensitive patterns — LiteLLM applies these to the outbound prompt before it reaches any AI provider.",
+          icon: "🛡️"
+        },
+        {
+          title: "Request is forwarded to the AI provider",
+          content: "LiteLLM forwards the request to the appropriate provider — OpenAI, Anthropic, Azure OpenAI, Google Gemini, or any other configured model. If your primary provider is unavailable, LiteLLM can automatically fail over to a backup.",
+          icon: "☁️"
+        },
+        {
+          title: "Response is logged and returned",
+          content: "The AI provider's response comes back through the proxy. LiteLLM logs the full exchange — which team, which model, how many tokens, what the cost, the timestamp — and returns the response to the application. Your usage dashboard updates in real time.",
+          icon: "📊"
+        }
+      ]}
+    />
+  </div>
+
+  <h2>What LiteLLM Actually Gives You</h2>
+
+  <p>
+    Executives evaluating LiteLLM should understand that it solves four distinct problems simultaneously. Most tools solve one. LiteLLM's value comes from addressing all four from a single control point.
+  </p>
+
+  <h3>Visibility</h3>
+  <p>
+    You cannot govern what you cannot see. LiteLLM gives you a real-time view of every AI request across your organization: who is using what model, how often, for what purpose (based on the prompts), at what cost. For many organizations, this visibility alone is transformative — it reveals AI usage that leadership did not know existed.
+  </p>
+
+  <h3>Cost Management</h3>
+  <p>
+    AI costs scale with usage in ways that can surprise even experienced technology leaders. A single enthusiastic team running an AI agent in a loop can generate tens of thousands of dollars in API charges in a week. LiteLLM allows you to set hard budget caps per team, per project, or per user — with alerts before limits are reached and automatic cutoffs when they are. This is not a "nice to have" for enterprises running AI at scale.
+  </p>
+
+  <h3>Access Control</h3>
+  <p>
+    Not every team should use every model. Your most powerful — and most expensive — models might be reserved for production use cases, while development and testing teams use smaller, cheaper alternatives. LiteLLM enforces this through model allowlists per team or API key. It also means you can instantly revoke access to a specific application if it is misbehaving, without touching the AI provider directly.
+  </p>
+
+  <h3>Security and Compliance</h3>
+  <p>
+    By centralizing all AI traffic, LiteLLM creates a single point where you can apply content inspection, detect sensitive data patterns leaving your organization, and maintain a complete audit log. In a regulatory investigation, your LiteLLM logs are your evidence that you knew what your AI systems were doing.
+  </p>
+
+  <div class="callout callout-warning">
+    <span class="callout-icon">⚠️</span>
+    <p>LiteLLM is a traffic controller, not a content judge. It can detect and flag patterns you define — a social security number format, a specific keyword — but it does not evaluate whether a response is harmful, misleading, or out of policy. For behavioral controls on AI outputs, you need a guardrails layer in addition to a proxy.</p>
+  </div>
+
+  <FlipCard
+    scenario="Scenario: The Rogue AI Project"
+    frontTitle="Three Teams, Zero Visibility"
+    frontContent="Three engineering teams are using AI independently. Each has their own API keys, their own preferred models, their own costs. The CIO has no dashboard. The CISO has no logs. Finance sees a growing line item labeled 'AI APIs' with no breakdown."
+    backTitle="What This Actually Means"
+    backContent={`<p>Without LiteLLM or equivalent: Team A is sending customer PII to OpenAI without realizing it violates your data processing agreements. Team B has racked up $40,000 in AI costs this month on an experimental project that has no business owner. Team C is using a deprecated model version with known reliability issues. The CIO discovers all of this during a quarterly audit — three months after the fact. With LiteLLM: all three teams route through the proxy. Sensitive data patterns are flagged in real time. Budget alerts fire at $5,000 and again at $10,000. Model versions are locked to the approved list by IT policy. All usage is visible on a single dashboard updated every minute.</p><ul><li>Visibility is the foundation of all AI governance — you cannot manage what you cannot see</li><li>LiteLLM gives you a single control plane for all AI usage across every team and application</li><li>Cost management alone often delivers ROI that covers the entire implementation effort</li></ul>`}
+  />
+
+  <ScenarioToggle
+    attackerTitle="🔴 Without LiteLLM — Ungoverned AI"
+    defenderTitle="🟢 With LiteLLM — Controlled AI"
+    attackerContent={`<p>AI usage proliferates across the organization with no central control. Each team manages its own keys and costs. No one has a complete picture.</p><ul><li>12 different API keys exist across the organization — 3 belong to employees who have left the company</li><li>Customer data is being sent to external AI providers, but no one knows which data or how much</li><li>An AI agent in finance enters an error loop and generates $80,000 in API charges over a weekend</li><li>A security audit reveals AI usage in 6 systems that were never reviewed or approved</li><li>There is no log of what was sent to any AI provider — compliance is impossible to demonstrate</li></ul>`}
+    defenderContent={`<p>All AI traffic flows through the LiteLLM proxy. Governance is real, not aspirational. Costs are predictable and controlled.</p><ul><li>One central API key management system — keys for departed employees are revoked immediately</li><li>Sensitive data detection flags any prompt containing customer PII before it leaves the network</li><li>Budget alerts fire at 50%, 80%, and 100% of each team's monthly allocation — the finance loop is caught in hours, not days</li><li>Every new AI integration must be registered and routed through the proxy before it can call any model</li><li>Complete audit logs exist for every request, response, model used, and cost incurred</li></ul>`}
+  />
+
+  <div class="defense-section">
+    <h2>Building Your LiteLLM Implementation</h2>
+
+    <p>
+      A well-configured LiteLLM deployment gives your organization four concrete capabilities that most enterprises currently lack entirely. Here is what each looks like in practice.
+    </p>
+
+    <h3>Unified API Key Management</h3>
+    <p>
+      Instead of dozens of team-managed keys scattered across repositories and environment variables, you have a single master key per team or project, issued by IT and managed centrally. When an employee leaves, their key is revoked in one place. When a project ends, its key is disabled. You always know exactly who has access to what.
+    </p>
+
+    <h3>Per-Team Budget Controls</h3>
+    <p>
+      Set monthly spending limits for each team and project. Configure alerts at multiple thresholds — 50%, 80%, and 100% of budget. Set automatic cutoffs to prevent runaway costs. Get weekly cost reports broken down by team, model, and use case. Finance can now forecast AI costs with the same confidence as any other technology expense.
+    </p>
+
+    <h3>Model Allowlisting</h3>
+    <p>
+      Define which models each team or application is permitted to use. Lock production systems to specific, approved model versions. Prevent teams from using models that have not been evaluated for your security and compliance requirements. Ensure that expensive frontier models are used only for use cases that justify the cost.
+    </p>
+
+    <h3>Logging Pipeline</h3>
+    <p>
+      Route all LiteLLM logs to your existing security information and event management system. Create alerts for anomalous patterns — a spike in token usage, requests to unusual endpoints, specific keywords in prompts. Maintain logs for your regulatory retention period. When an auditor asks what your AI systems were doing on a specific date, you have an answer.
+    </p>
+  </div>
+
+  <div class="callout callout-info">
+    <span class="callout-icon">💡</span>
+    <p>The most common objection to implementing a proxy is latency — the concern that routing through an additional layer will slow down AI responses. In practice, LiteLLM adds single-digit milliseconds of overhead. For workloads where AI model inference takes seconds, this is imperceptible. The governance value far outweighs the negligible performance cost.</p>
+  </div>
+
+</ContentLayout>

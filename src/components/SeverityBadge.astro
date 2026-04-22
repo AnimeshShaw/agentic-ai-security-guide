@@ -1,0 +1,18 @@
+---
+export type Severity = 'critical' | 'high' | 'medium' | 'low';
+
+export interface Props {
+  level: Severity;
+}
+
+const { level } = Astro.props;
+
+const labels: Record<Severity, string> = {
+  critical: '🔴 Critical',
+  high:     '🟠 High',
+  medium:   '🟡 Medium',
+  low:      '🟢 Low',
+};
+---
+
+<span class:list={['severity', `severity-${level}`]}>{labels[level]}</span>

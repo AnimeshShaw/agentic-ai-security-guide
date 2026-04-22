@@ -1,0 +1,138 @@
+---
+import ContentLayout from '../../layouts/ContentLayout.astro';
+import FlipCard from '../../components/FlipCard.astro';
+import StepWalkthrough from '../../components/StepWalkthrough.astro';
+import ScenarioToggle from '../../components/ScenarioToggle.astro';
+---
+<ContentLayout
+  title="How AI Agents Work"
+  description="LLMs, tools, memory, and orchestration — the anatomy of an agent explained without the jargon."
+  category="Foundations"
+  readingTime="10 min read"
+>
+
+  <p>You do not need to understand the mathematics of machine learning to govern AI agents effectively. But you do need to understand the architecture — what the main components are, what each one does, and crucially, where each one creates risk. This page gives you that map.</p>
+
+  <p>Think of it this way: you don't need to know how an internal combustion engine works to make good decisions about a fleet of vehicles. But you do need to know that cars need fuel, brakes can fail, and drivers need licenses. The same principle applies here.</p>
+
+  <h2>The Four Components of Every AI Agent</h2>
+
+  <p>Every AI agent, regardless of vendor or use case, is built from four core components. Understanding what each does — and what can go wrong with each — is the foundation of AI governance.</p>
+
+  <h3>1. The LLM: The Reasoning Engine</h3>
+
+  <p>At the center of every agent is a Large Language Model, or LLM. This is the AI itself — the component that reads instructions, understands context, reasons about what to do next, and generates responses or decisions. Think of it as the agent's brain.</p>
+
+  <p>What makes LLMs remarkable is also what makes them different from traditional software: they were not explicitly programmed with rules. They learned patterns from vast amounts of text, and they apply those patterns to generate outputs. This means their behavior is probabilistic — the same input can produce slightly different outputs on different runs. They can be creative and flexible in ways traditional software cannot. They can also be wrong in ways traditional software cannot.</p>
+
+  <p>An LLM is not a database with a lookup table. It is closer to a very experienced consultant who has read millions of documents and is making their best judgment based on what they've learned. That judgment can be brilliant. It can also be confidently wrong.</p>
+
+  <h3>2. Tools: The Agent's Hands and Access</h3>
+
+  <p>An LLM on its own can only generate text. Tools are what give an agent the ability to act on the world. A tool is any external capability that the agent has been granted permission to use.</p>
+
+  <p>Think of tools as the agent's job authorizations. Just as an employee might be authorized to access the expense system, the HR portal, and the customer database — but not the payroll system — an agent's tools define what it is allowed to touch.</p>
+
+  <p>Common tools include: web browsing (the agent can visit websites and read their content), email (the agent can read and send emails), code execution (the agent can write and run programs), database queries (the agent can retrieve or modify records), API calls (the agent can communicate with external software services), and file management (the agent can read, write, or delete documents).</p>
+
+  <p>This is where the stakes become concrete. An agent with email tools can send messages on your behalf. An agent with database tools can retrieve sensitive records — or modify them. An agent with code execution tools can run programs on your infrastructure. Tools are not abstract capabilities. They are real access to real systems.</p>
+
+  <h3>3. Memory: What the Agent Knows and Remembers</h3>
+
+  <p>Memory is how agents maintain context across a conversation or across time. There are two types that matter for governance purposes.</p>
+
+  <p><strong>Short-term memory</strong> (also called the context window) is everything the agent is currently "holding in mind" — the current conversation, recent tool outputs, and the instructions it was given. Think of it as the agent's working memory. It is temporary and typically erased when a session ends.</p>
+
+  <p><strong>Long-term memory</strong> is persistent storage — databases, document repositories, or knowledge bases that the agent can read from and write to across sessions. An agent with long-term memory can remember that a customer prefers a particular communication style, that a vendor contract expires in March, or that a previous security incident occurred. This is enormously useful and creates new data governance questions: who can read what the agent has stored? How long is it retained? Is it governed by your data retention policies?</p>
+
+  <h3>4. The Orchestrator: The Manager</h3>
+
+  <p>The orchestrator is the system that coordinates all the other components. It receives the user's goal, asks the LLM what to do next, routes the LLM's decision to the right tool, collects the tool's output, feeds it back to the LLM, and repeats this loop until the task is complete.</p>
+
+  <p>Think of the orchestrator as a very efficient project manager who never gets tired: it keeps track of where the task is, passes information between the brain and the hands, and ensures each step happens in the right order. It is also where business rules and guardrails are typically enforced — which makes it a critical control point from a security perspective.</p>
+
+  <StepWalkthrough
+    title="Inside an Agent Processing a Single Request"
+    steps={[
+      {
+        title: "Receive the Task",
+        content: "A user asks the agent: 'Find all overdue invoices from Vendor X and send a payment reminder.' The orchestrator receives this instruction and the agent's session begins. At this point, nothing has happened yet except text being received.",
+        icon: "📥"
+      },
+      {
+        title: "Plan the Approach",
+        content: "The LLM reasons about what steps are needed: first query the accounts payable database for overdue Vendor X invoices, then identify the correct contact email, then draft a professional payment reminder, then send it. This plan is generated dynamically — it is not pre-programmed. The LLM is deciding the approach in real time.",
+        icon: "🧠"
+      },
+      {
+        title: "Use Tools",
+        content: "The orchestrator executes the plan step by step. It calls the database tool to retrieve invoices. It calls the contacts tool to look up the vendor email. Each tool call goes out to a real system and returns real data. The agent is now reading from your financial systems and your contact records.",
+        icon: "🔧"
+      },
+      {
+        title: "Check Memory",
+        content: "The agent checks its long-term memory: has it sent a reminder to this vendor before? What was the outcome? Is there a preferred tone or format for communications with this vendor? This context shapes the email it drafts. The memory system is reading from a persistent store that may contain data from previous interactions.",
+        icon: "🗃️"
+      },
+      {
+        title: "Act and Respond",
+        content: "The LLM drafts the email, the orchestrator passes it to the email tool, and the email is sent. The agent logs the action to its memory store and reports back to the user: 'Done — I sent a payment reminder to accounts@vendorx.com for three overdue invoices totaling $47,200.' The entire workflow ran without a human reviewing the email before it was sent.",
+        icon: "✅"
+      }
+    ]}
+  />
+
+  <h2>Multi-Agent Systems: When Agents Manage Other Agents</h2>
+
+  <p>A single agent handling a single task is relatively straightforward to reason about. The more complex — and increasingly common — architecture is a multi-agent system, where one agent (the "orchestrator agent") assigns work to other specialized agents that each handle specific tasks.</p>
+
+  <p>Consider a business intelligence workflow: an orchestrator agent receives a strategic question from a senior leader. It delegates research tasks to a web-browsing agent, data retrieval to a database agent, and financial modeling to an analysis agent. Each sub-agent completes its piece, returns results to the orchestrator, which synthesizes everything into a final report.</p>
+
+  <p>This architecture is powerful because it allows complex work to be parallelized and specialized. It is also more complex to secure, because each agent-to-agent communication is a potential point of compromise. If one sub-agent is manipulated by malicious content, it could pass corrupted instructions to the orchestrator, which could affect every other agent in the system.</p>
+
+  <div class="dark-section">
+    <span class="section-label">⚠️ THE THREAT</span>
+
+    <h3>What "Tool Use" Really Means</h3>
+
+    <p>The phrase "tool use" sounds innocuous. In practice, it means an AI system has been granted credentials and permissions to act inside your real infrastructure. This is not a simulation. When an agent uses a tool, the consequences are the same as if a human employee took that action.</p>
+
+    <p>Here is what that looks like across common tool categories:</p>
+
+    <ul>
+      <li><strong>Web browsing tools:</strong> The agent visits real websites and reads real content — including potentially hostile content planted by attackers.</li>
+      <li><strong>Email tools:</strong> The agent sends real emails from real corporate addresses to real recipients. If it is manipulated, it can send sensitive information externally or impersonate your organization.</li>
+      <li><strong>Database tools:</strong> The agent reads from and potentially writes to production databases. A compromised agent could exfiltrate records or corrupt data.</li>
+      <li><strong>Code execution tools:</strong> The agent runs real programs on real infrastructure. This is among the highest-risk tool types, as code execution can have effects ranging from data manipulation to system compromise.</li>
+      <li><strong>API tools:</strong> The agent communicates with third-party services — payment processors, HR systems, cloud platforms — using credentials that grant access to sensitive operations.</li>
+    </ul>
+
+    <p>The question your security team must ask for every agent deployment is not "what can this agent do?" but "what is the worst thing this agent could do if it were manipulated or made an error?" That worst-case analysis should drive your tool permission decisions.</p>
+  </div>
+
+  <div class="threat-card high">
+    <h4>Risk: When the LLM Makes a Wrong Decision</h4>
+    <p>LLMs are not perfect reasoners. They can misinterpret ambiguous instructions, draw incorrect conclusions from incomplete data, or apply reasoning patterns from their training that don't fit the current situation. In a chatbot, a wrong answer is corrected by the user before any action is taken. In an agent, a wrong decision may trigger a chain of real-world actions before anyone notices the error.</p>
+    <p><strong>Example:</strong> An agent tasked with "archiving inactive customer accounts" misinterprets "inactive for 90 days" as "inactive for 90 months" due to an ambiguous instruction. It archives thousands of active accounts before the error is caught. The LLM was not hacked — it was just wrong. The damage is real.</p>
+  </div>
+
+  <div class="threat-card high">
+    <h4>Risk: When a Tool Has Too Much Access</h4>
+    <p>One of the most common security failures in early agent deployments is granting tools far more permission than the agent's tasks require. An agent built to answer customer questions about order status might be connected to a database tool that also has write access to order records — because it was easier to configure that way. The agent only needs read access, but write access was granted "just in case."</p>
+    <p><strong>Example:</strong> A customer service agent with write access to the order database is manipulated through a malicious customer message into modifying an order record. The agent was only supposed to look up information — but because write access was available, it was exploitable. Over-provisioned tools dramatically expand the blast radius of any agent failure or attack.</p>
+  </div>
+
+  <h2>Why This Architecture Matters for Security</h2>
+
+  <p>Traditional software security is primarily about protecting the code and the data. The code does what it is programmed to do, and you secure the perimeter around the data. In an agent architecture, a third thing must be secured: the reasoning layer.</p>
+
+  <p>The LLM can be manipulated through its inputs. If an attacker can get malicious text in front of the agent — in an email it reads, a webpage it visits, a document it processes — they may be able to influence the LLM's decisions. This is not a theoretical risk; it is the defining security challenge of agentic AI, and it is covered in depth in the Prompt Injection section of this guide.</p>
+
+  <p>Understanding the four-component architecture gives you the vocabulary to ask the right questions: How is the LLM's decision-making constrained? What tools are connected, and with what permissions? What data is being written to memory, and who governs it? How is inter-agent communication authenticated and validated? These are the questions a well-governed enterprise must be able to answer for every agent it deploys.</p>
+
+  <div class="callout callout-info">
+    <span class="callout-icon">💡</span>
+    <p><strong>The governance takeaway:</strong> An AI agent is not software in the traditional sense. It is an autonomous actor built from four components — a reasoning engine, access to real systems, persistent memory, and a coordinating manager. Securing it requires governing all four components: constraining how the LLM is instructed, limiting what tools can access, auditing what is stored in memory, and validating what the orchestrator is authorized to do.</p>
+  </div>
+
+</ContentLayout>

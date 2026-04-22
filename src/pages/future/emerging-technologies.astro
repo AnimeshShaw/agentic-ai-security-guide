@@ -1,0 +1,79 @@
+---
+import ContentLayout from '../../layouts/ContentLayout.astro';
+import StepWalkthrough from '../../components/StepWalkthrough.astro';
+import FlipCard from '../../components/FlipCard.astro';
+---
+
+<ContentLayout
+  title="Emerging Technologies & Future Threats"
+  description="What's coming in AI capabilities — and what it means for security leaders who need to stay ahead of the curve."
+  category="Future Trends"
+  readingTime="11 min read"
+>
+
+<div class="callout callout-info">
+  <span class="callout-icon">💡</span>
+  <p>This section covers capabilities that are either in early deployment or 12–36 months from mainstream adoption. Security leaders should begin governance thinking now — waiting until a technology is widespread makes policy reactive rather than proactive.</p>
+</div>
+
+<h2>The Next Wave of AI Capabilities</h2>
+
+<p>Every major AI capability shift creates new security challenges. The move from chatbots to autonomous agents created the entire threat landscape this guide covers. The next wave of capabilities — computer use, multi-agent coordination, long-horizon planning, and AI in critical infrastructure — will create an entirely new surface area. The organizations that begin governance thinking now will be dramatically better positioned than those who wait.</p>
+
+<div class="threat-card info">
+  <h4>Computer Use & GUI Automation</h4>
+  <p><strong>What it is:</strong> AI models that can see a computer screen, move a mouse, click buttons, type into forms, and interact with any software interface exactly as a human would. No API integration required — the AI operates any software visually.</p>
+  <p><strong>Why it matters:</strong> This collapses the boundary between "AI system" and "human user." An AI with computer use capability can access anything a human user can access — including systems with no AI integration, no API, and no technical access controls designed with AI in mind. Every access control built around human authentication becomes relevant.</p>
+  <p><strong>Security implications:</strong> Existing software access controls (login, MFA, session management) were designed for humans. An AI with computer-use credentials operates with full human-level access. Privilege escalation, credential theft, and session hijacking become AI-enabled attacks. Social engineering attacks can now target AI agents, not just human employees.</p>
+  <p><strong>What to watch:</strong> Anthropic Claude computer use (Claude 3.5+), OpenAI Operator, Google's Project Mariner</p>
+</div>
+
+<div class="threat-card info">
+  <h4>Multi-Agent Coordination (Agent Swarms)</h4>
+  <p><strong>What it is:</strong> Multiple AI agents working together as a coordinated system — one agent planning, others executing, others reviewing results. Complex tasks are decomposed and parallelized across specialized agents that communicate and hand off work.</p>
+  <p><strong>Why it matters:</strong> Multi-agent systems dramatically expand what AI can accomplish autonomously — and dramatically expand the attack surface. Each agent is a trust boundary. Each inter-agent communication channel is an injection vector. A compromise in one agent can propagate to all agents that trust it.</p>
+  <p><strong>Security implications:</strong> Inter-agent prompt injection (covered in AGT05) becomes a first-class threat. Verifying whether an instruction genuinely comes from a trusted orchestrator versus an attacker who has compromised one agent in the network is a hard problem. Audit trails must span multiple agents to reconstruct what happened.</p>
+  <p><strong>What to watch:</strong> Microsoft AutoGen, CrewAI, LangGraph, OpenAI Swarm. Governance frameworks will need to address agent-to-agent authentication and trust hierarchies.</p>
+</div>
+
+<div class="threat-card info">
+  <h4>Long-Horizon Planning & Extended Autonomy</h4>
+  <p><strong>What it is:</strong> AI agents capable of pursuing multi-step goals over hours, days, or weeks — maintaining context, adapting to obstacles, and completing complex projects without continuous human input.</p>
+  <p><strong>Why it matters:</strong> Current AI oversight models assume relatively short action sequences. A human can review an agent's 10-step plan. Reviewing a 10,000-step plan spanning weeks of actions is practically impossible. Extended autonomy reduces the opportunity for meaningful human oversight precisely as the consequences of mistakes compound.</p>
+  <p><strong>Security implications:</strong> An agent pursuing a long-horizon goal under a prompt injection attack may take hundreds of actions before the attack's effects become visible. Rollback and recovery become exponentially harder. The irreversibility problem (AGT04) scales with autonomy duration.</p>
+  <p><strong>What to watch:</strong> Devin (AI software engineer), OpenAI o3-mini on complex tasks, Google DeepMind's work on long-context reasoning agents.</p>
+</div>
+
+<div class="threat-card info">
+  <h4>AI in Physical Systems & Critical Infrastructure</h4>
+  <p><strong>What it is:</strong> AI models making decisions that directly control physical systems — power grids, water treatment, manufacturing, healthcare devices, autonomous vehicles, building management systems.</p>
+  <p><strong>Why it matters:</strong> When an AI makes a wrong decision in a chat application, you get a wrong answer. When an AI makes a wrong decision in a water treatment plant, you get a public health emergency. The consequence asymmetry is fundamental. Cyber-physical systems have safety-critical requirements that pure software systems do not.</p>
+  <p><strong>Security implications:</strong> Nation-state adversaries are already targeting industrial control systems. AI integration creates new attack surfaces on previously isolated systems. The convergence of IT and OT (operational technology) security becomes an AI governance problem. Prompt injection in a system that controls physical actuators is qualitatively different from prompt injection in a customer service chatbot.</p>
+</div>
+
+<FlipCard
+  scenario="Scenario: The Self-Directed AI Employee"
+  frontTitle="An Agent That Operates Like a Human Employee"
+  frontContent="Imagine an AI that has been given a corporate laptop login, email access, calendar management, and permission to book meetings, draft communications, and use internal tools — just as a new employee would. It operates autonomously on behalf of a senior executive."
+  backTitle="What Your Current Controls Weren't Designed For"
+  backContent={`<p>Your existing access controls were designed with assumptions about human operators: humans get tired, humans log off, humans make distinctive behavioral patterns. The AI doesn't — it can work continuously, at machine speed, across every system it has credentials for simultaneously.</p><p>The agent's access grants are human-scale. The agent's operational tempo is machine-scale. Your DLP systems flag unusual large data transfers. But this agent does many small transfers, each within normal range — the aggregate is unusual, but no single event triggers a rule.</p><p>The agent receives a phishing email. A human would likely hesitate. The agent, trained to be helpful and action-oriented, follows the link and enters the corporate SSO credentials it has access to. There was no social engineering — just an action the agent was capable of and no policy preventing it.</p><ul><li>Human-oriented controls (behavioral baselines, MFA, session timeouts) need rethinking for AI operators</li><li>AI agents need behavioral policies, not just access policies</li><li>The phishing problem applies to AI agents — they can be socially engineered too</li><li>Governance frameworks must evolve before widespread deployment, not after</li></ul>`}
+/>
+
+<StepWalkthrough
+  title="Preparing Your Organization for Emerging Capabilities"
+  steps={[
+    { title: "Establish an AI capabilities horizon scanning practice", content: "Designate someone responsible for tracking AI capability developments 12–24 months out. Read vendor roadmaps, research papers, and analyst reports. Security leaders who see capabilities coming can develop governance before deployment pressure arrives.", icon: "🔭" },
+    { title: "Apply security reviews to capabilities before adoption", content: "When a new AI capability becomes available to your organization (computer use, multi-agent coordination, longer autonomy), conduct a structured security review before deploying it. Ask: what new attack surfaces does this create? What existing controls break? What new controls are needed?", icon: "🔍" },
+    { title: "Engage with standards bodies and industry groups", content: "NIST, CISA, ISO, and sector-specific bodies are developing AI security standards now. Participating in these efforts means your organization's experience shapes the standards — and you get early warning of regulatory direction.", icon: "🤝" },
+    { title: "Red team emerging capabilities before full deployment", content: "For any significant new AI capability, run a structured adversarial testing exercise before broad deployment. What can an attacker do with this capability that they couldn't do before? What attacks become easier? What new attack categories emerge?", icon: "🧪" },
+    { title: "Update your AI incident response playbook annually", content: "As capabilities evolve, so do incidents. An incident response playbook written for chatbots is inadequate for autonomous agents. Update your playbook to address the AI capabilities you have deployed — and those you're planning to deploy.", icon: "📋" },
+  ]}
+/>
+
+<div class="defense-section">
+  <h3>The One Principle That Stays Constant</h3>
+  <p>Every AI capability that expands what agents can do autonomously requires a proportional investment in oversight, containment, and reversibility. The security implications scale with capability. A chat AI that gives wrong answers needs guardrails. An autonomous agent that executes transactions needs human approval workflows. An agent that controls physical systems needs safety interlocks and manual override at every decision point.</p>
+  <p>The governance question is always the same: <strong>what is the maximum harm this system can cause before a human has the opportunity to intervene — and is that harm acceptable?</strong></p>
+</div>
+
+</ContentLayout>

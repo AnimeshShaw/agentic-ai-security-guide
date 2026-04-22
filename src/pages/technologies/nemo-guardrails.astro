@@ -1,0 +1,81 @@
+---
+import ContentLayout from '../../layouts/ContentLayout.astro';
+import FlipCard from '../../components/FlipCard.astro';
+import StepWalkthrough from '../../components/StepWalkthrough.astro';
+import ScenarioToggle from '../../components/ScenarioToggle.astro';
+---
+
+<ContentLayout
+  title="NeMo Guardrails"
+  description="NVIDIA's open-source framework for adding programmable safety rules to AI — enforcing what your AI can and cannot say or do."
+  category="Core Technologies"
+  readingTime="9 min read"
+>
+
+<h2>The Compliance Officer for Your AI</h2>
+
+<p>Imagine hiring a compliance officer whose only job is to review every AI response before it reaches a user, and every user message before the AI processes it. They work in milliseconds, never tire, apply the same rules consistently, and can be programmed with your exact business requirements. That's the role NeMo Guardrails plays.</p>
+
+<p>NeMo Guardrails is an open-source framework from NVIDIA that allows organizations to define behavioral rules for AI systems. These rules — called guardrails — operate as a layer on top of any large language model, checking inputs and outputs against your defined policies before anything reaches the user or executes in the system.</p>
+
+<div class="callout callout-info">
+  <span class="callout-icon">💡</span>
+  <p>NeMo Guardrails doesn't replace your AI model. It wraps around it. The model does the reasoning; the guardrails enforce the boundaries. You get the model's capabilities within the limits you define.</p>
+</div>
+
+<h2>Three Types of Guardrails</h2>
+
+<div class="threat-card info">
+  <h4>Input Rails</h4>
+  <p>Rules that evaluate what's coming <em>in</em> before the AI sees it. If a user's message contains prohibited content, a jailbreak pattern, or a sensitive query, the input rail intercepts it before it ever reaches the language model. The model processes only messages that pass the input check.</p>
+</div>
+
+<div class="threat-card info">
+  <h4>Dialog Rails</h4>
+  <p>Rules that govern the <em>flow</em> of conversation. If a user is asking about topic X, dialog rails can require the AI to always include a disclaimer, redirect to a human, or follow a specific structured flow — regardless of what the model would otherwise generate.</p>
+</div>
+
+<div class="threat-card info">
+  <h4>Output Rails</h4>
+  <p>Rules that evaluate what the AI is about to say <em>before</em> it reaches the user. If the model generates a response that violates a policy — mentions a competitor, makes a regulatory claim, or produces potentially harmful content — the output rail blocks or modifies it before delivery.</p>
+</div>
+
+<FlipCard
+  scenario="Scenario: Financial Advice Chatbot"
+  frontTitle="Your AI Answers Customer Financial Questions"
+  frontContent="Your bank deploys an AI to answer customer questions about products, rates, and account management. Without guardrails, you're relying on the AI's general training to know what's appropriate. The model is capable and helpful."
+  backTitle="What Guardrails Make Possible"
+  backContent={`<p>Without guardrails: a customer asks "Should I put my retirement savings into this high-risk investment?" The AI, trained on enthusiastic financial content, provides a confident-sounding recommendation — potentially violating securities regulations on investment advice.</p><p>With NeMo Guardrails configured for financial services: that question triggers a predefined dialog rail. The AI's response is intercepted and replaced with: "That's a great question for one of our licensed financial advisors. I can help you schedule a consultation. Questions about specific investment recommendations require a licensed professional." The policy is enforced automatically, consistently, and auditably — without retraining the model.</p><ul><li>The rule is configurable by your compliance team, not just your AI team</li><li>Every application of the rule is logged for audit purposes</li><li>The model's capabilities for everything else remain unchanged</li><li>New rules can be added without model updates</li></ul>`}
+/>
+
+<StepWalkthrough
+  title="How a Request Flows Through NeMo Guardrails"
+  steps={[
+    { title: "User sends a message", content: "A user submits a message to your AI system. Before it reaches the language model, it enters the NeMo Guardrails pipeline.", icon: "💬" },
+    { title: "Input rail evaluation", content: "The guardrails system evaluates the message against your defined input rules. Does it match a prohibited pattern? Is it a jailbreak attempt? Does it require a specific routing? If it fails, the guardrail handles the response directly — the model never sees it.", icon: "🔍" },
+    { title: "Model generates response", content: "If the input passes, it's sent to the language model. The model generates a response using its normal reasoning capabilities.", icon: "🤖" },
+    { title: "Output rail evaluation", content: "Before the response reaches the user, output rails evaluate it. Does it contain prohibited content? Does it make claims that require a disclaimer? Does it follow the required response structure? Responses that fail are blocked or modified.", icon: "🛡️" },
+    { title: "User receives compliant response", content: "The user receives only responses that have passed both input and output evaluation. All rail activations are logged — a complete audit trail of every policy enforcement decision.", icon: "✅" },
+  ]}
+/>
+
+<ScenarioToggle
+  attackerTitle="🔴 Without Guardrails"
+  defenderTitle="🟢 With NeMo Guardrails"
+  attackerContent={`<p>Without behavioral guardrails, your AI is only as safe as the model's general training:</p><ul><li>Jailbreaks may succeed — the model can often be manipulated into bypassing its own safety training</li><li>Regulatory violations can occur through confident-sounding incorrect statements</li><li>Off-topic or harmful content can reach users</li><li>No audit trail of policy violations — you can't demonstrate compliance</li><li>Competitor mentions or sensitive topics handled inconsistently by the model</li></ul>`}
+  defenderContent={`<ul><li><strong>Consistent policy enforcement</strong> — rules apply equally to every request, every user</li><li><strong>Audit trail</strong> — every rule activation is logged, demonstrating compliance</li><li><strong>Rapid policy updates</strong> — new rules deploy without model retraining</li><li><strong>Regulatory alignment</strong> — compliance team can configure rules directly</li><li><strong>Defense against jailbreaks</strong> — input rails catch known attack patterns before the model sees them</li></ul><p>Guardrails don't make your AI perfect — they make it consistently bounded within your defined policy space.</p>`}
+/>
+
+<div class="defense-section">
+  <h3>When Guardrails Are Most Valuable</h3>
+  <ul>
+    <li><strong>Regulated industries</strong> (finance, healthcare, legal, insurance) — where specific claims or advice require licensed professionals</li>
+    <li><strong>Customer-facing deployments</strong> — where brand consistency and compliance exposure are high</li>
+    <li><strong>Sensitive topic handling</strong> — anywhere the AI might encounter topics requiring specific responses (mental health, legal rights, safety information)</li>
+    <li><strong>Competitive sensitivity</strong> — enforcing rules about competitor mentions or pricing discussions</li>
+    <li><strong>Compliance demonstration</strong> — when audit trails of AI behavior are required by regulators or enterprise contracts</li>
+  </ul>
+  <p><strong>Guardrails are a layer, not a complete solution.</strong> They work alongside least-privilege design, input sanitization, and human oversight — not instead of them.</p>
+</div>
+
+</ContentLayout>

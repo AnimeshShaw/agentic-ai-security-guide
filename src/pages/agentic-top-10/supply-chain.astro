@@ -1,0 +1,73 @@
+---
+import ContentLayout from '../../layouts/ContentLayout.astro';
+import FlipCard from '../../components/FlipCard.astro';
+import StepWalkthrough from '../../components/StepWalkthrough.astro';
+---
+
+<ContentLayout
+  title="AGT10: Supply Chain & Plugin Compromise"
+  description="When the tools, plugins, and services your agents depend on become the attack vector."
+  category="Agentic AI Top 10"
+  readingTime="9 min read"
+  severity="high"
+>
+
+<h2>Your Agent Is Only as Secure as Its Weakest Dependency</h2>
+
+<p>An AI agent is not a single thing. It is a composition: a foundation model, an orchestration framework, a set of plugins or tools, external APIs, SDK libraries, and deployment infrastructure. Each of these components is a trust relationship. You trust the model provider, the plugin author, the SDK maintainer, the API operator. If any of these parties is compromised — or makes a mistake — your agent is compromised too.</p>
+
+<p>This is the AI equivalent of the software supply chain attack, made famous by incidents like SolarWinds (2020) and XZ Utils (2024). In those cases, attackers compromised trusted components that were then distributed to thousands of downstream users. The same attack pattern applies to AI agent infrastructure — and the ecosystem is expanding rapidly, creating new attack surface every week.</p>
+
+<FlipCard
+  scenario="Scenario: Popular MCP Plugin Update"
+  frontTitle="Your Team Uses a Well-Regarded MCP Plugin"
+  frontContent="Your development team uses a popular Model Context Protocol plugin that gives your agent access to your project management system. It has thousands of stars on GitHub. The team set it to auto-update to always have the latest features."
+  backTitle="The Compromised Maintainer"
+  backContent={`<p>The plugin maintainer's GitHub account is compromised. The attacker pushes a malicious version update that looks like a routine bug fix. Auto-update pulls it to all installations within hours. The updated plugin still works normally — but it now silently exfiltrates every piece of data the agent sends through it to an attacker-controlled server.</p><p>Every agent using the plugin is compromised. Every tool call that passes through it is logged by the attacker. The plugin's normal functionality provides cover: your security monitoring sees legitimate plugin behavior, not an attack.</p><ul><li>The plugin was trusted because it was popular and previously safe</li><li>Auto-update is a convenience that becomes a delivery mechanism for supply chain attacks</li><li>The attack is invisible — the plugin still works, the exfiltration is silent</li><li>Pinning to verified versions and reviewing updates before deploying is essential</li></ul>`}
+/>
+
+<h2>The Agentic Supply Chain</h2>
+
+<div class="threat-card">
+  <h4>Foundation Model</h4>
+  <p>The base model's training data, safety training, and capabilities. A compromised or backdoored model behaves maliciously only when triggered by specific inputs — potentially for months before detection.</p>
+</div>
+
+<div class="threat-card high">
+  <h4>Plugins and Tool Integrations</h4>
+  <p>MCP servers, function-calling tools, and browser extensions that extend agent capabilities. Each plugin is a third-party dependency with its own security posture and update cadence. A compromised plugin has access to everything the agent touches.</p>
+</div>
+
+<div class="threat-card medium">
+  <h4>Orchestration Framework</h4>
+  <p>Libraries like LangChain, LlamaIndex, or AutoGen that coordinate agent behavior. Vulnerabilities or compromises in these frameworks affect every application built on them.</p>
+</div>
+
+<div class="threat-card high">
+  <h4>External APIs and Data Sources</h4>
+  <p>Third-party APIs the agent calls to retrieve data or take actions. A compromised API can return malicious content designed to trigger prompt injection in the agent, or silently modify the data the agent acts on.</p>
+</div>
+
+<StepWalkthrough
+  title="Building a Plugin Governance Program"
+  steps={[
+    { title: "Inventory all agent dependencies", content: "Document every plugin, tool integration, SDK, and external API each agent uses. This is your supply chain manifest. If you don't know what your agent depends on, you can't govern it.", icon: "📋" },
+    { title: "Vet plugins before adoption", content: "Before adopting a new plugin: review its source code (or engage someone who can), check its security history, verify the maintainer's identity, and assess the vendor's security practices. Treat plugin adoption like vendor onboarding.", icon: "🔍" },
+    { title: "Pin versions — no auto-update", content: "Lock each dependency to a specific reviewed version. Any version update must go through a review and approval process before deployment. This breaks the auto-update supply chain attack vector.", icon: "📌" },
+    { title: "Sandbox plugins", content: "Each plugin should run in an isolated environment with the minimum permissions needed for its function. A compromised plugin in a sandbox can exfiltrate only what the sandbox allows — not everything the agent can access.", icon: "📦" },
+    { title: "Monitor plugin behavior", content: "Establish a baseline of normal behavior for each plugin: expected API calls, data volumes, access patterns. Deviations from baseline should trigger investigation. Anomalous plugin behavior is one of the few ways to detect a supply chain compromise early.", icon: "📊" },
+  ]}
+/>
+
+<div class="defense-section">
+  <h3>The Plugin Governance Minimum</h3>
+  <ol>
+    <li><strong>Plugin registry.</strong> Maintain an approved list of plugins. Only plugins on the approved list can be used by production agents. New plugins require security review for approval.</li>
+    <li><strong>Version pinning.</strong> All plugin versions are pinned. Updates require explicit review and approval. No auto-update in production environments.</li>
+    <li><strong>Network egress controls for plugins.</strong> Plugins should not be able to make arbitrary outbound network calls. Allowlist the specific endpoints each plugin is permitted to reach.</li>
+    <li><strong>Plugin sandboxing.</strong> Where technically feasible, run plugins in isolated environments with minimal permissions. A compromised plugin in a sandbox is a contained incident, not a full breach.</li>
+    <li><strong>Update review process.</strong> Establish a cadence for reviewing and applying plugin updates — weekly or biweekly. Unreviewed updates are not deployed, but reviewed updates are applied promptly to receive security patches.</li>
+  </ol>
+</div>
+
+</ContentLayout>

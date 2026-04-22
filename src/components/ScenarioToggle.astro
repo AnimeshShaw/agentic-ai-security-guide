@@ -1,0 +1,48 @@
+---
+export interface Props {
+  attackerTitle?: string;
+  defenderTitle?: string;
+  attackerContent: string;
+  defenderContent: string;
+}
+
+const {
+  attackerTitle = '🔴 Attacker\'s View',
+  defenderTitle = '🟢 Defender\'s View',
+  attackerContent,
+  defenderContent,
+} = Astro.props;
+
+const id = `scenario-${Math.random().toString(36).slice(2, 8)}`;
+---
+
+<div class="scenario-toggle" id={id}>
+  <div class="scenario-tabs">
+    <button class="scenario-tab attacker active" data-tab="attacker">{attackerTitle}</button>
+    <button class="scenario-tab defender" data-tab="defender">{defenderTitle}</button>
+  </div>
+  <div class="scenario-panel attacker-panel active" data-panel="attacker">
+    <Fragment set:html={attackerContent} />
+  </div>
+  <div class="scenario-panel defender-panel" data-panel="defender">
+    <Fragment set:html={defenderContent} />
+  </div>
+</div>
+
+<script define:vars={{ id }}>
+  const wrap = document.getElementById(id);
+  if (!wrap) return;
+
+  const tabs   = wrap.querySelectorAll('.scenario-tab');
+  const panels = wrap.querySelectorAll('.scenario-panel');
+
+  tabs.forEach((tab) => {
+    tab.addEventListener('click', () => {
+      const target = tab.dataset.tab;
+      tabs.forEach((t)   => t.classList.remove('active'));
+      panels.forEach((p) => p.classList.remove('active'));
+      tab.classList.add('active');
+      wrap.querySelector(`[data-panel="${target}"]`)?.classList.add('active');
+    });
+  });
+</script>

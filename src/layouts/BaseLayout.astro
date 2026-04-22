@@ -1,0 +1,51 @@
+---
+import '../styles/global.css';
+
+export interface Props {
+  title: string;
+  description?: string;
+}
+
+const {
+  title,
+  description = 'The leadership guide to agentic AI security — for CISOs, CTOs, and board members.',
+} = Astro.props;
+---
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content={description} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>{title === 'Home' ? 'Agentic AI Security Guide' : `${title} — Agentic AI Security Guide`}</title>
+    <!-- Apply saved theme before first paint to prevent flash -->
+    <script is:inline>
+      (function () {
+        try {
+          var saved = localStorage.getItem('theme');
+          if (saved === 'dark' || (!saved && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+          }
+        } catch (_) {}
+      })();
+    </script>
+  </head>
+  <body>
+    <div id="reading-progress"></div>
+    <slot />
+    <script>
+      const bar = document.getElementById('reading-progress');
+      if (bar) {
+        const update = () => {
+          const scrolled = window.scrollY;
+          const total = document.documentElement.scrollHeight - window.innerHeight;
+          bar.style.width = total > 0 ? (scrolled / total) * 100 + '%' : '0%';
+        };
+        window.addEventListener('scroll', update, { passive: true });
+        update();
+      }
+    </script>
+  </body>
+</html>

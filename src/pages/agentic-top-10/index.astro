@@ -1,0 +1,114 @@
+---
+import ContentLayout from '../../layouts/ContentLayout.astro';
+---
+<ContentLayout
+  title="Agentic AI Top 10"
+  description="The 10 critical security risks unique to autonomous AI agents — risks that don't exist in traditional software or standard chatbots."
+  category="Agentic AI Top 10"
+  readingTime="5 min overview"
+>
+
+  <p>The OWASP LLM Top 10 addresses risks in language models — hallucinations, prompt injection into a chatbot, insecure output handling. Those risks matter. But they assume a human is in the loop: the model generates text, a person reads it, a person decides what to do next. Agentic AI systems break that assumption entirely. When an AI agent can browse the web, send emails, execute code, query databases, and call external APIs — all without a human reviewing each step — the risk profile changes fundamentally. An agent doesn't just say something dangerous. It <em>does</em> something dangerous, at machine speed, often irreversibly.</p>
+
+  <p>The Agentic AI Top 10 addresses this new category of risk. These are not theoretical concerns — early agentic deployments in financial services, IT operations, customer service, and software development are already encountering these failure modes. The common thread across all ten risks is <strong>autonomous action</strong>: the agent has been given the ability to act in the world, and each of these risks describes a way that capability can be turned against the organization that deployed it. Understanding these risks is not optional for technology leaders in 2025. Agentic AI is moving from pilot to production, and security frameworks need to move with it.</p>
+
+  <div class="top10-grid">
+
+    <a href="/agentic-top-10/prompt-injection" class="top10-card critical">
+      <div class="card-number">AGT01</div>
+      <div class="card-content">
+        <h3>Prompt Injection</h3>
+        <p>Attackers embed hidden instructions in content the agent reads, hijacking its behavior without touching any system directly.</p>
+        <span class="severity-badge critical">Critical</span>
+      </div>
+    </a>
+
+    <a href="/agentic-top-10/excessive-agency" class="top10-card critical">
+      <div class="card-number">AGT02</div>
+      <div class="card-content">
+        <h3>Excessive Agency</h3>
+        <p>Agents given more permissions than their task requires — turning any vulnerability into a maximum-impact event.</p>
+        <span class="severity-badge critical">Critical</span>
+      </div>
+    </a>
+
+    <a href="/agentic-top-10/unsafe-tool-execution" class="top10-card critical">
+      <div class="card-number">AGT03</div>
+      <div class="card-content">
+        <h3>Unsafe Tool Execution</h3>
+        <p>Agents that run code, shell commands, and API calls without validating inputs — becoming weapons against their own infrastructure.</p>
+        <span class="severity-badge critical">Critical</span>
+      </div>
+    </a>
+
+    <a href="/agentic-top-10/inter-agent-attacks" class="top10-card high">
+      <div class="card-number">AGT04</div>
+      <div class="card-content">
+        <h3>Inter-Agent Attacks</h3>
+        <p>When AI agents communicate with each other, a compromise at one node can propagate silently through the entire network.</p>
+        <span class="severity-badge high">High</span>
+      </div>
+    </a>
+
+    <a href="/agentic-top-10/memory-poisoning" class="top10-card high">
+      <div class="card-number">AGT05</div>
+      <div class="card-content">
+        <h3>Memory Poisoning</h3>
+        <p>Attackers corrupt what an agent remembers, causing it to behave incorrectly in every future interaction — a sleeper attack.</p>
+        <span class="severity-badge high">High</span>
+      </div>
+    </a>
+
+    <a href="/agentic-top-10/privilege-escalation" class="top10-card high">
+      <div class="card-number">AGT06</div>
+      <div class="card-content">
+        <h3>Privilege Escalation</h3>
+        <p>Agents that acquire permissions beyond their original scope — either through manipulation or by simply asking for more access.</p>
+        <span class="severity-badge high">High</span>
+      </div>
+    </a>
+
+    <a href="/agentic-top-10/uncontrolled-loops" class="top10-card high">
+      <div class="card-number">AGT07</div>
+      <div class="card-content">
+        <h3>Uncontrolled Action Loops</h3>
+        <p>Agents stuck in runaway behavior — taking thousands of actions, burning budget, and causing side effects with no exit condition.</p>
+        <span class="severity-badge high">High</span>
+      </div>
+    </a>
+
+    <a href="/agentic-top-10/data-exfiltration" class="top10-card high">
+      <div class="card-number">AGT08</div>
+      <div class="card-content">
+        <h3>Data Exfiltration via Tools</h3>
+        <p>Agents manipulated into leaking sensitive data through their own legitimate tool connections — internal data leaving through trusted channels.</p>
+        <span class="severity-badge high">High</span>
+      </div>
+    </a>
+
+    <a href="/agentic-top-10/insufficient-oversight" class="top10-card medium">
+      <div class="card-number">AGT09</div>
+      <div class="card-content">
+        <h3>Insufficient Human Oversight</h3>
+        <p>Removing human supervision from autonomous agents eliminates the last line of defense when everything else fails.</p>
+        <span class="severity-badge medium">Medium</span>
+      </div>
+    </a>
+
+    <a href="/agentic-top-10/supply-chain" class="top10-card high">
+      <div class="card-number">AGT10</div>
+      <div class="card-content">
+        <h3>Supply Chain Compromise</h3>
+        <p>The plugins, tools, and SDKs your agents depend on become attack vectors — a compromised tool gives attackers access to everything the agent can touch.</p>
+        <span class="severity-badge high">High</span>
+      </div>
+    </a>
+
+  </div>
+
+  <div class="callout callout-warning">
+    <span class="callout-icon">⚠️</span>
+    <p>This list reflects emerging best practices from the security research community. As agentic AI deployments accelerate, these risks will become more clearly defined and more frequently exploited. Organizations deploying autonomous agents today should treat this framework as a living document and revisit their controls as the threat landscape matures.</p>
+  </div>
+
+</ContentLayout>

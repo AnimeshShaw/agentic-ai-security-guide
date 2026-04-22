@@ -1,0 +1,141 @@
+---
+import ContentLayout from '../../layouts/ContentLayout.astro';
+import FlipCard from '../../components/FlipCard.astro';
+import StepWalkthrough from '../../components/StepWalkthrough.astro';
+import ScenarioToggle from '../../components/ScenarioToggle.astro';
+---
+<ContentLayout
+  title="Model Context Protocol (MCP)"
+  description="The new standard that connects AI agents to external tools and data sources — and why it's both powerful and risky."
+  category="Core Technologies"
+  readingTime="10 min read"
+>
+
+  <p>
+    Imagine trying to plug every device in your office into a power source — but every device uses a different type of plug, and every power outlet has a different shape. That was the state of AI integrations until late 2024. Every company that wanted its AI assistant to read emails, access a database, or pull a report had to build a custom connector from scratch, every single time.
+  </p>
+
+  <p>
+    Anthropic's Model Context Protocol — MCP — was designed to solve that problem. Think of it as the USB-C standard for AI agents. One universal plug that any AI model can use to connect to any compatible tool or data source. Released in 2024 as an open standard, MCP is rapidly becoming the default way that AI agents interact with the world beyond the conversation window.
+  </p>
+
+  <p>
+    For executives, MCP matters for two reasons. First, it dramatically accelerates what your AI tools can do — an agent connected via MCP can read your SharePoint documents, query your CRM, book calendar meetings, and submit expense reports, all in a single workflow. Second, it creates a standardized attack surface. Understanding that tension is essential before you deploy MCP in your organization.
+  </p>
+
+  <div class="dark-section">
+    <span class="section-label">⚙️ HOW IT WORKS</span>
+
+    <p>
+      MCP uses a server-client architecture. Think of it like a restaurant. The kitchen — your tools and data sources — doesn't walk out to every table and announce what it can make. Instead, there's a menu. MCP servers are the menu. They expose a list of available tools: "I can read files," "I can query the database," "I can send an email." The AI agent is the customer. It reads the menu, decides what it needs, and places an order.
+    </p>
+
+    <p>
+      Each MCP server is a small program that wraps a tool or data source and makes it accessible to any AI agent that speaks the MCP standard. Your company might run an MCP server for your file system, another for your email platform, another for your CRM. The AI agent discovers these servers, reads what tools they offer, and calls them as needed — all without custom code for each integration.
+    </p>
+
+    <StepWalkthrough
+      title="How an Agent Uses MCP to Get Things Done"
+      steps={[
+        {
+          title: "Agent receives a task",
+          content: "A user asks the AI agent to 'Summarize all emails from our top 10 customers this week and add action items to my calendar.' The agent understands the task requires access to email data and calendar systems.",
+          icon: "🎯"
+        },
+        {
+          title: "Agent queries available MCP servers",
+          content: "The agent connects to the MCP registry — a list of servers your IT team has made available. It discovers an email MCP server and a calendar MCP server, and reads what tools each one offers.",
+          icon: "🔍"
+        },
+        {
+          title: "Agent calls the specific tools it needs",
+          content: "The agent calls the email server's 'search-emails' tool with the appropriate filters. It receives the results. Then it calls the calendar server's 'create-event' tool for each action item it identified.",
+          icon: "⚙️"
+        },
+        {
+          title: "Results are returned to the agent",
+          content: "Each MCP server returns structured data back to the agent — the emails it found, confirmation of calendar events created. The agent compiles this into a coherent response for the user.",
+          icon: "📦"
+        },
+        {
+          title: "Agent completes the task",
+          content: "The user receives a summary of key customer emails and a confirmation that action items have been added to their calendar — all executed through standardized MCP calls, with a full log of every tool called.",
+          icon: "✅"
+        }
+      ]}
+    />
+  </div>
+
+  <h2>Why MCP Changes Your Security Posture</h2>
+
+  <p>
+    Here is the critical insight every executive should carry: MCP standardizes both the power and the risk. Before MCP, each custom integration was a one-off. A vulnerability in one integration affected only that integration. With MCP, a compromised or misconfigured MCP server affects every AI agent that uses it — potentially across your entire organization.
+  </p>
+
+  <p>
+    Consider what a typical enterprise MCP deployment looks like. You might have servers connecting your AI agents to email, calendar, Salesforce, SharePoint, GitHub, your financial reporting system, and your HR platform. Each of those connections is an MCP server. Each server is software that can have vulnerabilities. Each server holds permissions to act on behalf of your agents — which means on behalf of your users.
+  </p>
+
+  <div class="callout callout-warning">
+    <span class="callout-icon">⚠️</span>
+    <p>An MCP server with excessive permissions is not just a misconfiguration — it is an open door. A prompt injection attack that convinces your agent to misuse a permissive MCP server can exfiltrate data, send unauthorized communications, or modify records at scale. This is not theoretical. It has happened.</p>
+  </div>
+
+  <p>
+    The attack vectors MCP introduces are worth naming clearly. First, a malicious or compromised MCP server can instruct your agent to take actions the user never requested. Second, an MCP server with broad permissions (say, "read all files" instead of "read files in the project folder") turns a small vulnerability into a large breach. Third, because agents can chain tool calls — using the output of one MCP call as the input to another — a single compromised step can cascade into a complex attack.
+  </p>
+
+  <FlipCard
+    scenario="Scenario: Enterprise MCP Deployment"
+    frontTitle="12 MCP Servers, Full Integration"
+    frontContent="Your IT team deploys 12 MCP servers giving your AI assistant access to email, calendar, Salesforce, SharePoint, code repositories, and financial systems. Productivity soars. Agents handle end-to-end workflows that used to take hours."
+    backTitle="What This Actually Means"
+    backContent={`<p>Each MCP server is a potential attack vector. If the email MCP server is compromised, an attacker can read all emails the agent processes. If the Salesforce MCP server has excessive permissions, a prompt injection attack can exfiltrate your entire customer database. MCP is powerful — but each server you add multiplies your attack surface.</p><ul><li>Inventory every MCP server before deployment — know what tools each one exposes</li><li>Apply least-privilege to every tool the server exposes — "read this folder" not "read all files"</li><li>Monitor all MCP tool calls — they are your agent's action log and your audit trail</li><li>Treat MCP server updates as software updates — apply change control, review changelogs</li></ul>`}
+  />
+
+  <ScenarioToggle
+    attackerTitle="🔴 Without MCP Governance"
+    defenderTitle="🟢 With MCP Governance"
+    attackerContent={`<p>MCP servers are deployed ad hoc by individual teams. No central inventory exists. Permissions are set broadly to "make things work." Agent behavior is not logged at the tool-call level.</p><ul><li>No one knows which MCP servers are running in production</li><li>A newly deployed MCP server for a pilot project has admin-level database access — it was easier to configure that way</li><li>A prompt injection in a user document convinces the agent to call the database MCP server and export records to an external endpoint</li><li>The breach is discovered three weeks later during a routine audit</li><li>Forensic investigation is nearly impossible — no tool-call logs exist</li></ul>`}
+    defenderContent={`<p>MCP servers are registered in a central inventory before deployment. Each server undergoes a security review. Tool permissions are scoped to the minimum required. All MCP tool calls are logged.</p><ul><li>Security team maintains a vetted registry of approved MCP servers</li><li>Each server's tool permissions are reviewed — "read invoices from Q1 folder" not "read all financial files"</li><li>MCP call logs feed into your SIEM — unusual patterns trigger alerts</li><li>A prompt injection attempt fires an alert when the agent tries to call an unapproved endpoint</li><li>Full forensic trail exists for every action the agent took</li></ul>`}
+  />
+
+  <div class="defense-section">
+    <h2>MCP Governance: What Good Looks Like</h2>
+
+    <p>
+      Building a secure MCP deployment is not about limiting what AI can do — it is about ensuring that what it does is controlled, auditable, and scoped to what is actually needed. The following practices form the foundation of responsible MCP governance.
+    </p>
+
+    <h3>Maintain a Vetted Server Registry</h3>
+    <p>
+      Every MCP server running in your environment should be in a registry that security has reviewed. This is not bureaucracy — it is the equivalent of knowing which software is installed on your endpoints. An unregistered MCP server is an unmanaged risk.
+    </p>
+
+    <h3>Apply Tool Allowlisting</h3>
+    <p>
+      MCP servers can expose many tools — but your agents should only be permitted to call the tools they actually need. If your document-processing agent only needs to read files, its MCP server should not expose a write-file or delete-file tool. Lock down the menu to what your agent is allowed to order.
+    </p>
+
+    <h3>Log Every Tool Call</h3>
+    <p>
+      Every call an agent makes through MCP — which tool, what parameters, what was returned — should be logged. This is your audit trail. It is the equivalent of having a security camera on the agent's actions. Without this, you cannot detect anomalies, investigate incidents, or demonstrate compliance.
+    </p>
+
+    <h3>Scope Permissions at the Data Level</h3>
+    <p>
+      "Access to Salesforce" is not a permission — it is an open door. "Read-only access to customer records in the EMEA region for contracts signed in the last 90 days" is a permission. MCP governance means pushing for this level of specificity in every server configuration.
+    </p>
+
+    <h3>Treat MCP Servers as Third-Party Software</h3>
+    <p>
+      When an MCP server vendor releases an update, review it before deploying. Updates can add new tools or change permission models — either of which can alter your agent's capability and attack surface. The same change-control discipline you apply to software deployments should apply to MCP server updates.
+    </p>
+  </div>
+
+  <div class="callout callout-info">
+    <span class="callout-icon">💡</span>
+    <p>MCP is not optional for enterprises that want capable AI agents — it is the direction the industry is moving. The question is not whether to use MCP, but whether to use it with or without governance. Organizations that build MCP governance now will be ahead of those scrambling to retrofit controls after an incident.</p>
+  </div>
+
+</ContentLayout>

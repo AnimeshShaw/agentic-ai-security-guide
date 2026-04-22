@@ -1,0 +1,94 @@
+---
+import ContentLayout from '../../layouts/ContentLayout.astro';
+---
+<ContentLayout
+  title="OWASP LLM Top 10 (2025)"
+  description="The 10 most critical security risks in large language models, as defined by OWASP — each explained for business leaders."
+  category="OWASP LLM Top 10"
+  readingTime="5 min overview"
+>
+
+  <p>OWASP — the Open Worldwide Application Security Project — is a globally respected nonprofit that sets the standard for application security. For decades, their "Top 10" lists have shaped how organizations prioritize security investments. In 2023, they released their first Top 10 specifically for Large Language Models, updated in 2025 to reflect how rapidly the threat landscape has evolved. This list is not theoretical — it is built from real-world incidents reported by security researchers, enterprise teams, and penetration testers working with AI systems in production.</p>
+
+  <p>Why does this list matter to you as a business leader? Because AI is no longer a pilot project — it is infrastructure. Every LLM your organization deploys, connects to internal data, or exposes to customers carries risk. The OWASP LLM Top 10 gives you a shared vocabulary with your security team, a prioritization framework for AI risk investment, and a checklist against which to evaluate any AI vendor or internal deployment. The ten risks below range from attackers hijacking your AI's behavior to your AI leaking confidential data to runaway costs from uncontrolled usage. Each card links to a full explanation with real-world examples.</p>
+
+  <div class="top10-grid">
+
+    <a href="/llm-top-10/prompt-injection" class="top10-card critical">
+      <div class="top10-number">LLM01:2025</div>
+      <div class="top10-card-title">Prompt Injection</div>
+      <div class="top10-card-desc">Attackers embed malicious instructions in content the AI reads, hijacking its behavior without touching your systems.</div>
+      <span class="severity severity-critical">🔴 Critical</span>
+    </a>
+
+    <a href="/llm-top-10/sensitive-information-disclosure" class="top10-card high">
+      <div class="top10-number">LLM02:2025</div>
+      <div class="top10-card-title">Sensitive Information Disclosure</div>
+      <div class="top10-card-desc">LLMs can leak confidential data from their training, from live conversations, or from connected internal systems.</div>
+      <span class="severity severity-high">🟠 High</span>
+    </a>
+
+    <a href="/llm-top-10/supply-chain" class="top10-card high">
+      <div class="top10-number">LLM03:2025</div>
+      <div class="top10-card-title">Supply Chain Vulnerabilities</div>
+      <div class="top10-card-desc">The AI models, plugins, and data your teams plug in may carry hidden risks from their own compromised supply chains.</div>
+      <span class="severity severity-high">🟠 High</span>
+    </a>
+
+    <a href="/llm-top-10/data-poisoning" class="top10-card critical">
+      <div class="top10-number">LLM04:2025</div>
+      <div class="top10-card-title">Data and Model Poisoning</div>
+      <div class="top10-card-desc">Attackers corrupt the data the AI learns from, permanently manipulating its behavior in ways that are very hard to detect.</div>
+      <span class="severity severity-critical">🔴 Critical</span>
+    </a>
+
+    <a href="/llm-top-10/improper-output-handling" class="top10-card high">
+      <div class="top10-number">LLM05:2025</div>
+      <div class="top10-card-title">Improper Output Handling</div>
+      <div class="top10-card-desc">When AI-generated content is used without validation, it can inject malicious code into websites, databases, and downstream systems.</div>
+      <span class="severity severity-high">🟠 High</span>
+    </a>
+
+    <a href="/llm-top-10/excessive-agency" class="top10-card critical">
+      <div class="top10-number">LLM06:2025</div>
+      <div class="top10-card-title">Excessive Agency</div>
+      <div class="top10-card-desc">AI agents given too many permissions cause catastrophic damage when compromised — turning any vulnerability into a critical incident.</div>
+      <span class="severity severity-critical">🔴 Critical</span>
+    </a>
+
+    <a href="/llm-top-10/system-prompt-leakage" class="top10-card medium">
+      <div class="top10-number">LLM07:2025</div>
+      <div class="top10-card-title">System Prompt Leakage</div>
+      <div class="top10-card-desc">The hidden instructions that control your AI's behavior can be extracted by attackers, exposing confidential business logic.</div>
+      <span class="severity severity-medium">🟡 Medium</span>
+    </a>
+
+    <a href="/llm-top-10/vector-weaknesses" class="top10-card high">
+      <div class="top10-number">LLM08:2025</div>
+      <div class="top10-card-title">Vector and Embedding Weaknesses</div>
+      <div class="top10-card-desc">The AI memory systems that power knowledge retrieval introduce new attack surfaces and data exposure risks.</div>
+      <span class="severity severity-high">🟠 High</span>
+    </a>
+
+    <a href="/llm-top-10/misinformation" class="top10-card medium">
+      <div class="top10-number">LLM09:2025</div>
+      <div class="top10-card-title">Misinformation</div>
+      <div class="top10-card-desc">AI systems confidently generate false information — and organizations act on it, creating legal, financial, and reputational risk.</div>
+      <span class="severity severity-medium">🟡 Medium</span>
+    </a>
+
+    <a href="/llm-top-10/unbounded-consumption" class="top10-card medium">
+      <div class="top10-number">LLM10:2025</div>
+      <div class="top10-card-title">Unbounded Consumption</div>
+      <div class="top10-card-desc">Without rate limits and cost controls, AI systems can be exploited to exhaust budgets and deny service to legitimate users.</div>
+      <span class="severity severity-medium">🟡 Medium</span>
+    </a>
+
+  </div>
+
+  <div class="callout callout-info">
+    <span class="callout-icon">💡</span>
+    <p>Click any card to explore the full explanation with interactive examples, real-world scenarios, and practical defenses — all written for business leaders, not engineers.</p>
+  </div>
+
+</ContentLayout>

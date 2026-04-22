@@ -1,0 +1,78 @@
+---
+import ContentLayout from '../../layouts/ContentLayout.astro';
+import FlipCard from '../../components/FlipCard.astro';
+import StepWalkthrough from '../../components/StepWalkthrough.astro';
+import ScenarioToggle from '../../components/ScenarioToggle.astro';
+---
+
+<ContentLayout
+  title="AGT03: Unsafe Tool Execution"
+  description="When AI agents execute tools and system calls without sufficient validation — turning the agent into a weapon against its own systems."
+  category="Agentic AI Top 10"
+  readingTime="10 min read"
+  severity="critical"
+>
+
+<h2>Tools Are the Point — and the Risk</h2>
+
+<p>What makes an AI agent different from a chatbot is its ability to use tools: read files, execute code, browse the web, call APIs, query databases, send messages. Tools are what give agents real-world impact. They're also what make unsafe agents catastrophically dangerous.</p>
+
+<p>Unsafe Tool Execution happens when agents call tools without adequate validation of the inputs those tools receive. Just as a web application must validate user input before passing it to a database, an agent must validate what it sends to its tools. When it doesn't, the agent can be manipulated into weaponizing its own capabilities against the organization that deployed it.</p>
+
+<FlipCard
+  scenario="Scenario: Data Analysis Agent with Code Execution"
+  frontTitle="An Agent That Writes and Runs Python Code"
+  frontContent="Your data science team deploys an AI agent that can write and run Python code to analyze sales data. It saves days of manual analysis work. Analysts can ask questions in plain English and receive charts, statistics, and insights automatically."
+  backTitle="How the Code Executor Becomes a Backdoor"
+  backContent={`<p>An analyst asks the agent: "Analyze Q3 sales data and also check whether any anomalies appear in the server access logs." The agent reads the access logs to look for patterns. The logs contain carefully crafted entries planted by an attacker — entries that, when processed by the Python script, trigger the execution of shell commands.</p><p>The agent has now executed attacker-controlled code using its own code execution tool — with the agent's system permissions, in the production environment, without any human review or approval.</p><ul><li>The attacker never touched your systems directly — they manipulated a log file</li><li>The agent's own code execution capability was the attack vector</li><li>The agent was running with production system permissions, so the compromise was complete</li><li>Sandboxed code execution environments prevent exactly this scenario</li></ul>`}
+/>
+
+<h2>The Validation Gap</h2>
+
+<p>Every tool call has three components: the tool itself (what capability is being invoked), the parameters (what the agent is telling the tool to do), and the permissions (what the tool is allowed to affect). Unsafe tool execution fails at the parameters level — the agent passes unvalidated, potentially attacker-influenced content as tool parameters.</p>
+
+<div class="threat-card">
+  <h4>Unvalidated File Paths</h4>
+  <p>An agent asked to "read the uploaded report" passes an attacker-controlled filename to a file reading tool. The filename is "../../../etc/passwd" — a path traversal attack. The tool reads system files instead of the uploaded report.</p>
+</div>
+
+<div class="threat-card high">
+  <h4>Unvalidated Code Execution</h4>
+  <p>An agent passes AI-generated or attacker-influenced code to a code execution tool without sandboxing. The code accesses the network, reads system credentials, or exfiltrates data — all with the agent's permissions.</p>
+</div>
+
+<div class="threat-card medium">
+  <h4>Unvalidated API Parameters</h4>
+  <p>An agent constructs API calls using external content. An attacker embeds specially crafted text that, when used as an API parameter, triggers unintended behavior in the target API — SQL injection via an AI-constructed query, command injection via a system call parameter.</p>
+</div>
+
+<StepWalkthrough
+  title="Principles of Safe Tool Design for Agents"
+  steps={[
+    { title: "Treat all tool inputs as untrusted", content: "Any content that influenced the agent's decision to call a tool — user messages, browsed content, processed documents — must be treated as potentially hostile. Validate all parameters before passing them to tools.", icon: "🔍" },
+    { title: "Sandbox code execution", content: "Code execution tools must run in isolated environments with no access to production systems, credentials, or sensitive data. Treat sandboxed execution like a contractor working in a secure room — they can do their work but can't reach the broader building.", icon: "📦" },
+    { title: "Apply allowlists, not blocklists", content: "Rather than trying to block dangerous inputs, define what inputs are allowed. An agent that reads files should accept only files from specific directories with specific extensions — not anything the user specifies.", icon: "✅" },
+    { title: "Require human approval for irreversible tool calls", content: "Any tool that takes irreversible action — sending a message, executing a transaction, modifying a database, deleting a file — should require human confirmation before execution. This is the last line of defense.", icon: "👤" },
+    { title: "Log every tool call with full parameters", content: "Every tool execution must be logged with the tool name, parameters, calling context, and result. This is your forensic record when something goes wrong — and the foundation for anomaly detection.", icon: "📋" },
+  ]}
+/>
+
+<ScenarioToggle
+  attackerTitle="🔴 Unsandboxed Agent"
+  defenderTitle="🟢 Properly Constrained Agent"
+  attackerContent={`<p>With an unsandboxed agent with production access:</p><ul><li>Prompt injection in processed content → attacker runs arbitrary code with production permissions</li><li>Path traversal in file parameters → attacker reads any file the agent user can access</li><li>Injected API parameters → attacker manipulates downstream systems</li><li>Any tool the agent has becomes an attack vector</li></ul><p>The attacker doesn't need to breach your systems — they manipulate the agent that already has access.</p>`}
+  defenderContent={`<ul><li><strong>Code execution in isolated sandbox</strong> with no production access, no credentials, no network egress except to approved APIs</li><li><strong>File access limited to specific directories</strong> with allowlist of file types and path validation</li><li><strong>API calls reviewed</strong> against an allowlist of permitted endpoints</li><li><strong>Human approval required</strong> for any tool call with external impact</li><li><strong>Full audit logging</strong> of all tool calls for anomaly detection and forensics</li></ul><p>When constraints are in place, a successful prompt injection is contained. The agent cannot do what the attacker instructs — its tools are limited to safe operations within defined bounds.</p>`}
+/>
+
+<div class="defense-section">
+  <h3>The Non-Negotiables for Code-Executing Agents</h3>
+  <p>If your organization deploys agents that can execute code, these are non-negotiable requirements:</p>
+  <ol>
+    <li><strong>All code execution happens in a sandboxed environment</strong> — isolated VM or container, no production credentials, no sensitive data, time-limited execution</li>
+    <li><strong>The sandbox has no access to production systems</strong> — network egress whitelisted, no credential injection, no access to production databases</li>
+    <li><strong>Code generated by the AI is logged and reviewable</strong> — you must be able to audit what code was executed</li>
+    <li><strong>Execution anomalies trigger alerts</strong> — unusual resource usage, network calls to unexpected destinations, or process spawning must alert your security team</li>
+  </ol>
+</div>
+
+</ContentLayout>

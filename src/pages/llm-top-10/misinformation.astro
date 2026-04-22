@@ -1,0 +1,71 @@
+---
+import ContentLayout from '../../layouts/ContentLayout.astro';
+import FlipCard from '../../components/FlipCard.astro';
+import StepWalkthrough from '../../components/StepWalkthrough.astro';
+---
+
+<ContentLayout
+  title="LLM09: Misinformation"
+  description="When AI confidently generates false information — and your organization acts on it."
+  category="OWASP LLM Top 10"
+  readingTime="8 min read"
+  severity="medium"
+>
+
+<h2>The Confident Wrong Answer</h2>
+
+<p>Every other vulnerability in this list involves an attacker deliberately doing something. Misinformation is different: it happens when the AI is working exactly as designed, with no attacker involved, and still produces output that causes real harm.</p>
+
+<p>Large language models are trained to produce fluent, coherent, contextually appropriate text. They are not trained to be factually accurate. The distinction matters enormously. An LLM can produce confidently-stated nonsense with the same fluency and apparent authority as accurate information. It doesn't know the difference — and it doesn't signal the difference.</p>
+
+<p>The industry term for this is "hallucination" — but that word undersells the business risk. Hallucination sounds like a minor glitch. Confidently fabricated legal citations, financial projections, or medical guidance that get acted upon are operational and legal liabilities.</p>
+
+<FlipCard
+  scenario="Scenario: Legal Research Assistant (Real Case)"
+  frontTitle="A Lawyer Uses AI to Research Case Precedents"
+  frontContent="A lawyer preparing a brief for a US federal court uses an AI assistant to research relevant legal precedents. The AI returns a detailed list of 6 citations: case names, courts, dates, judges, and key quotes. The output looks completely authoritative."
+  backTitle="Three of Those Cases Don't Exist"
+  backContent={`<p>This is not a hypothetical. In 2023, in the real case of <em>Mata v. Avianca</em> in US federal court, a lawyer submitted an AI-generated brief containing fabricated case citations. The judge requested copies of the cited cases. They could not be produced because they did not exist. The court issued sanctions.</p><p>The AI produced realistic-sounding citations because it was trained on legal text and learned to produce text that <em>sounds like</em> legal citations. It had no mechanism to verify whether those cases actually existed.</p><ul><li>The AI's tone conveyed no uncertainty — there was no indication these citations were fabricated</li><li>The lawyer trusted the output without independent verification</li><li>The harm was professional (sanctions) and reputational, but could have been far worse in different contexts</li><li>This exact failure pattern occurs in medical, financial, and regulatory contexts daily</li></ul>`}
+/>
+
+<h2>Why LLMs Hallucinate</h2>
+
+<StepWalkthrough
+  title="The Mechanism Behind AI Misinformation"
+  steps={[
+    { title: "LLMs predict the next word, not facts", content: "A language model is fundamentally trained to predict what text comes next given what came before. It learned from vast amounts of human text. When asked a question, it produces the text that most plausibly follows — which is usually accurate, but not always.", icon: "🔤" },
+    { title: "Confidence is a style, not a signal", content: "The AI produces confident-sounding text because confident text appears more frequently in training data for authoritative topics. It learned to sound like an expert. But sounding like an expert and being correct are different things — the model doesn't know the difference.", icon: "🎭" },
+    { title: "Gaps are filled with plausible invention", content: "When the model doesn't have relevant training data for a specific fact, it doesn't say 'I don't know.' It fills the gap with text that fits the context — a plausible-sounding name, date, or figure. This is the hallucination.", icon: "🕳️" },
+    { title: "The user's trust amplifies the risk", content: "Research consistently shows humans over-trust AI output — called automation bias. The AI's confident, well-formatted, grammatically perfect output inspires more trust than it deserves. Verification rates are far lower than the error rates justify.", icon: "🤝" },
+  ]}
+/>
+
+<div class="dark-section">
+  <span class="section-label">⚠️ HIGH-RISK DOMAINS</span>
+  <h3>Where Misinformation Causes the Most Damage</h3>
+  <div class="threat-card" style="background: var(--dark-surface); border-color: var(--dark-border);">
+    <p style="color: var(--dark-text-secondary);"><strong style="color:var(--dark-text);">Legal:</strong> Fabricated case citations, incorrect regulatory requirements, inaccurate contract interpretations. Consequences: sanctions, malpractice, compliance failure.</p>
+  </div>
+  <div class="threat-card" style="background: var(--dark-surface); border-color: var(--dark-border); margin-top: 0.75rem;">
+    <p style="color: var(--dark-text-secondary);"><strong style="color:var(--dark-text);">Financial:</strong> Incorrect financial projections, fabricated market data, wrong regulatory figures. Consequences: bad investment decisions, misstatements in filings, audit findings.</p>
+  </div>
+  <div class="threat-card" style="background: var(--dark-surface); border-color: var(--dark-border); margin-top: 0.75rem;">
+    <p style="color: var(--dark-text-secondary);"><strong style="color:var(--dark-text);">Medical:</strong> Wrong drug interactions, incorrect dosage information, fabricated research citations. Consequences: patient harm, liability, regulatory action.</p>
+  </div>
+  <div class="threat-card" style="background: var(--dark-surface); border-color: var(--dark-border); margin-top: 0.75rem;">
+    <p style="color: var(--dark-text-secondary);"><strong style="color:var(--dark-text);">Regulatory/Compliance:</strong> Incorrect interpretation of requirements. Consequences: non-compliance, fines, enforcement action based on wrong understanding.</p>
+  </div>
+</div>
+
+<div class="defense-section">
+  <h3>Governance Controls for Misinformation Risk</h3>
+  <ol>
+    <li><strong>Define mandatory verification domains.</strong> For your organization, identify which topics require independent verification before AI output is acted upon (legal citations, financial figures, regulatory requirements, medical information). Write this into your AI usage policy.</li>
+    <li><strong>Scope AI to retrieval, not synthesis, for critical facts.</strong> An AI that retrieves and quotes from verified documents (with citations) is less prone to hallucination than one synthesizing from memory. Use RAG with trusted sources for high-stakes domains.</li>
+    <li><strong>Train employees on automation bias.</strong> The default human behavior is to trust confident AI output. Your employees need explicit training that AI confidence is not a reliability signal.</li>
+    <li><strong>Build verification into workflows, not reviews.</strong> "Have a human check the AI output" is advice that gets ignored under time pressure. Build verification steps into the workflow — required fields, source citation requirements, sign-off checkboxes before action.</li>
+    <li><strong>Monitor AI output quality.</strong> For high-volume, high-stakes AI applications, implement sampling and evaluation of output quality. Spot-check AI answers against verified sources on a regular cadence.</li>
+  </ol>
+</div>
+
+</ContentLayout>

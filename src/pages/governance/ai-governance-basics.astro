@@ -1,0 +1,199 @@
+---
+import ContentLayout from '../../layouts/ContentLayout.astro';
+import FlipCard from '../../components/FlipCard.astro';
+import StepWalkthrough from '../../components/StepWalkthrough.astro';
+import ScenarioToggle from '../../components/ScenarioToggle.astro';
+import InteractiveChecklist from '../../components/InteractiveChecklist.astro';
+---
+<ContentLayout
+  title="AI Governance Basics"
+  description="What you actually need to govern when you deploy AI — models, agents, data, and people."
+  category="Governance"
+  readingTime="11 min read"
+>
+
+  <p>Most organizations treating AI governance as a checkbox are doing it wrong. They either have no governance at all, apply software governance frameworks that don't fit AI's unique properties, or create policies that look good on paper and are ignored in practice. This page explains what AI governance actually is, why it's different from what you already do, and what a minimum viable AI governance program looks like in practice.</p>
+
+  <h2>The Four Pillars of AI Governance</h2>
+
+  <p>AI governance isn't a single program — it's four distinct domains, each requiring different owners, controls, and audit mechanisms. Organizations that treat "AI governance" as one thing usually end up with one of the four pillars well-covered and the others invisible.</p>
+
+  <div class="threat-card info">
+    <h3>Model Governance</h3>
+    <p>Controlling which AI models your organization uses, how they're approved, and how they're maintained over time.</p>
+    <ul>
+      <li>Which models are deployed — version, provider, and capability profile?</li>
+      <li>Who approved each model for each use case?</li>
+      <li>How are model updates and version changes managed?</li>
+      <li>What is the process when a model is deprecated or replaced?</li>
+      <li>Are model capabilities documented — what the model can and cannot do reliably?</li>
+      <li>How is model performance monitored for drift over time?</li>
+    </ul>
+  </div>
+
+  <div class="threat-card info">
+    <h3>Agent Governance</h3>
+    <p>Controlling what autonomous AI agents are authorized to do, who authorized them, and how their behavior is supervised.</p>
+    <ul>
+      <li>What tools and permissions does each agent have?</li>
+      <li>Who authorized those permissions and on what date?</li>
+      <li>What actions are irreversible, and do those require human approval?</li>
+      <li>How are agents monitored for unexpected or out-of-scope behavior?</li>
+      <li>What is the kill switch — how do you disable an agent immediately?</li>
+      <li>Are agent actions logged at a level that supports forensic investigation?</li>
+    </ul>
+  </div>
+
+  <div class="threat-card info">
+    <h3>Data Governance</h3>
+    <p>Controlling what data your AI systems access, process, and produce — and who can see the outputs.</p>
+    <ul>
+      <li>What data was used to train or fine-tune the model?</li>
+      <li>What data does the model process at inference time — including PII, financial data, confidential IP?</li>
+      <li>Who can access AI outputs, and are those outputs appropriately classified?</li>
+      <li>Is data being sent to third-party AI providers — and under what contractual terms?</li>
+      <li>Are vector databases and knowledge bases audited for sensitive data exposure?</li>
+      <li>What is the data retention and deletion policy for AI-processed data?</li>
+    </ul>
+  </div>
+
+  <div class="threat-card info">
+    <h3>People Governance</h3>
+    <p>Controlling who builds, deploys, approves, and audits AI systems — and ensuring accountability at every stage.</p>
+    <ul>
+      <li>Who is authorized to build and deploy AI systems in the organization?</li>
+      <li>What approval process does a new AI deployment require?</li>
+      <li>Who is the named owner responsible for each AI system?</li>
+      <li>Who audits AI systems — and how often?</li>
+      <li>Are AI builders trained on security requirements and responsible AI practices?</li>
+      <li>How do employees report AI misbehavior or unexpected outputs?</li>
+    </ul>
+  </div>
+
+  <h2>Why AI Governance Is Different From Software Governance</h2>
+
+  <p>If you've governed software for twenty years, you have instincts about how to control technology risk. Some of those instincts apply to AI. Many of them don't. The difference matters because applying the wrong governance model creates a false sense of control — you believe you've governed something that you haven't.</p>
+
+  <div class="dark-section">
+    <span class="section-label">KEY POINT</span>
+    <h3>The Core Problem: You Can't Read the Code</h3>
+    <p>With conventional software, you can — in principle — read the code and understand what it does. The behavior of a deterministic system is defined by its source code. AI doesn't work this way. A large language model's "behavior" emerges from billions of parameters set during training on enormous datasets. There is no line of code that says "hallucinate this fact" or "comply with this prompt injection." The behavior is emergent and statistical, not deterministic and auditable.</p>
+    <p>This means you cannot verify AI behavior by reviewing source code. You can only verify AI behavior by observing outputs at scale over time — which requires monitoring, not code review.</p>
+  </div>
+
+  <p>There are four properties that make AI governance fundamentally different:</p>
+
+  <ul>
+    <li><strong>Non-determinism:</strong> The same input can produce different outputs on different runs. A policy that says "the AI must always respond X to input Y" cannot be verified by testing — only by statistical sampling across many runs.</li>
+    <li><strong>Model drift:</strong> Models updated by providers change behavior over time, sometimes significantly. A model that passed safety testing in January may behave differently in July after an update you didn't control.</li>
+    <li><strong>Emergent capabilities:</strong> Models gain capabilities that weren't explicitly designed. A model trained for one task may be capable of tasks it was never tested for — including tasks you didn't intend to enable.</li>
+    <li><strong>Context sensitivity:</strong> AI behavior is highly sensitive to the prompt, the conversation history, and the data provided. The same model can behave very differently depending on what's in its context window.</li>
+  </ul>
+
+  <div class="callout callout-warning">
+    <span class="callout-icon">⚠️</span>
+    <p>When your AI provider releases a model update — which happens without your approval — your governance testing may be invalidated. Your AI governance program must include a process for re-validating behavior after model updates, not just at initial deployment.</p>
+  </div>
+
+  <h2>The Three Failure Modes of AI Governance</h2>
+
+  <p>In practice, organizations fail at AI governance in predictable ways. Recognizing the failure mode you're in is the first step to fixing it.</p>
+
+  <h3>Failure Mode 1: No Governance (Chaos)</h3>
+  <p>Teams deploy AI tools without any central visibility or control. Shadow AI proliferates. Customer data is sent to consumer AI tools under personal accounts with no data processing agreements. Agents are deployed by individual developers with no security review. When an incident occurs, no one knows what AI systems exist, who owns them, or what they have access to. This is the most common failure mode for organizations that haven't yet treated AI governance as a priority.</p>
+
+  <h3>Failure Mode 2: Wrong Governance (Software Governance Applied to AI)</h3>
+  <p>Organizations with mature software governance frameworks attempt to apply those frameworks to AI. AI deployments go through change management processes designed for application releases. Code review replaces behavior testing. Static analysis tools — which have nothing meaningful to say about a model's output behavior — are applied to AI integrations. The governance process produces artifacts (change tickets, review approvals) that don't actually address AI-specific risks. This is common in large enterprises with strong software governance cultures.</p>
+
+  <h3>Failure Mode 3: Governance Theater (Policies Without Enforcement)</h3>
+  <p>Policies are written. An "AI usage policy" is published. Maybe an AI ethics committee is formed. But the policies aren't enforced, the committee doesn't have authority, and real AI deployments bypass the governance process. The documentation looks good for auditors but doesn't reflect what's actually happening. This is common in organizations under regulatory pressure who needed to produce governance documentation quickly.</p>
+
+  <div class="callout callout-info">
+    <span class="callout-icon">💡</span>
+    <p>The diagnostic question for governance theater: "Can you name one AI deployment that your governance process rejected or significantly modified?" If the answer is no, the governance process may not have real teeth.</p>
+  </div>
+
+  <h2>What "Responsible AI" Actually Means in Practice</h2>
+
+  <p>The phrase "responsible AI" has been used so broadly that it's become nearly meaningless. For a CISO or CTO, responsible AI has a specific operational meaning: governance is designed into the AI system from the beginning, not bolted on afterward as a compliance requirement.</p>
+
+  <p>Designed-in governance means:</p>
+  <ul>
+    <li>Risk classification happens before deployment, not after an incident</li>
+    <li>Data handling requirements are defined before a model is selected, not discovered during an audit</li>
+    <li>Human oversight is built into the workflow, not added as a review step after AI has already acted</li>
+    <li>Monitoring is operational from day one, not implemented after something goes wrong</li>
+    <li>Incident response procedures exist before they're needed</li>
+  </ul>
+
+  <p>The alternative — bolted-on governance — is what most organizations actually have. AI was deployed because a team saw a business opportunity, governance was layered on afterward when it became a compliance requirement, and the governance controls don't actually match the system's risk profile because they weren't designed together.</p>
+
+  <StepWalkthrough
+    title="Building an AI Governance Program in 5 Steps"
+    steps={[
+      {
+        title: "Inventory What AI You Have",
+        content: "Before you can govern AI, you need to know what AI exists in your organization. This means surveying every team — not just engineering — for AI tools in use, including SaaS products with embedded AI features. Shadow AI is common. Your inventory will find things that surprise you. Use this as a discovery exercise, not a compliance audit — you want teams to disclose honestly.",
+        icon: "📋"
+      },
+      {
+        title: "Classify by Risk Level",
+        content: "Not all AI carries equal risk. A grammar checker is low risk. An AI system that influences credit decisions is high risk. Classify each AI system based on: what data it accesses, what decisions it influences, what actions it can take autonomously, and what the consequence of a failure or compromise would be. Your classification system should have at least three tiers: low, medium, and high risk.",
+        icon: "🔍"
+      },
+      {
+        title: "Define Governance Requirements Per Risk Tier",
+        content: "Each risk tier should have defined requirements: what documentation is required, what testing must be done, what approvals are needed, what monitoring must be in place, and how often it must be reviewed. High-risk AI requires more than low-risk AI. These requirements should be specific enough that someone can build a compliant system without guessing what 'compliant' means.",
+        icon: "📐"
+      },
+      {
+        title: "Assign Ownership",
+        content: "Every AI system in production must have a named owner — a specific person, not a team or a department. That owner is responsible for the system's compliance with governance requirements, for monitoring its behavior, and for responding if something goes wrong. Ownership without accountability is meaningless: make clear what the owner is actually responsible for.",
+        icon: "👤"
+      },
+      {
+        title: "Build Monitoring and Audit Cadence",
+        content: "Governance without ongoing monitoring is a snapshot, not a program. Define what monitoring is required for each risk tier, who reviews that monitoring, and what triggers a governance review. Establish a regular audit cadence — quarterly for high-risk systems, annually for low-risk. The cadence should include a review of whether the AI system's behavior still matches its approved profile.",
+        icon: "📊"
+      }
+    ]}
+  />
+
+  <div class="defense-section">
+    <h2>Your Governance Minimum Viable Product</h2>
+    <p>If you're starting from zero, don't try to build a comprehensive AI governance program in the first month. Build the minimum viable program that creates real control, then mature it over time.</p>
+
+    <h3>This Week</h3>
+    <ul>
+      <li>Assign one person as the temporary AI governance owner — even if that role evolves later</li>
+      <li>Send an all-hands survey asking teams to disclose every AI tool they're using</li>
+      <li>Review whether your existing AI vendor contracts have data processing addenda (most don't by default)</li>
+    </ul>
+
+    <h3>This Month</h3>
+    <ul>
+      <li>Create your AI inventory — a simple spreadsheet is fine to start. Columns: system name, owner, data accessed, risk tier, approval status</li>
+      <li>Classify each inventoried system by risk level using a simple framework</li>
+      <li>Write a one-page AI usage policy covering what employees can and cannot use AI for with company data</li>
+      <li>Identify the three highest-risk AI deployments and schedule a governance review for each</li>
+    </ul>
+
+    <h3>This Quarter</h3>
+    <ul>
+      <li>Define governance requirements for each risk tier</li>
+      <li>Implement a new AI deployment approval process — lightweight for low-risk, structured for high-risk</li>
+      <li>Establish monitoring for customer-facing AI systems</li>
+      <li>Brief your board on the AI inventory and governance program status</li>
+      <li>Assess your top three AI vendors for security and compliance posture</li>
+    </ul>
+  </div>
+
+  <FlipCard
+    scenario="Scenario: Audit Request"
+    frontTitle="Regulator Requests AI Documentation"
+    frontContent="Your regulator requests documentation of all AI systems used in customer-facing decisions in the past 12 months. You have two weeks to respond."
+    backTitle="What This Means"
+    backContent={`<p>Without AI governance: your team spends 6 weeks manually interviewing every business unit, discovering AI tools they didn't know existed, finding three cases where AI influenced credit decisions with no documentation of the model used. With AI governance: the AI inventory is current. Model cards exist for every customer-facing AI. Decision logs are available. You respond to the regulator in two weeks with complete documentation.</p><ul><li>Governance exists to make audits answerable and problems findable</li><li>The regulator doesn't care if the AI was accurate — they care if you knew what it was doing</li><li>An AI inventory is the single most important governance artifact to create first</li></ul>`}
+  />
+
+</ContentLayout>

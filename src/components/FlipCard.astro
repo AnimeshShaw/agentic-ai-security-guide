@@ -1,0 +1,47 @@
+---
+export interface Props {
+  scenario: string;
+  frontTitle: string;
+  frontContent: string;
+  backTitle?: string;
+  backContent: string;
+}
+
+const { scenario, frontTitle, frontContent, backTitle = 'What Really Happened', backContent } = Astro.props;
+const id = `flip-${Math.random().toString(36).slice(2, 8)}`;
+---
+
+<div class="flip-card-container">
+  <p class="flip-label">👆 Click the card to reveal the explanation</p>
+  <div class="flip-card" id={id} role="button" tabindex="0" aria-label="Click to reveal explanation">
+    <div class="flip-card-front">
+      <div class="flip-card-scenario">{scenario}</div>
+      <h4 style="color: var(--dark-text); margin:0 0 0.75rem; font-size:1.05rem;">{frontTitle}</h4>
+      <p style="color: var(--dark-text-secondary); margin:0; font-size:0.95rem; line-height:1.65;">{frontContent}</p>
+      <div class="flip-hint">
+        <span>🔍</span>
+        <span>Click to see what's really happening</span>
+      </div>
+    </div>
+    <div class="flip-card-back">
+      <div class="flip-back-label">✅ {backTitle}</div>
+      <Fragment set:html={backContent} />
+      <button class="btn-reset" style="margin-top:1rem; background:none; border:1px solid var(--border); padding:0.4rem 0.9rem; border-radius:var(--radius-sm); font-size:0.8rem; cursor:pointer; color:var(--text-muted);">
+        ↩ Show scenario again
+      </button>
+    </div>
+  </div>
+</div>
+
+<script define:vars={{ id }}>
+  const card = document.getElementById(id);
+  if (card) {
+    const toggle = () => card.classList.toggle('revealed');
+    card.addEventListener('click', toggle);
+    card.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') toggle(); });
+    const resetBtn = card.querySelector('.btn-reset');
+    if (resetBtn) {
+      resetBtn.addEventListener('click', (e) => { e.stopPropagation(); card.classList.remove('revealed'); });
+    }
+  }
+</script>

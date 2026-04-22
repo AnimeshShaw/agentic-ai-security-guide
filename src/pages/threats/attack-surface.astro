@@ -1,0 +1,132 @@
+---
+import ContentLayout from '../../layouts/ContentLayout.astro';
+import FlipCard from '../../components/FlipCard.astro';
+import StepWalkthrough from '../../components/StepWalkthrough.astro';
+import ScenarioToggle from '../../components/ScenarioToggle.astro';
+---
+<ContentLayout
+  title="The AI Agent Attack Surface"
+  description="Where AI agents are vulnerable — and why the attack surface is unlike anything you've managed before."
+  category="Threat Landscape"
+  readingTime="10 min read"
+>
+
+  <p>In security, the term "attack surface" refers to the sum of all the different points where an attacker could try to enter or extract data from an environment. Every door, every window, every unlocked USB port on a laptop is part of the attack surface. Good security practice means understanding your attack surface completely, then systematically reducing it to only what is necessary.</p>
+
+  <p>AI agents create a new attack surface unlike anything your security team has managed before. It is larger, more dynamic, and more difficult to enumerate than a traditional application's attack surface. And in most organizations deploying agents today, it is not being mapped at all.</p>
+
+  <p>This page identifies the five distinct attack surfaces that AI agents introduce, explains what makes each one dangerous, and gives you the questions you need to ask as a leader to ensure your organization is managing them.</p>
+
+  <div class="dark-section">
+    <span class="section-label">⚠️ THE THREAT</span>
+
+    <h3>The Five Attack Surfaces Agents Create</h3>
+
+    <p>Each of these attack surfaces is new. Traditional perimeter security, endpoint protection, and network monitoring were not designed to cover them. Defending against threats on these surfaces requires AI-specific controls.</p>
+
+    <div class="threat-card">
+      <h4>Attack Surface 1: Prompt Inputs</h4>
+      <p>Every message, instruction, or piece of text that reaches an agent is a potential attack vector. Unlike traditional software inputs (which are validated against known formats), agents process natural language — which means almost any text is a valid input. An attacker who can get text in front of an agent can potentially instruct it to take actions it was never intended to take.</p>
+      <p><strong>What this looks like in practice:</strong> A customer submits a support ticket with hidden instructions embedded in the text. An employee pastes a document into a chat interface with malicious directives buried inside. A web page the agent browses contains invisible text instructing the agent to exfiltrate data.</p>
+      <p><strong>Why it's different:</strong> Traditional input validation checks for SQL injection, malformed data types, or oversized payloads. It cannot detect a grammatically valid English sentence that happens to be a malicious instruction to an AI agent.</p>
+    </div>
+
+    <div class="threat-card">
+      <h4>Attack Surface 2: Tool Connections</h4>
+      <p>Every external system an agent is connected to is both a capability and an exposure point. When an agent connects to an email system, a database, a third-party API, or a file storage service, that connection is bidirectional: the agent can send and receive data, and the external system can influence what the agent does next based on what it returns.</p>
+      <p><strong>What this looks like in practice:</strong> An agent retrieves a record from a CRM system. The record contains a malicious embedded instruction. The agent processes the instruction as if it came from a legitimate source and takes an unintended action. The attack originated in the database — not in the user's input.</p>
+      <p><strong>Why it's different:</strong> Traditional API security focuses on authentication and data integrity. It does not address the possibility that the data returned by a legitimate API could be used to manipulate the AI consuming it.</p>
+    </div>
+
+    <div class="threat-card">
+      <h4>Attack Surface 3: Memory Stores</h4>
+      <p>Agents with long-term memory store information in external databases or knowledge repositories. These stores can be read by the agent across sessions and may be shared across multiple agent instances. If an attacker can write to a memory store — or if malicious content is inadvertently stored there — it can persist and influence agent behavior long after the original attack.</p>
+      <p><strong>What this looks like in practice:</strong> An agent processes a malicious document and stores a summary of it in its memory system. The summary contains a subtle embedded instruction. Every future session that agent runs, it retrieves that memory and the instruction influences its behavior — even though the original malicious document was long ago discarded.</p>
+      <p><strong>Why it's different:</strong> Traditional database security governs who can read and write to a data store. It does not address the semantic content of what is written there and its downstream effects on AI reasoning.</p>
+    </div>
+
+    <div class="threat-card">
+      <h4>Attack Surface 4: Agent-to-Agent Channels</h4>
+      <p>In multi-agent architectures, agents pass instructions and data to other agents. These inter-agent communications create a new trust boundary that is frequently overlooked. If one agent in a network is compromised or manipulated, it can pass corrupted instructions to other agents it manages or coordinates with — spreading the compromise through the system automatically.</p>
+      <p><strong>What this looks like in practice:</strong> An orchestrator agent is manipulated through a malicious document. It passes modified instructions to a sub-agent responsible for financial transactions. The sub-agent executes what it believes are legitimate instructions from a trusted orchestrator. The transaction completes before any human notices.</p>
+      <p><strong>Why it's different:</strong> Traditional service-to-service security uses API keys, mutual TLS, and role-based access control. These verify identity but not intent — a compromised agent with valid credentials can pass malicious instructions through authenticated channels.</p>
+    </div>
+
+    <div class="threat-card">
+      <h4>Attack Surface 5: Output Channels</h4>
+      <p>Everything an agent produces — reports, emails, code, API calls, database writes — is an output channel. A manipulated agent can use these channels to exfiltrate data, spread misinformation, trigger external processes, or prepare the ground for follow-on attacks. The output channels of an agent are its weapons when it has been turned against the organization.</p>
+      <p><strong>What this looks like in practice:</strong> An agent manipulated through prompt injection sends an email to an external address containing excerpts from confidential documents it processed. The email is sent from a legitimate corporate email account, using real credentials, as part of what looks like a routine workflow. Data exfiltration completed with no network anomaly and no unauthorized login.</p>
+      <p><strong>Why it's different:</strong> DLP (Data Loss Prevention) tools look for known patterns — credit card numbers, SSNs, classified document headers. They are not designed to detect when an AI agent has summarized confidential information into natural-language prose and sent it in an email that otherwise looks legitimate.</p>
+    </div>
+  </div>
+
+  <h2>Why Traditional Perimeter Defense Doesn't Work</h2>
+
+  <p>The perimeter security model assumes that threats come from outside your network, and that if you can control what enters and exits the perimeter, you are protected. Firewalls, VPNs, and network segmentation all operate on this logic.</p>
+
+  <p>Agentic AI attacks often originate inside the perimeter, through legitimate channels, using legitimate credentials. The attack payload is not malware — it is text. The attacker's tool is not a network exploit — it is the AI's own reasoning capability. The compromised system is not an external server — it is your own AI agent, acting on your behalf.</p>
+
+  <p>No firewall rule blocks a grammatically correct English sentence. No intrusion detection signature identifies a persuasively written instruction embedded in a customer email. No DLP policy flags a conversational summary of confidential data generated by your own AI system. These are not gaps that will be filled by updating existing tools. They require new thinking and new controls.</p>
+
+  <StepWalkthrough
+    title="How an Attacker Maps Your Agent's Attack Surface"
+    steps={[
+      {
+        title: "Identify What Inputs the Agent Accepts",
+        content: "The attacker's first question is: where can I get text in front of this agent? They test the system: submit requests through the public interface, send emails to monitored inboxes, upload documents through connected portals, post content to monitored channels. Every input mechanism the agent accepts is a potential injection point. Attackers don't need to know your architecture — they discover it by probing what the agent responds to.",
+        icon: "🔍"
+      },
+      {
+        title: "Find What Systems It's Connected To",
+        content: "The attacker observes what data the agent retrieves and what actions it takes. If the agent mentions data from a CRM, they know it's connected to a CRM. If it can send emails, they know it has email access. By watching what the agent does and asking it questions, an attacker can infer a significant portion of your agent's tool configuration without any direct access to your systems.",
+        icon: "🗺️"
+      },
+      {
+        title: "Probe How It Stores and Retrieves Memory",
+        content: "The attacker tests whether the agent remembers past interactions. They plant subtle markers in early conversations and test in later sessions whether those markers influence behavior. If they do, the attacker knows the memory system is persistent and potentially exploitable — meaning a single successful instruction injection can have lasting effects that persist across sessions and potentially across users.",
+        icon: "🧩"
+      },
+      {
+        title: "Test What It Can Output or Send",
+        content: "The attacker identifies what the agent can do with the access it has. Can it send emails externally? Can it write to databases? Can it call external APIs? Can it generate reports that are distributed to others? Each output capability is a potential weapon. The attacker's final step is crafting an injection that weaponizes these legitimate capabilities — turning the agent's own tools against the organization.",
+        icon: "🎯"
+      }
+    ]}
+  />
+
+  <div class="defense-section">
+    <h3>Taking Inventory: Questions Leaders Must Ask</h3>
+
+    <p>Mapping your agent attack surface starts with leadership asking the right questions. For every AI agent deployed in your organization — whether built internally or procured from a vendor — the following questions should have documented, verifiable answers.</p>
+
+    <h4>Questions Every Leader Should Ask About Each Deployed Agent</h4>
+
+    <ul>
+      <li><strong>What inputs does this agent accept, and from whom?</strong> Can external parties (customers, vendors, the public) submit text that this agent processes? If so, that is an attack surface that requires active defense.</li>
+
+      <li><strong>What systems is this agent connected to, and with what permissions?</strong> Get a complete list of every tool the agent has access to. For each tool, confirm that the access level is the minimum required for the agent's defined tasks — not the maximum available for convenience.</li>
+
+      <li><strong>What data is stored in this agent's memory, and who governs it?</strong> Determine whether the agent has persistent memory, what is stored there, how long it is retained, who can access it, and whether it falls under your existing data governance policies.</li>
+
+      <li><strong>How are instructions to this agent validated?</strong> Is there any mechanism to distinguish legitimate instructions from injected ones? Are there categories of actions the agent is explicitly prohibited from taking regardless of what it is instructed to do?</li>
+
+      <li><strong>What actions does this agent take autonomously, and which require human approval?</strong> Irreversible actions — sending external communications, modifying records, executing financial transactions — should have human-in-the-loop checkpoints unless there is a documented justification for full automation.</li>
+
+      <li><strong>How would we know if this agent were compromised or behaving unexpectedly?</strong> Is every action the agent takes logged? Is there alerting for unusual patterns — unexpected data access, unusual external communications, high-volume actions at off-hours? You cannot investigate what you haven't recorded.</li>
+    </ul>
+  </div>
+
+  <h2>Attack Surface Management as a Leadership Responsibility</h2>
+
+  <p>In traditional IT security, attack surface management is an engineering function. Leaders set the policy; engineers implement the controls and report back. That model still applies to AI agents — but with one important addition: leaders must be asking about the AI-specific attack surfaces explicitly, because these are not yet part of standard security review checklists.</p>
+
+  <p>A security team that performs rigorous application security reviews may never ask whether an agent's memory store could be poisoned with malicious instructions. A procurement team that carefully vets a vendor's SOC 2 compliance may not ask what the vendor's AI agent does with the documents it processes. These are new questions that require new organizational habits.</p>
+
+  <p>The organizations that build those habits now — before a significant AI security incident forces the issue — will be significantly better positioned than those that learn through failure. The attack surface is large, it is expanding, and it is largely unmapped. The work of mapping it is the first step in defending it.</p>
+
+  <div class="callout callout-warning">
+    <span class="callout-icon">⚠️</span>
+    <p><strong>Key insight:</strong> The AI agent attack surface does not replace your existing attack surface — it adds to it. Every agent you deploy extends your perimeter in multiple new directions simultaneously: through its inputs, its tool connections, its memory, its inter-agent communications, and its outputs. Each direction requires explicit security attention that most organizations are not yet providing.</p>
+  </div>
+
+</ContentLayout>

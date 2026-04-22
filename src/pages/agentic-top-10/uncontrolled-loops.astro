@@ -1,0 +1,70 @@
+---
+import ContentLayout from '../../layouts/ContentLayout.astro';
+import FlipCard from '../../components/FlipCard.astro';
+import StepWalkthrough from '../../components/StepWalkthrough.astro';
+---
+
+<ContentLayout
+  title="AGT07: Uncontrolled Action Loops"
+  description="When AI agents get stuck in recursive, runaway behavior — taking thousands of unintended actions without stopping."
+  category="Agentic AI Top 10"
+  readingTime="8 min read"
+  severity="high"
+>
+
+<h2>Agents That Can't Stop</h2>
+
+<p>Agents work by trying, evaluating results, and retrying when something doesn't work. This loop is intentional — it's what allows agents to persist through obstacles and complete complex multi-step tasks. The problem arises when the exit condition for the loop is never met, or when the agent misinterprets its progress and keeps trying variations indefinitely.</p>
+
+<p>Without explicit limits, a runaway agent can take hundreds of thousands of actions before anyone notices. Each action may have real-world consequences: emails sent, API calls made, database records modified, costs incurred. By the time the loop is detected, the damage may be extensive and partially irreversible.</p>
+
+<FlipCard
+  scenario="Scenario: Email Follow-Up Agent"
+  frontTitle="An Agent That Chases Unresponsive Prospects"
+  frontContent="Your sales team deploys an agent to send follow-up emails to prospects who haven't responded. It checks for replies and sends the next follow-up in the sequence if no response is detected. Seems straightforward."
+  backTitle="847 Emails to One Prospect"
+  backContent={`<p>The agent's reply-detection logic checked the wrong mailbox — the prospect had replied, but the agent was looking at the wrong folder. Detecting "no response," it sent the next follow-up. Then checked again. Still "no response." Sent another. The agent continued this loop for four hours before anyone noticed.</p><p>The prospect received 847 follow-up emails. They sent a furious public post about it. The company's email domain was flagged as spam by major providers. Three sales deals were lost from collateral damage. All because a loop had no maximum iteration count.</p><ul><li>No attack required — just a bug and no safeguards</li><li>Every email was a legitimate, individually authorized action — the loop was the problem</li><li>A simple limit of "maximum 5 follow-ups per prospect" would have prevented the entire incident</li><li>Rate limiting on irreversible actions (sent emails) is non-negotiable</li></ul>`}
+/>
+
+<h2>Loop Failure Patterns</h2>
+
+<div class="threat-card">
+  <h4>Exit Condition Never Met</h4>
+  <p>The agent's goal can't be achieved (a resource is unavailable, a condition is never true), but the agent keeps retrying. Without a maximum attempt count, it runs indefinitely.</p>
+</div>
+
+<div class="threat-card high">
+  <h4>Misinterpreted Progress</h4>
+  <p>The agent takes an action that should move it forward, but misreads the result as failure. It retries the same action, or tries a new variation. Each iteration causes real-world side effects — emails sent, API calls made, records modified.</p>
+</div>
+
+<div class="threat-card medium">
+  <h4>Attacker-Triggered Loops</h4>
+  <p>A prompt injection can instruct an agent to repeat an action indefinitely: "Keep trying until you succeed." If the attacker's instruction overrides the agent's loop controls, they can weaponize the agent's persistence against your infrastructure or your victims.</p>
+</div>
+
+<StepWalkthrough
+  title="Engineering Loop Safety into Agents"
+  steps={[
+    { title: "Set hard iteration limits", content: "Every agent loop must have a maximum iteration count. When the limit is reached, the agent should stop and escalate to a human — not continue indefinitely. The limit should be calibrated to the expected number of attempts for the task, not set arbitrarily high.", icon: "🔢" },
+    { title: "Rate limit irreversible actions", content: "For actions that can't be undone (sending emails, making payments, modifying records), apply per-unit-time rate limits. Maximum 5 emails per prospect per week. Maximum 3 payment retries. These limits bound damage from any loop failure.", icon: "🚦" },
+    { title: "Implement timeout controls", content: "Every agent task should have a wall-clock timeout. If a task hasn't completed within a defined time window, it should pause and alert a human. Long-running tasks may be legitimately complex — or may be stuck. Humans should decide which.", icon: "⏱️" },
+    { title: "Monitor action volume in real time", content: "Unusual spikes in agent action volume should trigger immediate alerts. If an agent normally sends 10 emails per day and suddenly sends 500 in an hour, that's an alert — not background noise. Anomaly detection on action volume is as important as security monitoring.", icon: "📊" },
+    { title: "Design human escalation paths", content: "When an agent hits its limits, it needs somewhere to go. Define escalation paths: which human or queue receives the escalation, what information they receive, and what they're expected to decide. An agent that can't stop and has no escalation path will either loop or crash.", icon: "👤" },
+  ]}
+/>
+
+<div class="defense-section">
+  <h3>The Loop Safety Checklist</h3>
+  <p>For every agent you deploy, verify these controls exist:</p>
+  <ul>
+    <li>Maximum iteration count on every loop</li>
+    <li>Per-action-type rate limits for all irreversible actions</li>
+    <li>Wall-clock timeout for the entire task</li>
+    <li>Defined human escalation when limits are hit</li>
+    <li>Real-time monitoring and alerting on action volume anomalies</li>
+    <li>Ability to pause or stop a running agent within minutes of identifying a problem</li>
+  </ul>
+</div>
+
+</ContentLayout>

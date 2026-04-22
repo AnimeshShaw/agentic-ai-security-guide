@@ -1,0 +1,58 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import Sidebar from '../components/Sidebar.astro';
+import PageNav from '../components/PageNav.astro';
+import SeverityBadge from '../components/SeverityBadge.astro';
+import { getAdjacentPages } from '../data/nav';
+
+export type Severity = 'critical' | 'high' | 'medium' | 'low';
+
+export interface Props {
+  title: string;
+  description?: string;
+  category: string;
+  readingTime?: string;
+  severity?: Severity;
+  overridePrev?: { title: string; href: string };
+  overrideNext?: { title: string; href: string };
+}
+
+const {
+  title,
+  description,
+  category,
+  readingTime = '8 min read',
+  severity,
+  overridePrev,
+  overrideNext,
+} = Astro.props;
+
+const currentPath = Astro.url.pathname.replace(/\/$/, '');
+const { prev, next } = getAdjacentPages(currentPath);
+---
+
+<BaseLayout title={title} description={description}>
+  <div class="site-wrapper">
+    <Sidebar currentPath={currentPath} />
+    <main class="content-main fade-in">
+      <div class="content-header">
+        <span class="category-badge">{category}</span>
+        <span class="reading-time">⏱ {readingTime}</span>
+        {severity && <SeverityBadge level={severity} />}
+      </div>
+
+      <h1 class="page-title">{title}</h1>
+
+      {description && <p class="page-description">{description}</p>}
+
+      <div class="content-body">
+        <slot />
+      </div>
+
+      <PageNav
+        prev={overridePrev ?? prev}
+        next={overrideNext ?? next}
+      />
+    </main>
+  </div>
+</BaseLayout>

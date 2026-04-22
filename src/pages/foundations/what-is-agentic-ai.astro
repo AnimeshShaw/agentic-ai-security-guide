@@ -1,0 +1,105 @@
+---
+import ContentLayout from '../../layouts/ContentLayout.astro';
+import FlipCard from '../../components/FlipCard.astro';
+import StepWalkthrough from '../../components/StepWalkthrough.astro';
+import ScenarioToggle from '../../components/ScenarioToggle.astro';
+---
+<ContentLayout
+  title="What Is Agentic AI?"
+  description="How AI agents differ from chatbots, and what autonomy really means for your business."
+  category="Foundations"
+  readingTime="8 min read"
+>
+
+  <p>Every major technology shift in the past thirty years has come with a moment where executives realized the thing they were evaluating was fundamentally different from what came before. The internet was not a better fax machine. Mobile was not a smaller laptop. And agentic AI is not a smarter chatbot.</p>
+
+  <p>Understanding that distinction — precisely and concretely — is the starting point for every governance, security, and investment decision your organization will face in the next two to five years. This page gives you that foundation.</p>
+
+  <h2>The Chatbot You Know vs. The Agent You're About to Meet</h2>
+
+  <p>Most executives have used ChatGPT, Microsoft Copilot, or a similar AI assistant. You type a question, the AI responds with text, and then you decide what to do with that response. The AI is an advisor. It has no ability to act on your behalf. It cannot send an email, update a database, or book a meeting. It can only generate words on a screen.</p>
+
+  <p>An AI agent is something qualitatively different. An agent does not just respond — it acts. It can browse the web, send emails, query databases, execute code, schedule meetings, call external services, and chain dozens of these actions together in sequence to complete a multi-step task. You give it a goal; it figures out how to achieve it.</p>
+
+  <p>The simplest way to understand the difference: a chatbot is like having a brilliant outside consultant who gives you advice. An AI agent is like giving that consultant an employee badge, a company credit card, access to your systems, and the authority to execute decisions on your behalf — without asking you first.</p>
+
+  <h2>The Four Capabilities That Define an Agent</h2>
+
+  <p>What technically separates an agent from a chatbot comes down to four capabilities working together. Each one individually is interesting. Together, they create something with an entirely different risk and value profile.</p>
+
+  <p><strong>Planning.</strong> An agent can break a complex goal into a sequence of steps. Given the instruction "prepare a competitive analysis and send it to the board," an agent doesn't just write text — it plans: search recent filings, pull financial data, synthesize the findings, format a report, identify the right recipients, and send it. This is goal-directed reasoning, not question-answering.</p>
+
+  <p><strong>Deciding.</strong> An agent makes choices autonomously. If a search returns conflicting information, it decides which source to trust. If a step fails, it decides whether to retry or take an alternate route. These are not pre-programmed decision trees — they are real-time judgments made by the AI's underlying language model. This is what makes agents powerful and what makes them unpredictable.</p>
+
+  <p><strong>Acting.</strong> An agent can interact with external systems. Not just generating text about those systems — actually connecting to them, reading from them, and writing to them. It can click buttons, fill forms, make API calls, and trigger downstream processes. Every action it takes has real-world consequences.</p>
+
+  <p><strong>Chaining.</strong> An agent strings actions together across time, passing the results of one step as the input to the next. This is what enables complex, multi-hour workflows to run without a human in the loop at every step. It's also what enables a single bad decision early in a chain to cascade into significant harm downstream.</p>
+
+  <StepWalkthrough
+    title="The Difference Between a Chatbot and an Agent"
+    steps={[
+      {
+        title: "Level 1: The Chatbot",
+        content: "You ask: 'What should I say in my email to the board about Q3 results?' The AI drafts text. You copy it, paste it into your email client, and press send. The AI had zero contact with any external system. Every action remained with you.",
+        icon: "💬"
+      },
+      {
+        title: "Level 2: The Assisted Agent",
+        content: "You ask: 'Draft an email about Q3 results and show me who it should go to.' The AI drafts the email and looks up the board members' names from a connected directory. It still shows you the result and waits for your approval before doing anything.",
+        icon: "🔍"
+      },
+      {
+        title: "Level 3: The Supervised Agent",
+        content: "You ask: 'Send the Q3 results summary to the board.' The AI drafts the email, looks up recipients, and sends it — but logs every action and alerts you afterward. You could have stopped it if you'd been watching, but you probably weren't.",
+        icon: "⚡"
+      },
+      {
+        title: "Level 4: The Autonomous Agent",
+        content: "You deploy an agent with standing instructions: 'Every quarter, pull our financial results, prepare a board summary, and distribute it.' The agent now runs this workflow end-to-end without any human trigger or approval. It plans, decides, acts, and chains — entirely on its own.",
+        icon: "🤖"
+      }
+    ]}
+  />
+
+  <h2>The Spectrum of Autonomy</h2>
+
+  <p>Agentic AI is not a single thing — it is a spectrum. At one end, you have agents that take a single action and stop for human approval. At the other end, you have fully autonomous agents running persistent workflows that operate continuously in the background. Most enterprise deployments today sit somewhere in the middle, and that position is moving toward greater autonomy every quarter.</p>
+
+  <p>The degree of autonomy your organization grants to AI agents is one of the most consequential governance decisions you will make. More autonomy means more efficiency and more speed. It also means larger blast radius when something goes wrong, less visibility into what the system is doing, and more complex security requirements. These are not arguments against autonomy — they are arguments for being deliberate about it.</p>
+
+  <p>Consider how your organization makes decisions about human authority. A junior analyst can pull reports but not send them externally. A VP can approve contracts up to a certain value. A CFO can authorize expenditures within board-approved limits. This same logic — scoped authority, defined limits, accountability structures — must now be applied to AI agents. The difference is that agents can act at machine speed and scale.</p>
+
+  <h2>What "Agentic" Looks Like in Your Business</h2>
+
+  <p>It helps to see where agentic AI is already appearing in enterprise contexts, because it may already be present in systems your teams are building or procuring.</p>
+
+  <p>A customer service agent might receive an inbound support request, look up the customer's account history, identify the issue, draft and send a resolution email, update the CRM record, and escalate to a human if certain conditions are met — all without human involvement in any individual step.</p>
+
+  <p>A procurement agent might monitor supplier contracts, identify upcoming renewals, request updated quotes from approved vendors, compare pricing against market benchmarks, and draft a recommendation for a procurement manager to approve — compressing a week of work into an overnight batch job.</p>
+
+  <p>A security operations agent might monitor alert feeds, correlate signals across multiple systems, look up threat intelligence, draft incident reports, and in some configurations, begin automated containment actions — potentially faster than any human team could respond.</p>
+
+  <p>In each case, the agent is not just generating text. It is accessing systems, making decisions, and taking actions. That is the meaningful shift.</p>
+
+  <FlipCard
+    scenario="Scenario: The 'Helpful Assistant'"
+    frontTitle="An Everyday AI Interaction"
+    frontContent="Your team deploys an AI assistant to help employees find information. An employee asks it: 'Can you find the contract with Vendor X and check if the renewal clause gives us 90 days notice?' The assistant seems to just be searching and answering questions — like a smart search engine."
+    backTitle="What's Really Happening"
+    backContent={`<p>Depending on how this agent was built, it may be doing far more than answering questions. It could be:</p><ul><li><strong>Authenticating into your document management system</strong> using service credentials with broad access</li><li><strong>Reading confidential contract documents</strong> that the employee asking the question may not be authorized to view directly</li><li><strong>Logging the query and the document contents</strong> to an external AI provider's servers</li><li><strong>Caching retrieved documents</strong> in a memory system accessible to other agents or users</li></ul><p>The employee thinks they're using a search tool. The agent is actually operating as an authenticated actor inside your systems. That distinction matters enormously for data governance, access control, and regulatory compliance.</p>`}
+  />
+
+  <h2>Why the Distinction Matters for Leadership</h2>
+
+  <p>Every governance framework, every security policy, and every vendor contract your organization has was written with a specific assumption embedded in it: software does what it is programmed to do. Rules, workflows, and access controls were designed to govern deterministic systems where you control the logic.</p>
+
+  <p>Agents break that assumption. An agent decides what to do based on reasoning about its goal and its context. That means the agent's behavior is not fully predictable from its configuration alone. Two identical agents, given slightly different context, may take meaningfully different actions. You cannot audit an agent the same way you audit a traditional application.</p>
+
+  <p>This is not a reason to avoid agentic AI — the productivity and capability gains are real and substantial. It is a reason to build new governance muscles before the technology is deployed at scale, rather than after an incident forces the question.</p>
+
+  <div class="callout callout-info">
+    <span class="callout-icon">💡</span>
+    <p><strong>The core idea:</strong> Traditional AI responds. Agentic AI acts. A chatbot is an advisor who gives you words. An agent is an autonomous actor who takes real steps in real systems on your behalf. Every security, governance, and compliance question about AI in your enterprise changes the moment you move from one to the other. The rest of this guide is about what those questions are — and how to answer them.</p>
+  </div>
+
+</ContentLayout>

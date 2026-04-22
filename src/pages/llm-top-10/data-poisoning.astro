@@ -1,0 +1,92 @@
+---
+import ContentLayout from '../../layouts/ContentLayout.astro';
+import FlipCard from '../../components/FlipCard.astro';
+import StepWalkthrough from '../../components/StepWalkthrough.astro';
+import ScenarioToggle from '../../components/ScenarioToggle.astro';
+---
+
+<ContentLayout
+  title="LLM04: Data and Model Poisoning"
+  description="When an attacker corrupts the AI's training data or knowledge base to permanently manipulate its behavior."
+  category="OWASP LLM Top 10"
+  readingTime="10 min read"
+  severity="critical"
+>
+
+<div class="callout callout-danger">
+  <span class="callout-icon">🔴</span>
+  <p><strong>Rated Critical</strong> because poisoning is <em>persistent</em> — the manipulation survives indefinitely until explicitly detected and removed. Unlike a prompt injection that affects one session, poisoning affects every user who interacts with the system.</p>
+</div>
+
+<h2>What Is Data Poisoning?</h2>
+
+<p>Traditional cyberattacks target running systems: they exploit vulnerabilities, steal credentials, or inject malicious code. Data poisoning attacks the AI's <em>learning process</em> — corrupting what the system learns, so that the manipulation is baked into the model or knowledge base itself.</p>
+
+<p>Think of it like contaminating a textbook used to train doctors, rather than hacking the hospital's computer system. Every doctor trained with that textbook carries the misinformation forward. The source of truth has been corrupted.</p>
+
+<h2>Three Types of Poisoning Attacks</h2>
+
+<div class="threat-card">
+  <h4>Training Data Poisoning</h4>
+  <p>The attacker introduces malicious examples into the dataset used to train the model. The model learns to behave incorrectly in specific circumstances the attacker controls — often called a "backdoor trigger." The model works normally in all other cases, making the poisoning difficult to detect.</p>
+</div>
+
+<div class="threat-card high">
+  <h4>Fine-Tuning Poisoning</h4>
+  <p>Many enterprises fine-tune foundation models on their own data to customize behavior for their use case. If the fine-tuning dataset is compromised — either directly or via a poisoned data supplier — the resulting model carries the attacker's influence into production.</p>
+</div>
+
+<div class="threat-card">
+  <h4>RAG Knowledge Base Poisoning (Most Common)</h4>
+  <p>RAG (Retrieval-Augmented Generation) systems give AI agents access to a searchable knowledge base of documents. If an attacker can add documents to that knowledge base, they can poison the agent's responses for any query that retrieves those documents. This is the most practically relevant form of poisoning today.</p>
+</div>
+
+<h2>RAG Poisoning: The Most Immediate Threat</h2>
+
+<FlipCard
+  scenario="Scenario: Internal Policy Knowledge Base"
+  frontTitle="Employees Use AI to Navigate Company Policy"
+  frontContent="Your HR team has built an AI assistant that reads all company policy documents to answer employee questions. It handles 200+ queries a day about leave, expenses, benefits, and compliance. Employees trust it — it's faster than reading the policy manual."
+  backTitle="What a Poisoned Policy Looks Like"
+  backContent={`<p>An attacker with document-editing permissions (a disgruntled employee, or a compromised contractor account) adds a new policy document to the knowledge base: <em>"Executive Expense Pre-Approval Procedure (Updated)"</em>. It looks official. It states that expenses over $50,000 require approval only from the CFO's email alias — which the attacker has set up to forward to themselves.</p><p>Now every employee who asks the AI about high-value expense approvals receives the attacker's fabricated policy. The AI cites the document. The behavior persists until someone manually audits the knowledge base.</p><ul><li>The AI model itself isn't compromised — the knowledge base is</li><li>The AI is doing exactly what it's supposed to do: retrieving and citing documents</li><li>Detection requires auditing document content, not the AI's behavior</li><li>Every user who queries that topic is affected, not just one session</li></ul>`}
+/>
+
+<h2>How RAG Poisoning Spreads</h2>
+
+<StepWalkthrough
+  title="A RAG Knowledge Base Poisoning Attack"
+  steps={[
+    { title: "Attacker gains write access", content: "The attacker obtains the ability to add documents to your knowledge base — through a compromised employee account, an overly permissive document management system, or a supply chain compromise of a content provider your system ingests.", icon: "🔑" },
+    { title: "Poisoned document is crafted", content: "The attacker creates a document that looks legitimate — matching your company's document style, using plausible terminology, referencing real policies — but contains subtly incorrect or malicious content targeted at specific query types.", icon: "📝" },
+    { title: "Document enters the vector database", content: "Your RAG pipeline processes the document, converts it to a vector embedding, and stores it. It now sits alongside legitimate documents, indistinguishable from the outside without reading its content.", icon: "🗄️" },
+    { title: "Queries trigger retrieval", content: "When users ask questions relevant to the poisoned document's topic, the retrieval system surfaces it as a relevant source — because it is semantically relevant. The AI cites it confidently alongside legitimate documents.", icon: "🔍" },
+    { title: "Poisoning persists", content: "The attack continues indefinitely. Every user who asks relevant questions receives influenced responses. Unless someone audits the document store, the poisoning remains active for months or years.", icon: "⏳" },
+  ]}
+/>
+
+<div class="dark-section">
+  <span class="section-label">⚠️ THE ATTACKER'S ADVANTAGE</span>
+  <h3>Why Poisoning Is Especially Difficult to Detect</h3>
+  <p>When a system is hacked, there are often signals: unusual network traffic, access logs, error messages. Poisoning leaves almost no signals — the system works exactly as designed. It retrieves documents, it cites them accurately, it produces coherent answers. The answers are just wrong in the ways the attacker intended.</p>
+  <p>Traditional security monitoring cannot detect poisoning. You need content monitoring — auditing what's in your knowledge base and evaluating whether AI outputs make sense against ground truth. This requires domain expertise, not just security tooling.</p>
+</div>
+
+<ScenarioToggle
+  attackerTitle="🔴 The Attacker's Position"
+  defenderTitle="🟢 Defenses That Actually Work"
+  attackerContent={`<p>Data poisoning is attractive to sophisticated attackers because:</p><ul><li><strong>Persistent impact</strong>: one successful poisoning affects all future users until discovered</li><li><strong>Plausible deniability</strong>: "I just added a document to the shared drive"</li><li><strong>Low detectability</strong>: no anomalous system behavior — the AI works normally</li><li><strong>Targeted precision</strong>: poisoning can be scoped to specific query types, affecting only the decisions the attacker cares about</li><li><strong>Compounding effect</strong>: in autonomous agent systems, poisoned knowledge base entries influence agent decisions, which may write to other systems, spreading the corruption</li></ul>`}
+  defenderContent={`<h4>Defense Requires Both Technical and Process Controls</h4><ul><li><strong>Strict write access controls</strong> on knowledge bases and document stores — not everyone who can read should be able to write</li><li><strong>Document change audit logs</strong> — who added or modified which documents, when</li><li><strong>Content review workflows</strong> for new documents added to AI knowledge bases — treat it like code review</li><li><strong>Regular output sampling and validation</strong> — have domain experts sample AI answers on critical topics and verify against authoritative sources</li><li><strong>Immutable document provenance</strong> — documents should carry cryptographic signatures from authorized sources</li><li><strong>Anomaly detection on retrieval patterns</strong> — if one document is being retrieved far more than its recency or relevance would predict, investigate</li></ul>`}
+/>
+
+<div class="defense-section">
+  <h3>What Leaders Must Require</h3>
+  <ol>
+    <li><strong>Inventory all AI knowledge bases and RAG systems.</strong> Know what documents feed each AI system and who has write access.</li>
+    <li><strong>Apply least-privilege to document stores.</strong> Write access to AI knowledge bases should be restricted and logged.</li>
+    <li><strong>Implement content review for AI training and fine-tuning data.</strong> Any dataset used to train or update a production model should go through a review process equivalent to code review.</li>
+    <li><strong>Establish ground-truth validation for critical AI outputs.</strong> For decisions that matter (compliance guidance, financial calculations, safety procedures), establish a regular process to verify AI outputs against authoritative sources.</li>
+    <li><strong>Include RAG systems in your data breach response plan.</strong> A poisoned knowledge base is a data integrity incident — know how to identify it, contain it, and recover.</li>
+  </ol>
+</div>
+
+</ContentLayout>

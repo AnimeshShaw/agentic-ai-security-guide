@@ -1,0 +1,75 @@
+---
+import ContentLayout from '../../layouts/ContentLayout.astro';
+import FlipCard from '../../components/FlipCard.astro';
+import StepWalkthrough from '../../components/StepWalkthrough.astro';
+---
+
+<ContentLayout
+  title="LLM08: Vector and Embedding Weaknesses"
+  description="Security risks in the AI memory systems that let agents search and retrieve knowledge — the databases behind RAG."
+  category="OWASP LLM Top 10"
+  readingTime="9 min read"
+  severity="high"
+>
+
+<h2>The AI Filing System</h2>
+
+<p>Modern AI agents don't just rely on what they were trained on. They're given access to searchable knowledge bases — collections of documents that can be queried in real time. This is called RAG (Retrieval-Augmented Generation), and it's how AI agents "know" about your internal policies, your products, your customer history, or your legal documents.</p>
+
+<p>The technology that makes this work is called <em>vector embeddings</em>. Every document is converted into a long sequence of numbers that represents its meaning. When you ask a question, the system converts your question into the same kind of number sequence and finds documents with similar numbers — documents with similar meaning.</p>
+
+<p>Think of it as a highly sophisticated filing system. The AI converts documents and questions into a common language (numbers), and finds matches by mathematical similarity. The security risks come from what happens when this system is attacked, misconfigured, or over-permissioned.</p>
+
+<h2>The Four Attack Surfaces</h2>
+
+<div class="threat-card">
+  <h4>Unauthorized Data Retrieval</h4>
+  <p>A user asks a question. The retrieval system surfaces documents relevant to that question — including documents the user shouldn't be able to access. If a sales rep asks about "deal terms," the system might retrieve confidential executive contracts. Access controls on vector databases are frequently inadequate.</p>
+</div>
+
+<div class="threat-card high">
+  <h4>Embedding Inversion</h4>
+  <p>Embeddings (the number sequences representing documents) can sometimes be reversed mathematically to reconstruct the original text. If an attacker gains access to your vector database's raw data, they may be able to reconstruct confidential documents — even without access to the original files.</p>
+</div>
+
+<div class="threat-card">
+  <h4>Knowledge Base Poisoning</h4>
+  <p>An attacker with write access to the document store adds malicious documents. These become part of the searchable index. Future queries retrieve and cite the poisoned content. (Covered in more depth in the Data Poisoning section.)</p>
+</div>
+
+<div class="threat-card medium">
+  <h4>Query Exposure via Logging</h4>
+  <p>Every search query against a vector database reveals what users are asking — potentially exposing sensitive business concerns, pending decisions, or confidential investigations. Query logs are rarely protected as sensitive data, despite their intelligence value.</p>
+</div>
+
+<FlipCard
+  scenario="Scenario: Legal Knowledge Base"
+  frontTitle="The Legal Team's AI Assistant Knows Everything"
+  frontContent="Your legal team's AI assistant has been given access to 50,000 internal documents: contracts, compliance memos, litigation notes, regulatory filings, M&A due diligence documents, and settlement agreements. It's incredibly useful for legal research."
+  backTitle="The Access Control Failure"
+  backContent={`<p>The AI assistant has one set of permissions for the entire legal team. A junior paralegal asks: "What are the settlement terms in the Smith litigation?" The vector database retrieves the confidential settlement agreement — which was supposed to be restricted to senior partners only — because document-level access controls weren't implemented in the vector database.</p><p>Unlike a traditional document management system where each document has permission settings, the vector database treats all documents as equally accessible to anyone who can query it. The AI democratizes access to the filing cabinet — without the filing cabinet's permission structure.</p><ul><li>Vector databases are sensitive data stores that need access controls equivalent to your document management system</li><li>Document-level permissions must be enforced at retrieval time, not just at ingestion</li><li>Users should only receive AI responses based on documents they're authorized to access</li></ul>`}
+/>
+
+<StepWalkthrough
+  title="Building a Secure RAG Architecture"
+  steps={[
+    { title: "Document classification at ingestion", content: "When documents enter the knowledge base, classify them by sensitivity and authorized audience. Store this metadata alongside the embedding — it will control who can retrieve the document.", icon: "📂" },
+    { title: "Query-time permission filtering", content: "When a user queries the system, the retrieval process must filter by both semantic relevance AND the user's access rights. Only surface documents the querying user is authorized to see.", icon: "🔍" },
+    { title: "Audit logging for all retrievals", content: "Log every document retrieved by every user for every query. This is your forensic record if documents are accessed inappropriately. Query logs are security-sensitive data — protect them accordingly.", icon: "📋" },
+    { title: "Encryption and access controls on the database", content: "The vector database itself needs encryption at rest, network-level access controls, and monitored access. Treat it like your most sensitive document store, because it effectively is.", icon: "🔒" },
+  ]}
+/>
+
+<div class="defense-section">
+  <h3>What Leaders Must Require for RAG Systems</h3>
+  <ul>
+    <li><strong>Inventory all vector databases and RAG systems</strong> — these are sensitive data stores, often deployed by development teams without security review</li>
+    <li><strong>Document-level access controls at retrieval time</strong> — not just ingestion time</li>
+    <li><strong>Encryption at rest for vector databases</strong> — treat embedding data as sensitive</li>
+    <li><strong>Write access controls on document stores</strong> — who can add documents that the AI will cite?</li>
+    <li><strong>Query audit logging</strong> — every search is intelligence about what users are asking</li>
+    <li><strong>Include RAG systems in your data classification program</strong> — they inherit the sensitivity of every document they index</li>
+  </ul>
+</div>
+
+</ContentLayout>
