@@ -75,44 +75,52 @@ agentic-ai-security-guide/
 │   ├── How Agents Work
 │   └── Why Security Matters
 │
-├── Threat Landscape (6 pages)
+├── Threat Landscape (3 pages)
 │   ├── Attack Surface
 │   ├── Prompt Injection
-│   ├── Real-World Incidents
-│   ├── OWASP LLM Top 10
-│   ├── Supply Chain Risks
-│   └── Multi-Agent Trust
+│   └── Real-World Incidents
 │
-├── Core Technologies (8 pages)
+├── OWASP LLM Top 10 (11 pages)
+│   ├── Overview
+│   ├── LLM01: Prompt Injection
+│   ├── LLM02: Sensitive Info Disclosure
+│   ├── LLM03: Supply Chain
+│   ├── LLM04: Data Poisoning
+│   ├── LLM05: Improper Output Handling
+│   ├── LLM06: Excessive Agency
+│   ├── LLM07: System Prompt Leakage
+│   ├── LLM08: Vector Weaknesses
+│   ├── LLM09: Misinformation
+│   └── LLM10: Unbounded Consumption
+│
+├── Agentic AI Top 10 (11 pages)
+│   ├── Overview
+│   ├── AGT01: Prompt Injection
+│   ├── AGT02: Excessive Agency
+│   ├── AGT03: Unsafe Tool Execution
+│   ├── AGT04: Inter-Agent Attacks
+│   ├── AGT05: Memory Poisoning
+│   ├── AGT06: Privilege Escalation
+│   ├── AGT07: Uncontrolled Loops
+│   ├── AGT08: Data Exfiltration
+│   ├── AGT09: Insufficient Oversight
+│   └── AGT10: Supply Chain
+│
+├── Core Technologies (5 pages)
 │   ├── Model Context Protocol (MCP)
 │   ├── LiteLLM Proxy
 │   ├── NeMo Guardrails
 │   ├── Sandboxing Agents
-│   ├── Tools Landscape
-│   ├── Monitoring & Observability
-│   ├── Red-Teaming AI Systems
-│   └── Incident Response
+│   └── Tools Landscape
 │
-├── Governance & Frameworks (9 pages)
+├── Governance (3 pages)
 │   ├── AI Governance Basics
 │   ├── Compliance Frameworks (NIST, EU AI Act, ISO 42001)
-│   ├── Risk Assessment
-│   ├── Vendor Risk Management
-│   ├── Data Privacy & AI
-│   ├── Human Oversight Design
-│   ├── Policy Templates
-│   ├── Board Communication
 │   └── Leadership Checklist (50 questions, saves progress)
 │
-├── Future Trends (8 pages)
+├── Future Trends (2 pages)
 │   ├── Emerging Technologies
-│   ├── Computer Use Agents
-│   ├── Long-Horizon Planning
-│   ├── Multi-Agent Systems
-│   ├── Post-Quantum Considerations
-│   ├── Regulatory Horizon
-│   ├── Action Plan (12-month CISO/CIO roadmap)
-│   └── Building a Security Culture
+│   └── 12-Month Action Plan (CISO/CIO roadmap)
 │
 └── Reference
     └── Glossary (45+ terms, live search)
@@ -136,17 +144,17 @@ Not every leader needs to read all 40 pages. Here are the recommended entry poin
 <tr>
 <td><b>Board Members</b></td>
 <td>20 min</td>
-<td>Foundations → Why Security Matters → Board Communication</td>
+<td>What is Agentic AI → Why Security Matters → Leadership Checklist</td>
 </tr>
 <tr>
 <td><b>CISOs / VPs Security</b></td>
 <td>3–4 hours</td>
-<td>All of it — start Threat Landscape, then Governance, then Emerging Technologies</td>
+<td>Threat Landscape → OWASP LLM Top 10 → Agentic Top 10 → Governance → Emerging Technologies</td>
 </tr>
 <tr>
 <td><b>CIOs / CTOs</b></td>
 <td>2 hours</td>
-<td>Foundations → Core Technologies → Action Plan</td>
+<td>Foundations → Core Technologies (MCP, LiteLLM, Sandboxing) → Action Plan</td>
 </tr>
 <tr>
 <td><b>Risk Officers</b></td>
@@ -156,7 +164,7 @@ Not every leader needs to read all 40 pages. Here are the recommended entry poin
 <tr>
 <td><b>Vendor / Procurement</b></td>
 <td>45 min</td>
-<td>Vendor Risk Management → Supply Chain Risks → Policy Templates</td>
+<td>LLM Supply Chain → Agentic Supply Chain → Compliance Frameworks</td>
 </tr>
 </tbody>
 </table>
