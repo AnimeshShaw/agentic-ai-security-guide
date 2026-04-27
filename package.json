@@ -9,6 +9,6 @@
     "audit": "npm audit --audit-level=moderate"
   },
   "dependencies": {
-    "astro": "6.1.8"
+    "astro": "6.1.9"
   }
 }
