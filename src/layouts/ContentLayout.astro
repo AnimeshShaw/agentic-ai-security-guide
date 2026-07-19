@@ -3,6 +3,7 @@ import BaseLayout from './BaseLayout.astro';
 import Sidebar from '../components/Sidebar.astro';
 import PageNav from '../components/PageNav.astro';
 import SeverityBadge from '../components/SeverityBadge.astro';
+import TableOfContents from '../components/TableOfContents.astro';
 import { getAdjacentPages } from '../data/nav';
 
 export type Severity = 'critical' | 'high' | 'medium' | 'low';
@@ -29,10 +30,8 @@ const {
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const rawPath = Astro.url.pathname.replace(/\/$/, '');
-// Strip the base prefix so currentPath matches nav hrefs (e.g. "/foundations/what-is-agentic-ai")
 const currentPath = rawPath.startsWith(base) ? rawPath.slice(base.length) || '/' : rawPath;
 const { prev, next } = getAdjacentPages(currentPath);
-// Prefix hrefs with base for rendered links
 const prevPage = prev ? { ...prev, href: base + prev.href } : undefined;
 const nextPage = next ? { ...next, href: base + next.href } : undefined;
 ---
@@ -40,25 +39,55 @@ const nextPage = next ? { ...next, href: base + next.href } : undefined;
 <BaseLayout title={title} description={description}>
   <div class="site-wrapper">
     <Sidebar currentPath={currentPath} />
-    <main class="content-main fade-in">
-      <div class="content-header">
-        <span class="category-badge">{category}</span>
-        <span class="reading-time">⏱ {readingTime}</span>
-        {severity && <SeverityBadge level={severity} />}
-      </div>
 
-      <h1 class="page-title">{title}</h1>
+    <div class="content-layout-wrapper">
+      <main class="content-main fade-in">
+        
+        <!-- Top Bar with Breadcrumbs and Quick Search -->
+        <div class="top-bar">
+          <div class="breadcrumbs">
+            <a href={base + '/'}>Home</a>
+            <span>/</span>
+            <span>{category}</span>
+            <span>/</span>
+            <span class="active">{title}</span>
+          </div>
+          <div class="top-bar-actions">
+            <button class="btn-search-trigger" data-open-search aria-label="Open search">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="11" cy="11" r="8"/>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+              </svg>
+              <span>Search</span>
+              <kbd>⌘K</kbd>
+            </button>
+          </div>
+        </div>
 
-      {description && <p class="page-description">{description}</p>}
+        <!-- Header -->
+        <div class="content-header">
+          <span class="category-badge">{category}</span>
+          <span class="reading-time">⏱ {readingTime}</span>
+          {severity && <SeverityBadge level={severity} />}
+        </div>
 
-      <div class="content-body">
-        <slot />
-      </div>
+        <h1 class="page-title">{title}</h1>
 
-      <PageNav
-        prev={overridePrev ? { ...overridePrev, href: base + overridePrev.href } : prevPage}
-        next={overrideNext ? { ...overrideNext, href: base + overrideNext.href } : nextPage}
-      />
-    </main>
+        {description && <p class="page-description">{description}</p>}
+
+        <div class="content-body">
+          <slot />
+        </div>
+
+        <PageNav
+          prev={overridePrev ? { ...overridePrev, href: base + overridePrev.href } : prevPage}
+          next={overrideNext ? { ...overrideNext, href: base + overrideNext.href } : nextPage}
+        />
+      </main>
+
+      <!-- Sticky Table of Contents -->
+      <TableOfContents />
+    </div>
+
   </div>
 </BaseLayout>

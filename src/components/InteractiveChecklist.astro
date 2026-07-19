@@ -12,12 +12,8 @@ export interface Props {
 
 const { groups, storageKey: rawKey = 'ai-security-checklist' } = Astro.props;
 
-// Validate storageKey — only allow safe identifier characters to prevent
-// any edge-case injection if the key were ever passed dynamically.
 const storageKey = /^[a-zA-Z0-9_-]+$/.test(rawKey) ? rawKey : 'ai-security-checklist';
-
 const total = groups.reduce((sum, g) => sum + g.items.length, 0);
-// Use crypto.randomUUID for a collision-resistant, non-predictable DOM ID.
 const id = `checklist-${crypto.randomUUID().replace(/-/g, '').slice(0, 8)}`;
 
 function makeId(gi: number, ii: number) {
@@ -26,10 +22,37 @@ function makeId(gi: number, ii: number) {
 ---
 
 <div class="checklist-wrapper" id={id}>
+  
+  <!-- Maturity Dashboard Banner -->
+  <div class="maturity-dashboard">
+    <div class="maturity-score-box">
+      <div class="score-circle">
+        <span class="score-number" id={`${id}-score-num`}>0%</span>
+        <span class="score-label">Maturity Score</span>
+      </div>
+      <div class="score-details">
+        <div class="score-grade-row">
+          <span class="grade-badge" id={`${id}-grade-badge`}>Grade F</span>
+          <span class="grade-title" id={`${id}-grade-title`}>Initial Stage</span>
+        </div>
+        <p class="score-desc" id={`${id}-grade-desc`}>
+          Complete the assessment items below to calculate your organization's Agentic AI security maturity score.
+        </p>
+      </div>
+    </div>
+
+    <!-- Actions toolbar -->
+    <div class="maturity-actions">
+      <button class="btn-check-action" id={`${id}-btn-reset`}>Reset Checklist</button>
+      <button class="btn-check-action" id={`${id}-btn-selectall`}>Check All</button>
+      <button class="btn-check-action primary" id={`${id}-btn-print`}>🖨️ Print Summary</button>
+    </div>
+  </div>
+
   <div class="checklist-progress-bar">
     <div class="checklist-progress-fill" style="width: 0%"></div>
   </div>
-  <p class="checklist-progress-label"><span class="done-count">0</span> of {total} completed</p>
+  <p class="checklist-progress-label"><span class="done-count">0</span> of {total} controls verified</p>
 
   {groups.map((group, gi) => (
     <div class="checklist-group">
@@ -44,26 +67,219 @@ function makeId(gi: number, ii: number) {
   ))}
 </div>
 
+<style>
+  .checklist-wrapper { margin: 2rem 0; }
+
+  .maturity-dashboard {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 1.75rem;
+    margin-bottom: 2rem;
+    box-shadow: var(--shadow-md);
+  }
+
+  .maturity-score-box {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    margin-bottom: 1.25rem;
+    flex-wrap: wrap;
+  }
+
+  .score-circle {
+    width: 110px;
+    height: 110px;
+    border-radius: 50%;
+    background: var(--zone-bg);
+    border: 4px solid var(--accent);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    box-shadow: 0 0 20px rgba(99, 102, 241, 0.25);
+  }
+
+  .score-number {
+    font-family: var(--font-display);
+    font-size: 1.75rem;
+    font-weight: 800;
+    color: var(--zone-text);
+    line-height: 1;
+  }
+
+  .score-label {
+    font-size: 0.65rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--zone-text-muted);
+    margin-top: 0.2rem;
+  }
+
+  .score-details {
+    flex: 1;
+    min-width: 240px;
+  }
+
+  .score-grade-row {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .grade-badge {
+    padding: 0.3rem 0.75rem;
+    border-radius: 99px;
+    font-size: 0.8rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    background: var(--danger-bg);
+    color: var(--danger);
+    border: 1px solid var(--danger-border);
+  }
+
+  .grade-badge.grade-a { background: var(--defense-bg); color: #16A34A; border-color: var(--defense-border); }
+  .grade-badge.grade-b { background: var(--info-bg); color: #0284C7; border-color: var(--info-border); }
+  .grade-badge.grade-c { background: var(--warning-bg); color: #D97706; border-color: var(--warning-border); }
+
+  .grade-title {
+    font-family: var(--font-display);
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--text-primary);
+  }
+
+  .score-desc {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    margin: 0;
+    line-height: 1.5;
+  }
+
+  .maturity-actions {
+    display: flex;
+    gap: 0.75rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--border);
+    flex-wrap: wrap;
+  }
+
+  .btn-check-action {
+    padding: 0.45rem 1rem;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border-strong);
+    background: var(--bg);
+    color: var(--text-primary);
+    font-size: 0.825rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+
+  .btn-check-action:hover {
+    background: var(--accent-bg);
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  .btn-check-action.primary {
+    background: var(--accent);
+    color: white;
+    border-color: var(--accent);
+  }
+
+  .btn-check-action.primary:hover {
+    background: var(--accent-hover);
+  }
+
+  .checklist-progress-bar {
+    background: var(--border);
+    border-radius: 99px;
+    height: 8px;
+    margin-bottom: 0.5rem;
+    overflow: hidden;
+  }
+
+  .checklist-progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent), var(--defense));
+    border-radius: 99px;
+    transition: width 0.4s ease;
+  }
+
+  .checklist-progress-label {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin-bottom: 1.5rem;
+    font-family: var(--font-mono);
+  }
+
+  .checklist-group { margin-bottom: 2rem; }
+
+  .checklist-group-title {
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--accent);
+    margin-bottom: 0.75rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .checklist-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid var(--border);
+    cursor: pointer;
+    transition: background var(--transition);
+  }
+
+  .checklist-item:last-child { border-bottom: none; }
+
+  .checklist-item input[type="checkbox"] {
+    width: 18px; height: 18px;
+    margin-top: 3px;
+    accent-color: var(--accent);
+    flex-shrink: 0;
+    cursor: pointer;
+  }
+
+  .checklist-item-text { font-size: 0.95rem; color: var(--text-secondary); line-height: 1.5; }
+  .checklist-item.checked .checklist-item-text { text-decoration: line-through; color: var(--text-muted); }
+</style>
+
 <script define:vars={{ id, storageKey, total }}>
   const wrap = document.getElementById(id);
   if (!wrap) return;
 
-  const fill  = wrap.querySelector('.checklist-progress-fill');
-  const count = wrap.querySelector('.done-count');
-  const boxes = wrap.querySelectorAll('input[type="checkbox"]');
+  const fill       = wrap.querySelector('.checklist-progress-fill');
+  const count      = wrap.querySelector('.done-count');
+  const boxes      = wrap.querySelectorAll('input[type="checkbox"]');
+  const scoreNum   = document.getElementById(`${id}-score-num`);
+  const gradeBadge = document.getElementById(`${id}-grade-badge`);
+  const gradeTitle = document.getElementById(`${id}-grade-title`);
+  const gradeDesc  = document.getElementById(`${id}-grade-desc`);
+  const btnReset   = document.getElementById(`${id}-btn-reset`);
+  const btnSelectAll = document.getElementById(`${id}-btn-selectall`);
+  const btnPrint   = document.getElementById(`${id}-btn-print`);
 
   function load() {
     let saved = {};
     try {
       const raw = localStorage.getItem(storageKey);
       const parsed = JSON.parse(raw || '{}');
-      // Ensure we got a plain object, not an array or primitive.
       if (parsed && typeof parsed === 'object' && !Array.isArray(parsed)) {
         saved = parsed;
       }
-    } catch (_) {
-      // Corrupted storage — start fresh.
-    }
+    } catch (_) {}
+
     boxes.forEach((box) => {
       const checked = saved[box.dataset.id] === true;
       box.checked = checked;
@@ -74,9 +290,46 @@ function makeId(gi: number, ii: number) {
 
   function update() {
     const done = Array.from(boxes).filter((b) => b.checked).length;
-    const pct  = total > 0 ? (done / total) * 100 : 0;
-    if (fill)  fill.style.width = pct + '%';
+    const pct  = Math.round(total > 0 ? (done / total) * 100 : 0);
+
+    if (fill) fill.style.width = pct + '%';
     if (count) count.textContent = String(done);
+    if (scoreNum) scoreNum.textContent = pct + '%';
+
+    // Grade calculation
+    let grade = 'Grade F';
+    let title = 'Initial / High Risk';
+    let desc = 'Minimal agentic controls in place. Immediate risk of prompt injection or excessive agency.';
+    let gradeClass = '';
+
+    if (pct >= 90) {
+      grade = 'Grade A+';
+      title = 'Resilient Leader';
+      desc = 'World-class agentic security posture with comprehensive sandboxing, MCP governance, and HITL oversight.';
+      gradeClass = 'grade-a';
+    } else if (pct >= 75) {
+      grade = 'Grade A';
+      title = 'Advanced Posture';
+      desc = 'Strong security controls in place. Minor gaps remain in inter-agent isolation or memory guardrails.';
+      gradeClass = 'grade-a';
+    } else if (pct >= 55) {
+      grade = 'Grade B';
+      title = 'Established Posture';
+      desc = 'Basic model controls implemented. Vulnerable to indirect prompt injection or side-channel exfiltration.';
+      gradeClass = 'grade-b';
+    } else if (pct >= 35) {
+      grade = 'Grade C';
+      title = 'Emerging Posture';
+      desc = 'Initial AI guidelines established. Lacks runtime tool sandboxing or granular MCP permissions.';
+      gradeClass = 'grade-c';
+    }
+
+    if (gradeBadge) {
+      gradeBadge.textContent = grade;
+      gradeBadge.className = 'grade-badge ' + gradeClass;
+    }
+    if (gradeTitle) gradeTitle.textContent = title;
+    if (gradeDesc) gradeDesc.textContent = desc;
   }
 
   function save() {
@@ -84,9 +337,7 @@ function makeId(gi: number, ii: number) {
       const data = {};
       boxes.forEach((b) => { data[b.dataset.id] = b.checked; });
       localStorage.setItem(storageKey, JSON.stringify(data));
-    } catch (_) {
-      // localStorage may be unavailable (private browsing, quota exceeded).
-    }
+    } catch (_) {}
   }
 
   boxes.forEach((box) => {
@@ -95,6 +346,30 @@ function makeId(gi: number, ii: number) {
       save();
       update();
     });
+  });
+
+  btnReset?.addEventListener('click', () => {
+    if (confirm('Reset all checklist progress?')) {
+      boxes.forEach((box) => {
+        box.checked = false;
+        box.closest('.checklist-item')?.classList.remove('checked');
+      });
+      save();
+      update();
+    }
+  });
+
+  btnSelectAll?.addEventListener('click', () => {
+    boxes.forEach((box) => {
+      box.checked = true;
+      box.closest('.checklist-item')?.classList.add('checked');
+    });
+    save();
+    update();
+  });
+
+  btnPrint?.addEventListener('click', () => {
+    window.print();
   });
 
   load();

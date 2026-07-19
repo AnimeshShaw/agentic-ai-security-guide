@@ -7,7 +7,6 @@ export interface Props {
 
 const { currentPath } = Astro.props;
 const normalizedPath = currentPath.replace(/\/$/, '') || '/';
-// Strip trailing slash; keep leading slash for href construction
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 ---
 
@@ -22,35 +21,50 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
           <path d="M11 16L14.5 19.5L21 13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
         <div class="brand-text">
-          <span class="brand-title">AI Security</span>
-          <span class="brand-sub">Leadership Guide</span>
+          <span class="brand-title">Agentic Security</span>
+          <span class="brand-sub">Executive Guide</span>
         </div>
       </a>
     </div>
 
+    <!-- Quick Search trigger in Sidebar -->
+    <div class="sidebar-search">
+      <button class="sidebar-search-btn" data-open-search aria-label="Open Search">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="11" cy="11" r="8"/>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+        </svg>
+        <span>Search topics...</span>
+        <kbd>⌘K</kbd>
+      </button>
+    </div>
+
     <!-- Navigation -->
     <nav class="sidebar-nav" aria-label="Site navigation">
-      {navigation.map((section) => (
-        <div class="nav-section">
-          <div class="nav-section-title">{section.title}</div>
-          <ul class="nav-items">
-            {section.items.map((item) => {
-              const isActive = normalizedPath === item.href;
-              return (
-                <li>
-                  <a
-                    href={base + item.href}
-                    class:list={['nav-item', { active: isActive }]}
-                    aria-current={isActive ? 'page' : undefined}
-                  >
-                    {item.title}
-                  </a>
-                </li>
-              );
-            })}
-          </ul>
-        </div>
-      ))}
+      {navigation.map((section) => {
+        const hasActiveChild = section.items.some((i) => normalizedPath === i.href);
+        return (
+          <div class="nav-section">
+            <div class="nav-section-title">{section.title}</div>
+            <ul class="nav-items">
+              {section.items.map((item) => {
+                const isActive = normalizedPath === item.href;
+                return (
+                  <li>
+                    <a
+                      href={base + item.href}
+                      class:list={['nav-item', { active: isActive }]}
+                      aria-current={isActive ? 'page' : undefined}
+                    >
+                      {item.title}
+                    </a>
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
+        );
+      })}
     </nav>
 
   </div>
@@ -58,16 +72,16 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
   <!-- Theme toggle footer -->
   <div class="sidebar-footer">
     <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode">
-      <!-- Sun icon (shown in dark mode) -->
-      <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <!-- Sun icon -->
+      <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
         <circle cx="12" cy="12" r="4"/>
         <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/>
       </svg>
-      <!-- Moon icon (shown in light mode) -->
-      <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <!-- Moon icon -->
+      <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
         <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
       </svg>
-      <span class="theme-label"></span>
+      <span class="theme-label">Toggle theme</span>
     </button>
   </div>
 </aside>
@@ -87,22 +101,15 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
     border-right: 1px solid var(--border);
     overflow-y: auto;
     z-index: 50;
-    scrollbar-width: thin;
-    scrollbar-color: var(--border) transparent;
     display: flex;
     flex-direction: column;
   }
-
-  .sidebar::-webkit-scrollbar { width: 4px; }
-  .sidebar::-webkit-scrollbar-track { background: transparent; }
-  .sidebar::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
 
   .sidebar-inner {
     padding: 0 0 1rem;
     flex: 1;
   }
 
-  /* Brand */
   .sidebar-brand {
     padding: 1.125rem 1.25rem;
     border-bottom: 1px solid var(--border);
@@ -126,10 +133,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
     flex-shrink: 0;
   }
 
-  .brand-text {
-    display: flex;
-    flex-direction: column;
-  }
+  .brand-text { display: flex; flex-direction: column; }
 
   .brand-title {
     font-family: var(--font-display);
@@ -146,31 +150,62 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
     letter-spacing: 0.07em;
   }
 
-  /* Nav sections */
+  .sidebar-search {
+    padding: 0.75rem 1rem 0.25rem;
+  }
+
+  .sidebar-search-btn {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 0.45rem 0.75rem;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    color: var(--text-muted);
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+
+  .sidebar-search-btn:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  .sidebar-search-btn kbd {
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    padding: 0.1rem 0.3rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 3px;
+  }
+
   .sidebar-nav { padding: 0.5rem 0; }
 
-  .nav-section { margin-bottom: 0.125rem; }
+  .nav-section { margin-bottom: 0.5rem; }
 
   .nav-section-title {
-    padding: 0.7rem 1.25rem 0.3rem;
+    padding: 0.6rem 1.25rem 0.25rem;
     font-size: 0.65rem;
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.11em;
     color: var(--text-muted);
-    margin-top: 0.5rem;
   }
 
   .nav-items { list-style: none; padding: 0; margin: 0; }
 
   .nav-item {
     display: block;
-    padding: 0.42rem 1.25rem 0.42rem 1.75rem;
-    font-size: 0.875rem;
+    padding: 0.4rem 1.25rem 0.4rem 1.75rem;
+    font-size: 0.85rem;
     color: var(--text-secondary);
     text-decoration: none;
     border-left: 2px solid transparent;
-    transition: color var(--transition), background var(--transition), border-color var(--transition);
+    transition: all var(--transition);
     line-height: 1.4;
   }
 
@@ -187,7 +222,6 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
     font-weight: 600;
   }
 
-  /* Theme toggle footer */
   .sidebar-footer {
     padding: 0.875rem 1.25rem;
     border-top: 1px solid var(--border);
@@ -218,20 +252,14 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
     color: var(--accent);
   }
 
-  .theme-toggle svg {
-    width: 15px;
-    height: 15px;
-    flex-shrink: 0;
-  }
+  .theme-toggle svg { width: 15px; height: 15px; flex-shrink: 0; }
 
-  /* Show/hide sun and moon based on theme */
   .icon-sun { display: none; }
   .icon-moon { display: block; }
 
   html.dark .icon-sun { display: block; }
   html.dark .icon-moon { display: none; }
 
-  /* Mobile toggle */
   .sidebar-toggle {
     display: none;
     position: fixed;
@@ -257,14 +285,10 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
     height: 2px;
     background: white;
     border-radius: 2px;
-    transition: all var(--transition);
   }
 
   @media (max-width: 768px) {
-    .sidebar {
-      transform: translateX(-100%);
-      transition: transform 0.3s ease;
-    }
+    .sidebar { transform: translateX(-100%); transition: transform 0.3s ease; }
     .sidebar.open { transform: translateX(0); }
     .sidebar-toggle { display: flex; }
   }
@@ -293,7 +317,6 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
     if (label) label.textContent = dark ? 'Light mode' : 'Dark mode';
   }
 
-  // Set initial label
   const isDark = document.documentElement.classList.contains('dark');
   if (label) label.textContent = isDark ? 'Light mode' : 'Dark mode';
 
