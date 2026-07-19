@@ -1,5 +1,6 @@
 ---
 import '../styles/global.css';
+import SearchModal from '../components/SearchModal.astro';
 
 export interface Props {
   title: string;
@@ -35,17 +36,50 @@ const {
   <body>
     <div id="reading-progress"></div>
     <slot />
-    <script>
-      const bar = document.getElementById('reading-progress');
+    <SearchModal />
+
+    <script is:inline>
+      // Reading progress bar listener
+      var bar = document.getElementById('reading-progress');
       if (bar) {
-        const update = () => {
-          const scrolled = window.scrollY;
-          const total = document.documentElement.scrollHeight - window.innerHeight;
+        var update = function () {
+          var scrolled = window.scrollY;
+          var total = document.documentElement.scrollHeight - window.innerHeight;
           bar.style.width = total > 0 ? (scrolled / total) * 100 + '%' : '0%';
         };
         window.addEventListener('scroll', update, { passive: true });
         update();
       }
+
+      // Add copy button to code blocks
+      document.addEventListener('DOMContentLoaded', function() {
+        var preBlocks = document.querySelectorAll('pre');
+        preBlocks.forEach(function(pre) {
+          if (pre.parentNode.classList.contains('code-block-wrapper')) return;
+          
+          var wrapper = document.createElement('div');
+          wrapper.className = 'code-block-wrapper';
+          
+          var header = document.createElement('div');
+          header.className = 'code-block-header';
+          header.innerHTML = '<span>Code Example</span><button class="copy-code-btn">Copy</button>';
+          
+          pre.parentNode.insertBefore(wrapper, pre);
+          wrapper.appendChild(header);
+          wrapper.appendChild(pre);
+
+          var btn = header.querySelector('.copy-code-btn');
+          if (btn) {
+            btn.addEventListener('click', function() {
+              var code = pre.querySelector('code') || pre;
+              navigator.clipboard.writeText(code.textContent || '').then(function() {
+                btn.textContent = 'Copied!';
+                setTimeout(function() { btn.textContent = 'Copy'; }, 2000);
+              });
+            });
+          }
+        });
+      });
     </script>
   </body>
 </html>

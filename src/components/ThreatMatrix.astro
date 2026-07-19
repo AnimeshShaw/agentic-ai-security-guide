@@ -1,0 +1,281 @@
+---
+import SeverityBadge from './SeverityBadge.astro';
+
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+
+export interface ThreatEntry {
+  code: string;
+  title: string;
+  href: string;
+  severity: 'critical' | 'high' | 'medium';
+  type: 'owasp' | 'agentic';
+  domain: 'prompt' | 'tool' | 'memory' | 'multiagent' | 'infrastructure' | 'data';
+  description: string;
+}
+
+export const threats: ThreatEntry[] = [
+  // OWASP Top 10
+  { code: 'LLM01', title: 'Prompt Injection', href: '/llm-top-10/prompt-injection', severity: 'critical', type: 'owasp', domain: 'prompt', description: 'Crafted inputs hijack model context to override instructions or trigger unintended actions.' },
+  { code: 'LLM02', title: 'Sensitive Info Disclosure', href: '/llm-top-10/sensitive-information-disclosure', severity: 'high', type: 'owasp', domain: 'data', description: 'Unsanitized context outputs reveal private PII, credentials, or proprietary system prompts.' },
+  { code: 'LLM03', title: 'Supply Chain Vulnerabilities', href: '/llm-top-10/supply-chain', severity: 'high', type: 'owasp', domain: 'infrastructure', description: 'Compromised third-party models, plugins, or dataset dependencies.' },
+  { code: 'LLM04', title: 'Data Poisoning', href: '/llm-top-10/data-poisoning', severity: 'high', type: 'owasp', domain: 'data', description: 'Tampered training or fine-tuning datasets creating malicious backdoors.' },
+  { code: 'LLM05', title: 'Improper Output Handling', href: '/llm-top-10/improper-output-handling', severity: 'critical', type: 'owasp', domain: 'tool', description: 'Passing raw LLM output into command shells, browsers, or SQL engines.' },
+  { code: 'LLM06', title: 'Excessive Agency', href: '/llm-top-10/excessive-agency', severity: 'critical', type: 'owasp', domain: 'tool', description: 'Granting model agents broad privileges or destructive tool access.' },
+  { code: 'LLM07', title: 'System Prompt Leakage', href: '/llm-top-10/system-prompt-leakage', severity: 'medium', type: 'owasp', domain: 'prompt', description: 'Extracting operational system prompts, business rules, or secret keys.' },
+  { code: 'LLM08', title: 'Vector Weaknesses', href: '/llm-top-10/vector-weaknesses', severity: 'high', type: 'owasp', domain: 'memory', description: 'Exploiting embedding stores, RAG retrieval context, and vector DBs.' },
+  { code: 'LLM09', title: 'Misinformation & Hallucination', href: '/llm-top-10/misinformation', severity: 'medium', type: 'owasp', domain: 'data', description: 'Confidently false outputs causing operational or compliance damage.' },
+  { code: 'LLM10', title: 'Unbounded Consumption', href: '/llm-top-10/unbounded-consumption', severity: 'high', type: 'owasp', domain: 'infrastructure', description: 'Uncapped API calls leading to resource exhaustion or financial DoS.' },
+
+  // Agentic Top 10
+  { code: 'AGT01', title: 'Direct & Indirect Prompt Injection', href: '/agentic-top-10/prompt-injection', severity: 'critical', type: 'agentic', domain: 'prompt', description: 'Indirect injection inside fetched web content or tool responses manipulating agent goals.' },
+  { code: 'AGT02', title: 'Excessive Agency & Broad Scope', href: '/agentic-top-10/excessive-agency', severity: 'critical', type: 'agentic', domain: 'tool', description: 'Unrestricted execution bounds allowing autonomous agents to delete or alter data.' },
+  { code: 'AGT03', title: 'Unsafe Tool Execution & Injection', href: '/agentic-top-10/unsafe-tool-execution', severity: 'critical', type: 'agentic', domain: 'tool', description: 'Executing unsanitized code or bash scripts without sandboxing.' },
+  { code: 'AGT04', title: 'Inter-Agent Cascading Failures', href: '/agentic-top-10/inter-agent-attacks', severity: 'high', type: 'agentic', domain: 'multiagent', description: 'Malicious subagent interactions corrupting consensus across agent networks.' },
+  { code: 'AGT05', title: 'Persistent Memory Poisoning', href: '/agentic-top-10/memory-poisoning', severity: 'high', type: 'agentic', domain: 'memory', description: 'Tampering with vector memory or long-term agent state to alter future planning.' },
+  { code: 'AGT06', title: 'Privilege Escalation across Subagents', href: '/agentic-top-10/privilege-escalation', severity: 'high', type: 'agentic', domain: 'multiagent', description: 'Low-trust agent tricking administrative agent into executing privileged tools.' },
+  { code: 'AGT07', title: 'Uncontrolled Loops & Token Exhaustion', href: '/agentic-top-10/uncontrolled-loops', severity: 'high', type: 'agentic', domain: 'infrastructure', description: 'Infinite ReAct reasoning loops draining infrastructure resources and budgets.' },
+  { code: 'AGT08', title: 'Data Exfiltration via Tool Side-Channels', href: '/agentic-top-10/data-exfiltration', severity: 'critical', type: 'agentic', domain: 'data', description: 'Stealth leak of internal secrets via outbound web requests, DNS, or image tags.' },
+  { code: 'AGT09', title: 'Insufficient Oversight & Auditability', href: '/agentic-top-10/insufficient-oversight', severity: 'high', type: 'agentic', domain: 'infrastructure', description: 'Absence of human approval gates and cryptographically verifiable audit logs.' },
+  { code: 'AGT10', title: 'Agentic Supply Chain Vulnerabilities', href: '/agentic-top-10/supply-chain', severity: 'high', type: 'agentic', domain: 'infrastructure', description: 'Untrusted MCP server tools, malicious agent plugins, or skill repositories.' }
+];
+---
+
+<div class="threat-matrix-wrapper">
+  
+  <!-- Filter Toolbar -->
+  <div class="matrix-toolbar">
+    <div class="matrix-tabs">
+      <button class="matrix-tab active" data-filter="all">All Threats (20)</button>
+      <button class="matrix-tab" data-filter="agentic">Agentic Top 10</button>
+      <button class="matrix-tab" data-filter="owasp">OWASP LLM Top 10</button>
+      <button class="matrix-tab" data-filter="critical">Critical Only</button>
+    </div>
+    <div class="matrix-search">
+      <input type="text" id="matrix-search-input" placeholder="Filter vulnerabilities..." />
+    </div>
+  </div>
+
+  <!-- Grid -->
+  <div class="matrix-grid" id="matrix-grid">
+    {threats.map((item) => (
+      <a
+        href={base + item.href}
+        class="matrix-card"
+        data-type={item.type}
+        data-severity={item.severity}
+        data-domain={item.domain}
+        data-title={item.title.toLowerCase()}
+        data-code={item.code.toLowerCase()}
+      >
+        <div class="matrix-card-top">
+          <span class="matrix-code">{item.code}</span>
+          <SeverityBadge level={item.severity} />
+        </div>
+        <h4 class="matrix-card-title">{item.title}</h4>
+        <p class="matrix-card-desc">{item.description}</p>
+        <div class="matrix-card-footer">
+          <span class="matrix-tag">{item.type === 'agentic' ? '🤖 Agentic Risk' : '🔟 OWASP LLM'}</span>
+          <span class="matrix-arrow">→</span>
+        </div>
+      </a>
+    ))}
+  </div>
+
+</div>
+
+<style>
+  .threat-matrix-wrapper {
+    margin: 2rem 0;
+  }
+
+  .matrix-toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-bottom: 1.5rem;
+  }
+
+  .matrix-tabs {
+    display: flex;
+    gap: 0.4rem;
+    flex-wrap: wrap;
+  }
+
+  .matrix-tab {
+    padding: 0.45rem 0.9rem;
+    font-size: 0.825rem;
+    font-weight: 600;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+
+  .matrix-tab:hover,
+  .matrix-tab.active {
+    background: var(--accent);
+    color: white;
+    border-color: var(--accent);
+  }
+
+  .matrix-search input {
+    padding: 0.45rem 0.85rem;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--text-primary);
+    font-size: 0.85rem;
+    outline: none;
+    min-width: 220px;
+  }
+
+  .matrix-search input:focus {
+    border-color: var(--accent);
+  }
+
+  .matrix-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.25rem;
+  }
+
+  .matrix-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 1.35rem;
+    text-decoration: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    transition: all 0.2s ease;
+    box-shadow: var(--shadow-sm);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .matrix-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+  }
+
+  .matrix-card[data-severity="critical"]::before { background: var(--danger); }
+  .matrix-card[data-severity="high"]::before { background: #EA580C; }
+  .matrix-card[data-severity="medium"]::before { background: var(--warning); }
+
+  .matrix-card:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-lg);
+    border-color: var(--accent);
+    text-decoration: none;
+  }
+
+  .matrix-card-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .matrix-code {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--accent);
+  }
+
+  .matrix-card-title {
+    font-family: var(--font-display);
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    line-height: 1.3;
+    margin: 0;
+  }
+
+  .matrix-card-desc {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    line-height: 1.5;
+    flex: 1;
+    margin: 0;
+  }
+
+  .matrix-card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 0.75rem;
+    border-top: 1px solid var(--border);
+    font-size: 0.75rem;
+    color: var(--text-muted);
+  }
+
+  .matrix-arrow {
+    font-weight: 700;
+    color: var(--accent);
+    transition: transform 0.15s ease;
+  }
+
+  .matrix-card:hover .matrix-arrow {
+    transform: translateX(4px);
+  }
+</style>
+
+<script is:inline>
+  (function() {
+    var tabs = document.querySelectorAll('.matrix-tab');
+    var cards = document.querySelectorAll('.matrix-card');
+    var input = document.getElementById('matrix-search-input');
+
+    var currentFilter = 'all';
+    var searchQuery = '';
+
+    function filterMatrix() {
+      cards.forEach(function(card) {
+        var type = card.getAttribute('data-type');
+        var severity = card.getAttribute('data-severity');
+        var title = card.getAttribute('data-title');
+        var code = card.getAttribute('data-code');
+
+        var matchesFilter = false;
+        if (currentFilter === 'all') matchesFilter = true;
+        else if (currentFilter === 'owasp' && type === 'owasp') matchesFilter = true;
+        else if (currentFilter === 'agentic' && type === 'agentic') matchesFilter = true;
+        else if (currentFilter === 'critical' && severity === 'critical') matchesFilter = true;
+
+        var matchesSearch = true;
+        if (searchQuery) {
+          matchesSearch = title.indexOf(searchQuery) !== -1 || code.indexOf(searchQuery) !== -1;
+        }
+
+        if (matchesFilter && matchesSearch) {
+          card.style.display = 'flex';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    }
+
+    tabs.forEach(function(tab) {
+      tab.addEventListener('click', function() {
+        tabs.forEach(function(t) { t.classList.remove('active'); });
+        tab.classList.add('active');
+        currentFilter = tab.getAttribute('data-filter') || 'all';
+        filterMatrix();
+      });
+    });
+
+    if (input) {
+      input.addEventListener('input', function(e) {
+        searchQuery = e.target.value.trim().toLowerCase();
+        filterMatrix();
+      });
+    }
+  })();
+</script>

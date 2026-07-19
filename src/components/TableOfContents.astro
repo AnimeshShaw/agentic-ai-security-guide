@@ -1,0 +1,176 @@
+---
+export interface Props {
+  className?: string;
+}
+
+const { className = '' } = Astro.props;
+---
+
+<aside class:list={['toc-wrapper', className]} id="toc-wrapper">
+  <div class="toc-container">
+    <div class="toc-header">
+      <svg class="toc-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="8" y1="6" x2="21" y2="6"/>
+        <line x1="8" y1="12" x2="21" y2="12"/>
+        <line x1="8" y1="18" x2="21" y2="18"/>
+        <line x1="3" y1="6" x2="3.01" y2="6"/>
+        <line x1="3" y1="12" x2="3.01" y2="12"/>
+        <line x1="3" y1="18" x2="3.01" y2="18"/>
+      </svg>
+      <span class="toc-title">On this page</span>
+    </div>
+    <nav class="toc-nav" id="toc-nav" aria-label="Table of Contents">
+      <!-- Generated dynamically by script -->
+    </nav>
+  </div>
+</aside>
+
+<style>
+  .toc-wrapper {
+    position: sticky;
+    top: 2rem;
+    align-self: start;
+    width: 240px;
+    flex-shrink: 0;
+    margin-left: 2.5rem;
+    display: none; /* Shown on screen width > 1280px or when manually toggled */
+  }
+
+  @media (min-width: 1280px) {
+    .toc-wrapper {
+      display: block;
+    }
+  }
+
+  .toc-container {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.15rem;
+    box-shadow: var(--shadow-sm);
+    max-height: calc(100vh - 5rem);
+    overflow-y: auto;
+  }
+
+  .toc-header {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding-bottom: 0.75rem;
+    margin-bottom: 0.75rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .toc-icon {
+    width: 16px;
+    height: 16px;
+    color: var(--accent);
+  }
+
+  .toc-title {
+    font-family: var(--font-display);
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-muted);
+  }
+
+  :global(.toc-link) {
+    display: block;
+    font-size: 0.825rem;
+    color: var(--text-secondary);
+    text-decoration: none;
+    padding: 0.3rem 0;
+    line-height: 1.4;
+    transition: color 0.15s ease, border-color 0.15s ease;
+    border-left: 2px solid transparent;
+    padding-left: 0.65rem;
+  }
+
+  :global(.toc-link.depth-3) {
+    padding-left: 1.25rem;
+    font-size: 0.78rem;
+  }
+
+  :global(.toc-link:hover) {
+    color: var(--text-primary);
+    text-decoration: none;
+  }
+
+  :global(.toc-link.active) {
+    color: var(--accent);
+    font-weight: 600;
+    border-left-color: var(--accent);
+  }
+</style>
+
+<script is:inline>
+  (function() {
+    function initTOC() {
+      var tocNav = document.getElementById('toc-nav');
+      var body = document.querySelector('.content-body');
+      if (!tocNav || !body) return;
+
+      var headings = body.querySelectorAll('h2, h3');
+      if (headings.length < 2) {
+        var wrapper = document.getElementById('toc-wrapper');
+        if (wrapper) wrapper.style.display = 'none';
+        return;
+      }
+
+      tocNav.innerHTML = '';
+
+      var headingData = [];
+
+      headings.forEach(function(h, index) {
+        if (!h.id) {
+          h.id = 'section-' + (index + 1) + '-' + h.textContent.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+        }
+
+        var isH3 = h.tagName.toLowerCase() === 'h3';
+        var a = document.createElement('a');
+        a.className = 'toc-link' + (isH3 ? ' depth-3' : ' depth-2');
+        a.href = '#' + h.id;
+        a.textContent = h.textContent;
+        
+        a.addEventListener('click', function(e) {
+          e.preventDefault();
+          var target = document.getElementById(h.id);
+          if (target) {
+            target.scrollIntoView({ behavior: 'smooth' });
+            history.pushState(null, '', '#' + h.id);
+          }
+        });
+
+        tocNav.appendChild(a);
+        headingData.push({ el: h, link: a });
+      });
+
+      // ScrollSpy via IntersectionObserver
+      if ('IntersectionObserver' in window) {
+        var observer = new IntersectionObserver(function(entries) {
+          entries.forEach(function(entry) {
+            if (entry.isIntersecting) {
+              headingData.forEach(function(item) {
+                if (item.el === entry.target) {
+                  item.link.classList.add('active');
+                } else {
+                  item.link.classList.remove('active');
+                }
+              });
+            }
+          });
+        }, { rootMargin: '-80px 0px -60% 0px' });
+
+        headings.forEach(function(h) { observer.observe(h); });
+      }
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initTOC);
+    } else {
+      initTOC();
+    }
+  })();
+</script>
