@@ -135,9 +135,9 @@ h1, h2, h3, h4, h5, h6 {
   color: var(--text-primary);
   letter-spacing: -0.02em;
 }
-h1 { font-size: clamp(2.1rem, 5vw, 2.85rem); }
-h2 { font-size: clamp(1.5rem, 3vw, 2.1rem); margin: 2.5rem 0 1rem; }
-h3 { font-size: 1.35rem; margin: 2rem 0 0.75rem; }
+h1 { font-size: clamp(2.25rem, 5vw, 3.1rem); }
+h2 { font-size: clamp(1.65rem, 3vw, 2.2rem); margin: 2.75rem 0 1.1rem; }
+h3 { font-size: clamp(1.2rem, 2vw, 1.45rem); margin: 2.25rem 0 0.8rem; }
 h4 { font-size: 1.1rem; margin: 1.5rem 0 0.5rem; font-weight: 600; }
 
 p { margin-bottom: 1.25rem; color: var(--text-secondary); }
@@ -209,7 +209,7 @@ pre {
   padding: 1.25rem 1.5rem;
   overflow-x: auto;
   font-size: 0.875rem;
-  line-height: 1.6.5;
+  line-height: 1.65;
   margin: 0;
 }
 pre code { background: none; padding: 0; color: #7DD3FC; border: none; }
@@ -251,6 +251,7 @@ hr { border: none; border-top: 1px solid var(--border); margin: 2.5rem 0; }
 }
 
 .breadcrumbs span { color: var(--text-muted); }
+.breadcrumbs span.active { color: var(--text-primary); font-weight: 500; }
 
 .top-bar-actions {
   display: flex;
@@ -340,10 +341,11 @@ hr { border: none; border-top: 1px solid var(--border); margin: 2.5rem 0; }
 }
 
 .page-title {
-  font-size: clamp(2rem, 4vw, 2.75rem);
-  line-height: 1.15;
+  font-size: clamp(2.25rem, 4.5vw, 3.0rem);
+  line-height: 1.12;
   margin-bottom: 1rem;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.025em;
+  font-weight: 800;
 }
 
 .page-description {
@@ -374,6 +376,166 @@ hr { border: none; border-top: 1px solid var(--border); margin: 2.5rem 0; }
 html.dark .severity-medium { color: #FCD34D; }
 html.dark .severity-low    { color: #4ADE80; }
 html.dark .severity-high   { color: #FB923C; }
+
+/* ─── Fade-in Page Animation ─────────────────────────────────── */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.fade-in {
+  animation: fadeInUp 0.45s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* ─── Dark Section Block ─────────────────────────────────────── */
+.dark-section {
+  background: var(--zone-bg);
+  border: 1px solid var(--zone-border);
+  border-radius: var(--radius-lg);
+  padding: 1.75rem 2rem;
+  margin: 2rem 0;
+  color: var(--zone-text);
+}
+
+.dark-section h2,
+.dark-section h3,
+.dark-section h4 {
+  color: var(--zone-text);
+}
+
+.dark-section p {
+  color: var(--zone-text-secondary);
+}
+
+.dark-section li {
+  color: var(--zone-text-secondary);
+}
+
+.section-label {
+  display: inline-block;
+  font-size: 0.7rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--zone-accent);
+  margin-bottom: 0.6rem;
+}
+
+/* ─── Defense Section Block ──────────────────────────────────── */
+.defense-section {
+  background: var(--defense-bg);
+  border: 1px solid var(--defense-border);
+  border-radius: var(--radius-lg);
+  padding: 1.75rem 2rem;
+  margin: 2rem 0;
+}
+
+.defense-section h3,
+.defense-section h4 {
+  color: #166534;
+}
+
+html.dark .defense-section h3,
+html.dark .defense-section h4 {
+  color: #4ADE80;
+}
+
+.defense-section ol li,
+.defense-section ul li {
+  color: var(--text-secondary);
+  margin-bottom: 0.65rem;
+}
+
+/* ─── Threat Cards ───────────────────────────────────────────── */
+.threat-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.1rem 1.25rem;
+  margin: 0.75rem 0;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.threat-card:hover {
+  border-color: var(--border-strong);
+  box-shadow: var(--shadow-sm);
+}
+
+.dark-section .threat-card {
+  background: var(--zone-surface);
+  border-color: var(--zone-border);
+}
+
+/* ─── Attack Vector Blocks ───────────────────────────────────── */
+.attack-vector {
+  background: var(--danger-bg);
+  border: 1px solid var(--danger-border);
+  border-left: 4px solid var(--danger);
+  border-radius: var(--radius);
+  padding: 1rem 1.25rem;
+  margin: 1rem 0;
+}
+
+.attack-vector strong { color: var(--danger); }
+
+/* ─── Info Callout / Note Boxes ──────────────────────────────── */
+.callout {
+  border-radius: var(--radius);
+  padding: 1rem 1.25rem;
+  margin: 1.25rem 0;
+  display: flex;
+  gap: 0.75rem;
+  align-items: flex-start;
+}
+
+.callout-info {
+  background: var(--info-bg);
+  border: 1px solid var(--info-border);
+  border-left: 4px solid var(--info);
+}
+
+.callout-warning {
+  background: var(--warning-bg);
+  border: 1px solid var(--warning-border);
+  border-left: 4px solid var(--warning);
+}
+
+.callout-danger {
+  background: var(--danger-bg);
+  border: 1px solid var(--danger-border);
+  border-left: 4px solid var(--danger);
+}
+
+.callout-defense {
+  background: var(--defense-bg);
+  border: 1px solid var(--defense-border);
+  border-left: 4px solid var(--defense);
+}
+
+/* ─── Key Insight / Highlight Boxes ──────────────────────────── */
+.key-insight {
+  background: var(--accent-bg);
+  border: 1px solid rgba(99,102,241,0.25);
+  border-left: 4px solid var(--accent);
+  border-radius: var(--radius);
+  padding: 1.1rem 1.4rem;
+  margin: 1.5rem 0;
+  font-size: 1.05rem;
+  color: var(--text-primary);
+  font-style: italic;
+  line-height: 1.7;
+}
+
+/* ─── Two-column comparison grids ───────────────────────────── */
+.compare-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin: 1.5rem 0;
+}
+
+@media (max-width: 640px) {
+  .compare-grid { grid-template-columns: 1fr; }
+}
 
 /* ─── Print Styles ───────────────────────────────────────────── */
 @media print {

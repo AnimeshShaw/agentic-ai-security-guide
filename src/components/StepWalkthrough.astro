@@ -26,8 +26,10 @@ const id = `walk-${crypto.randomUUID().replace(/-/g, '').slice(0, 8)}`;
     {steps.map((step, i) => (
       <div class:list={['walk-step', { active: i === 0 }]} data-step={i}>
         <div class="walk-step-number">{i + 1}</div>
-        <h4 style="margin:0 0 0.5rem; font-size:1rem;">{step.icon ? `${step.icon} ` : ''}{step.title}</h4>
-        <p style="margin:0; color:var(--text-secondary); font-size:0.95rem; line-height:1.65;">{step.content}</p>
+        <div class="walk-step-content">
+          <h4 class="walk-step-title">{step.icon ? `${step.icon} ` : ''}{step.title}</h4>
+          <p class="walk-step-body">{step.content}</p>
+        </div>
       </div>
     ))}
   </div>
@@ -41,6 +43,165 @@ const id = `walk-${crypto.randomUUID().replace(/-/g, '').slice(0, 8)}`;
     <button class="btn-walk btn-next">Next →</button>
   </div>
 </div>
+
+<style>
+  .walkthrough {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 1.75rem;
+    margin: 2rem 0;
+    box-shadow: var(--shadow-sm);
+  }
+
+  .walkthrough-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .walkthrough-header h4 {
+    font-family: var(--font-display);
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin: 0;
+  }
+
+  .step-counter {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    padding: 0.2rem 0.6rem;
+    border-radius: 99px;
+    white-space: nowrap;
+  }
+
+  .current-step {
+    color: var(--accent);
+    font-weight: 700;
+  }
+
+  .walkthrough-body {
+    position: relative;
+    min-height: 130px;
+  }
+
+  .walk-step {
+    display: none;
+    align-items: flex-start;
+    gap: 1.25rem;
+    animation: walk-fadein 0.25s ease;
+  }
+
+  .walk-step.active {
+    display: flex;
+  }
+
+  @keyframes walk-fadein {
+    from { opacity: 0; transform: translateX(8px); }
+    to   { opacity: 1; transform: translateX(0); }
+  }
+
+  .walk-step-number {
+    flex-shrink: 0;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: var(--accent-bg);
+    border: 2px solid var(--accent);
+    color: var(--accent);
+    font-family: var(--font-display);
+    font-size: 0.9rem;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .walk-step-content { flex: 1; }
+
+  .walk-step-title {
+    margin: 0 0 0.5rem;
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--text-primary);
+  }
+
+  .walk-step-body {
+    margin: 0;
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+    line-height: 1.65;
+  }
+
+  .walkthrough-controls {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 1.5rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border);
+    gap: 1rem;
+  }
+
+  .btn-walk {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.45rem 1rem;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    white-space: nowrap;
+  }
+
+  .btn-walk:hover:not(:disabled) {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: var(--accent-bg);
+  }
+
+  .btn-walk:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+  }
+
+  .walk-progress-dots {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .walk-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--border-strong);
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .walk-dot.active {
+    background: var(--accent);
+    transform: scale(1.3);
+  }
+
+  .walk-dot:hover {
+    background: var(--accent);
+  }
+</style>
 
 <script define:vars={{ id, stepCount: steps.length }}>
   const wrap = document.getElementById(id);

@@ -7,7 +7,7 @@ const { prev, next } = Astro.props;
 ---
 
 {(prev || next) && (
-  <nav class="page-nav">
+  <nav class="page-nav" aria-label="Page navigation">
     {prev ? (
       <a href={prev.href} class="page-nav-link prev">
         <span class="page-nav-dir">← Previous</span>
@@ -22,3 +22,62 @@ const { prev, next } = Astro.props;
     )}
   </nav>
 )}
+
+<style>
+  .page-nav {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-top: 4rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--border);
+  }
+
+  .page-nav-link {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    padding: 1rem 1.25rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    text-decoration: none;
+    transition: all 0.2s ease;
+    max-width: 48%;
+    flex: 1;
+  }
+
+  .page-nav-link:hover {
+    border-color: var(--accent);
+    background: var(--accent-bg);
+    box-shadow: var(--shadow-sm);
+    transform: translateY(-1px);
+    text-decoration: none;
+  }
+
+  .page-nav-link.next {
+    text-align: right;
+    align-items: flex-end;
+  }
+
+  .page-nav-dir {
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--accent);
+  }
+
+  .page-nav-title {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    line-height: 1.3;
+  }
+
+  @media (max-width: 600px) {
+    .page-nav { flex-direction: column; }
+    .page-nav-link { max-width: 100%; }
+    .page-nav-link.next { text-align: left; align-items: flex-start; }
+  }
+</style>

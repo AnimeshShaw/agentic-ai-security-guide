@@ -5,12 +5,27 @@ import SearchModal from '../components/SearchModal.astro';
 export interface Props {
   title: string;
   description?: string;
+  /** Optional canonical URL override — defaults to current page URL */
+  canonical?: string;
+  /** Optional Open Graph image URL */
+  ogImage?: string;
 }
 
 const {
   title,
-  description = 'The leadership guide to agentic AI security — for CISOs, CTOs, and board members.',
+  description = 'The leadership guide to agentic AI security — for CISOs, CTOs, and board members. Covers OWASP LLM Top 10, Agentic AI Top 10, governance frameworks, compliance, and a 12-month action plan.',
+  canonical,
+  ogImage,
 } = Astro.props;
+
+const pageTitle = title === 'Home'
+  ? 'Agentic AI Security Guide — Executive & Technical Handbook'
+  : `${title} — Agentic AI Security Guide`;
+
+const siteUrl = 'https://animeshshaw.github.io/agentic-ai-security-guide';
+const canonicalUrl = canonical ?? (siteUrl + Astro.url.pathname);
+const defaultOgImage = `${siteUrl}/og-cover.png`;
+const resolvedOgImage = ogImage ?? defaultOgImage;
 ---
 
 <!DOCTYPE html>
@@ -18,9 +33,60 @@ const {
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- Primary Meta -->
+    <title>{pageTitle}</title>
     <meta name="description" content={description} />
+    <meta name="robots" content="index, follow" />
+    <meta name="author" content="Animesh Shaw" />
+    <meta name="keywords" content="agentic AI security, LLM security, OWASP LLM Top 10, AI governance, AI risk management, prompt injection, CISO AI guide, autonomous agents security, AI compliance" />
+    <link rel="canonical" href={canonicalUrl} />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={resolvedOgImage} />
+    <meta property="og:site_name" content="Agentic AI Security Guide" />
+    <meta property="og:locale" content="en_US" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={pageTitle} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={resolvedOgImage} />
+    <meta name="twitter:creator" content="@AnimeshShaw" />
+
+    <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href={`${import.meta.env.BASE_URL}favicon.svg`} />
-    <title>{title === 'Home' ? 'Agentic AI Security Guide' : `${title} — Agentic AI Security Guide`}</title>
+
+    <!-- Structured Data (JSON-LD) -->
+    <script type="application/ld+json" set:html={JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": title === 'Home' ? "WebSite" : "Article",
+      "name": pageTitle,
+      "description": description,
+      "url": canonicalUrl,
+      "author": {
+        "@type": "Person",
+        "name": "Animesh Shaw",
+        "url": "https://github.com/AnimeshShaw"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "Agentic AI Security Guide",
+        "url": siteUrl
+      },
+      ...(title === 'Home' ? {
+        "potentialAction": {
+          "@type": "SearchAction",
+          "target": `${siteUrl}/?q={search_term_string}`,
+          "query-input": "required name=search_term_string"
+        }
+      } : {})
+    })} />
+
     <!-- Apply saved theme before first paint to prevent flash -->
     <script is:inline>
       (function () {

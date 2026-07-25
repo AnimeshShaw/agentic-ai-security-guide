@@ -23,19 +23,127 @@ const id = `scenario-${crypto.randomUUID().replace(/-/g, '').slice(0, 8)}`;
 ---
 
 <div class="scenario-toggle" id={id}>
-  <div class="scenario-tabs">
-    <button class="scenario-tab attacker active" data-tab="attacker">{attackerTitle}</button>
-    <button class="scenario-tab defender" data-tab="defender">{defenderTitle}</button>
+  <div class="scenario-tabs" role="tablist">
+    <button class="scenario-tab attacker active" data-tab="attacker" role="tab" aria-selected="true">{attackerTitle}</button>
+    <button class="scenario-tab defender" data-tab="defender" role="tab" aria-selected="false">{defenderTitle}</button>
   </div>
-  <div class="scenario-panel attacker-panel active" data-panel="attacker">
+  <div class="scenario-panel attacker-panel active" data-panel="attacker" role="tabpanel">
     <!-- set:html used intentionally — content is static, hardcoded in page files only. -->
     <Fragment set:html={attackerContent} />
   </div>
-  <div class="scenario-panel defender-panel" data-panel="defender">
+  <div class="scenario-panel defender-panel" data-panel="defender" role="tabpanel">
     <!-- set:html used intentionally — content is static, hardcoded in page files only. -->
     <Fragment set:html={defenderContent} />
   </div>
 </div>
+
+<style>
+  .scenario-toggle {
+    margin: 2rem 0;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+  }
+
+  .scenario-tabs {
+    display: flex;
+    border-bottom: 1px solid var(--border);
+    background: var(--surface-2);
+  }
+
+  .scenario-tab {
+    flex: 1;
+    padding: 0.75rem 1.25rem;
+    border: none;
+    background: transparent;
+    font-family: var(--font-body);
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    position: relative;
+    letter-spacing: 0.01em;
+  }
+
+  .scenario-tab::after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: transparent;
+    transition: background 0.2s ease;
+  }
+
+  .scenario-tab.attacker:hover,
+  .scenario-tab.attacker.active {
+    color: var(--danger);
+    background: rgba(239,68,68,0.05);
+  }
+
+  .scenario-tab.attacker.active::after {
+    background: var(--danger);
+  }
+
+  .scenario-tab.defender:hover,
+  .scenario-tab.defender.active {
+    color: var(--defense);
+    background: rgba(34,197,94,0.05);
+  }
+
+  .scenario-tab.defender.active::after {
+    background: var(--defense);
+  }
+
+  .scenario-panel {
+    display: none;
+    padding: 1.5rem 1.75rem;
+    background: var(--surface);
+    animation: panel-fadein 0.2s ease;
+  }
+
+  .scenario-panel.active {
+    display: block;
+  }
+
+  @keyframes panel-fadein {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+
+  /* Style content inside attacker panel */
+  .attacker-panel :global(ul) {
+    border-left: 3px solid var(--danger-border);
+    padding-left: 1.25rem;
+    margin-left: 0;
+  }
+
+  .attacker-panel :global(li) {
+    color: var(--text-secondary);
+  }
+
+  .attacker-panel :global(strong) {
+    color: var(--danger);
+  }
+
+  /* Style content inside defender panel */
+  .defender-panel :global(ul) {
+    border-left: 3px solid var(--defense-border);
+    padding-left: 1.25rem;
+    margin-left: 0;
+  }
+
+  .defender-panel :global(li) {
+    color: var(--text-secondary);
+  }
+
+  .defender-panel :global(strong) {
+    color: var(--defense);
+  }
+</style>
 
 <script define:vars={{ id }}>
   const wrap = document.getElementById(id);
@@ -46,9 +154,10 @@ const id = `scenario-${crypto.randomUUID().replace(/-/g, '').slice(0, 8)}`;
     tabs.forEach((tab) => {
       tab.addEventListener('click', () => {
         const target = tab.dataset.tab;
-        tabs.forEach((t)   => t.classList.remove('active'));
+        tabs.forEach((t)   => { t.classList.remove('active'); t.setAttribute('aria-selected', 'false'); });
         panels.forEach((p) => p.classList.remove('active'));
         tab.classList.add('active');
+        tab.setAttribute('aria-selected', 'true');
         wrap.querySelector(`[data-panel="${target}"]`)?.classList.add('active');
       });
     });
