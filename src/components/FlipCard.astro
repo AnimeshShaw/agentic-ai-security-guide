@@ -32,12 +32,115 @@ const id = `flip-${crypto.randomUUID().replace(/-/g, '').slice(0, 8)}`;
       <div class="flip-back-label">{backTitle}</div>
       <!-- set:html used intentionally — content is static, hardcoded in page files only. -->
       <Fragment set:html={backContent} />
-      <button class="btn-reset" style="margin-top:1rem; background:none; border:1px solid var(--border); padding:0.4rem 0.9rem; border-radius:var(--radius-sm); font-size:0.8rem; cursor:pointer; color:var(--text-muted);">
+      <button class="btn-reset" style="margin-top:auto; background:none; border:1px solid var(--border); padding:0.4rem 0.9rem; border-radius:var(--radius-sm); font-size:0.8rem; cursor:pointer; color:var(--text-muted); align-self:flex-start;">
         Back to scenario
       </button>
     </div>
   </div>
 </div>
+
+<style>
+  .flip-card-container {
+    perspective: 1200px;
+    margin: 2rem 0;
+  }
+
+  .flip-label {
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-muted);
+    margin-bottom: 0.75rem;
+    text-align: center;
+  }
+
+  .flip-card {
+    position: relative;
+    width: 100%;
+    min-height: 380px;
+    transform-style: preserve-3d;
+    transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    cursor: pointer;
+    border-radius: var(--radius-lg);
+  }
+
+  .flip-card.revealed {
+    transform: rotateY(180deg);
+  }
+
+  .flip-card-front,
+  .flip-card-back {
+    position: absolute;
+    inset: 0;
+    backface-visibility: hidden;
+    border-radius: var(--radius-lg);
+    padding: 1.75rem;
+    display: flex;
+    flex-direction: column;
+    box-shadow: var(--shadow-md);
+  }
+
+  .flip-card-front {
+    background: var(--zone-bg);
+    border: 1px solid var(--zone-border);
+    color: var(--zone-text);
+    z-index: 2;
+  }
+
+  .flip-card-back {
+    background: var(--surface-2);
+    border: 1px solid var(--border-strong);
+    color: var(--text-primary);
+    transform: rotateY(180deg);
+    z-index: 1;
+    overflow-y: auto;
+  }
+
+  .flip-card-scenario {
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--zone-accent);
+    margin-bottom: 0.75rem;
+  }
+
+  .flip-back-label {
+    font-family: var(--font-display);
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 0.75rem;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 0.4rem;
+  }
+
+  .flip-hint {
+    margin-top: auto;
+    display: flex;
+    justify-content: center;
+    font-size: 0.85rem;
+    color: var(--zone-accent);
+    font-weight: 600;
+    padding-top: 1rem;
+  }
+
+  .flip-hint span {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+  }
+
+  .flip-hint span::after {
+    content: '→';
+    transition: transform 0.15s ease;
+  }
+
+  .flip-card:hover .flip-hint span::after {
+    transform: translateX(4px);
+  }
+</style>
 
 <script define:vars={{ id }}>
   const card = document.getElementById(id);
