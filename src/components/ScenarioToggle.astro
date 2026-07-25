@@ -39,18 +39,18 @@ const id = `scenario-${crypto.randomUUID().replace(/-/g, '').slice(0, 8)}`;
 
 <script define:vars={{ id }}>
   const wrap = document.getElementById(id);
-  if (!wrap) return;
+  if (wrap) {
+    const tabs   = wrap.querySelectorAll('.scenario-tab');
+    const panels = wrap.querySelectorAll('.scenario-panel');
 
-  const tabs   = wrap.querySelectorAll('.scenario-tab');
-  const panels = wrap.querySelectorAll('.scenario-panel');
-
-  tabs.forEach((tab) => {
-    tab.addEventListener('click', () => {
-      const target = tab.dataset.tab;
-      tabs.forEach((t)   => t.classList.remove('active'));
-      panels.forEach((p) => p.classList.remove('active'));
-      tab.classList.add('active');
-      wrap.querySelector(`[data-panel="${target}"]`)?.classList.add('active');
+    tabs.forEach((tab) => {
+      tab.addEventListener('click', () => {
+        const target = tab.dataset.tab;
+        tabs.forEach((t)   => t.classList.remove('active'));
+        panels.forEach((p) => p.classList.remove('active'));
+        tab.classList.add('active');
+        wrap.querySelector(`[data-panel="${target}"]`)?.classList.add('active');
+      });
     });
-  });
+  }
 </script>

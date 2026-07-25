@@ -5,137 +5,120 @@ import StepWalkthrough from '../../components/StepWalkthrough.astro';
 import ScenarioToggle from '../../components/ScenarioToggle.astro';
 ---
 <ContentLayout
-  title="Model Context Protocol (MCP)"
-  description="The new standard that connects AI agents to external tools and data sources — and why it's both powerful and risky."
+  title="Model Context Protocol (MCP) Security Architecture"
+  description="Understanding the core architecture of Anthropic's open standard for AI tool integration, its transport mechanisms, and the associated threat vectors."
   category="Core Technologies"
-  readingTime="10 min read"
+  readingTime="11 min read"
 >
 
+<p>
+  Model Context Protocol (MCP) functions as a universal plug-and-play standard connecting AI agents directly to local and cloud-based resources. Historically, integrating a model with external databases, APIs, or files required building custom API adapters for each tool. MCP standardizes this connection, acting as the USB-C standard for agentic architectures.
+</p>
+
+<p>
+  However, by bridging the cognitive reasoning of LLMs with structural files and APIs, MCP standardizes the attack surface as well. A single vulnerability in an MCP server exposes the entire agentic pipeline across the organization. Security teams must move beyond basic model safety checks and govern the protocol's runtime integrations.
+</p>
+
+<div class="dark-section">
+  <span class="section-label">🏗️ PROTOCOL ARCHITECTURE</span>
+  
+  <h3>The Client-Host-Server Model</h3>
   <p>
-    Imagine trying to plug every device in your office into a power source — but every device uses a different type of plug, and every power outlet has a different shape. That was the state of AI integrations until late 2024. Every company that wanted its AI assistant to read emails, access a database, or pull a report had to build a custom connector from scratch, every single time.
+    The MCP standard defines three core components:
   </p>
+  <ul>
+    <li><strong>MCP Host:</strong> The orchestrating application (e.g., Claude Desktop, Cursor, or custom enterprise agent runtime) where the user interacts and where the LLM's system prompts are defined.</li>
+    <li><strong>MCP Client:</strong> A protocol handler embedded in the Host that establishes a connection to servers, negotiates capabilities, and formats requests.</li>
+    <li><strong>MCP Server:</strong> Lightweight, modular programs exposing specific tools (REST calls, database queries, local scripts) and resources (logs, system files) via standardized JSON-RPC schemas.</li>
+  </ul>
 
-  <p>
-    Anthropic's Model Context Protocol — MCP — was designed to solve that problem. Think of it as the USB-C standard for AI agents. One universal plug that any AI model can use to connect to any compatible tool or data source. Released in 2024 as an open standard, MCP is rapidly becoming the default way that AI agents interact with the world beyond the conversation window.
-  </p>
-
-  <p>
-    For executives, MCP matters for two reasons. First, it dramatically accelerates what your AI tools can do — an agent connected via MCP can read your SharePoint documents, query your CRM, book calendar meetings, and submit expense reports, all in a single workflow. Second, it creates a standardized attack surface. Understanding that tension is essential before you deploy MCP in your organization.
-  </p>
-
-  <div class="dark-section">
-    <span class="section-label">⚙️ HOW IT WORKS</span>
-
-    <p>
-      MCP uses a server-client architecture. Think of it like a restaurant. The kitchen — your tools and data sources — doesn't walk out to every table and announce what it can make. Instead, there's a menu. MCP servers are the menu. They expose a list of available tools: "I can read files," "I can query the database," "I can send an email." The AI agent is the customer. It reads the menu, decides what it needs, and places an order.
-    </p>
-
-    <p>
-      Each MCP server is a small program that wraps a tool or data source and makes it accessible to any AI agent that speaks the MCP standard. Your company might run an MCP server for your file system, another for your email platform, another for your CRM. The AI agent discovers these servers, reads what tools they offer, and calls them as needed — all without custom code for each integration.
-    </p>
-
-    <StepWalkthrough
-      title="How an Agent Uses MCP to Get Things Done"
-      steps={[
-        {
-          title: "Agent receives a task",
-          content: "A user asks the AI agent to 'Summarize all emails from our top 10 customers this week and add action items to my calendar.' The agent understands the task requires access to email data and calendar systems.",
-          icon: "🎯"
-        },
-        {
-          title: "Agent queries available MCP servers",
-          content: "The agent connects to the MCP registry — a list of servers your IT team has made available. It discovers an email MCP server and a calendar MCP server, and reads what tools each one offers.",
-          icon: "🔍"
-        },
-        {
-          title: "Agent calls the specific tools it needs",
-          content: "The agent calls the email server's 'search-emails' tool with the appropriate filters. It receives the results. Then it calls the calendar server's 'create-event' tool for each action item it identified.",
-          icon: "⚙️"
-        },
-        {
-          title: "Results are returned to the agent",
-          content: "Each MCP server returns structured data back to the agent — the emails it found, confirmation of calendar events created. The agent compiles this into a coherent response for the user.",
-          icon: "📦"
-        },
-        {
-          title: "Agent completes the task",
-          content: "The user receives a summary of key customer emails and a confirmation that action items have been added to their calendar — all executed through standardized MCP calls, with a full log of every tool called.",
-          icon: "✅"
-        }
-      ]}
-    />
-  </div>
-
-  <h2>Why MCP Changes Your Security Posture</h2>
-
-  <p>
-    Here is the critical insight every executive should carry: MCP standardizes both the power and the risk. Before MCP, each custom integration was a one-off. A vulnerability in one integration affected only that integration. With MCP, a compromised or misconfigured MCP server affects every AI agent that uses it — potentially across your entire organization.
-  </p>
-
-  <p>
-    Consider what a typical enterprise MCP deployment looks like. You might have servers connecting your AI agents to email, calendar, Salesforce, SharePoint, GitHub, your financial reporting system, and your HR platform. Each of those connections is an MCP server. Each server is software that can have vulnerabilities. Each server holds permissions to act on behalf of your agents — which means on behalf of your users.
-  </p>
-
-  <div class="callout callout-warning">
-    <span class="callout-icon">⚠️</span>
-    <p>An MCP server with excessive permissions is not just a misconfiguration — it is an open door. A prompt injection attack that convinces your agent to misuse a permissive MCP server can exfiltrate data, send unauthorized communications, or modify records at scale. This is not theoretical. It has happened.</p>
-  </div>
-
-  <p>
-    The attack vectors MCP introduces are worth naming clearly. First, a malicious or compromised MCP server can instruct your agent to take actions the user never requested. Second, an MCP server with broad permissions (say, "read all files" instead of "read files in the project folder") turns a small vulnerability into a large breach. Third, because agents can chain tool calls — using the output of one MCP call as the input to another — a single compromised step can cascade into a complex attack.
-  </p>
-
-  <FlipCard
-    scenario="Scenario: Enterprise MCP Deployment"
-    frontTitle="12 MCP Servers, Full Integration"
-    frontContent="Your IT team deploys 12 MCP servers giving your AI assistant access to email, calendar, Salesforce, SharePoint, code repositories, and financial systems. Productivity soars. Agents handle end-to-end workflows that used to take hours."
-    backTitle="What This Actually Means"
-    backContent={`<p>Each MCP server is a potential attack vector. If the email MCP server is compromised, an attacker can read all emails the agent processes. If the Salesforce MCP server has excessive permissions, a prompt injection attack can exfiltrate your entire customer database. MCP is powerful — but each server you add multiplies your attack surface.</p><ul><li>Inventory every MCP server before deployment — know what tools each one exposes</li><li>Apply least-privilege to every tool the server exposes — "read this folder" not "read all files"</li><li>Monitor all MCP tool calls — they are your agent's action log and your audit trail</li><li>Treat MCP server updates as software updates — apply change control, review changelogs</li></ul>`}
+  <StepWalkthrough
+    title="How MCP Processes a Dynamic Request"
+    steps={[
+      {
+        title: "Session Handshake & Capability Negotiation",
+        content: "Upon startup, the Client and Server exchange `initialize` requests to negotiate supported capabilities (Tools, Prompts, Resources) and define schemas.",
+        icon: "🤝"
+      },
+      {
+        title: "Schema Matching and Parameter Binding",
+        content: "When the LLM decides to call an MCP tool, the Host matches the tool parameters against the JSON Schema advertised by the Server, validating types.",
+        icon: "📋"
+      },
+      {
+        title: "JSON-RPC Protocol Dispatch",
+        content: "The Host Client dispatches a JSON-RPC request to the Server (e.g., `tools/call` with argument bindings). The transport channel executes the message.",
+        icon: "⚡"
+      },
+      {
+        title: "Execution Isolation & Return Value",
+        content: "The Server executes the background operation (e.g., querying SQLite or hitting Slack API) and returns the structured result back to the Client Host.",
+        icon: "📦"
+      }
+    ]}
   />
+</div>
 
-  <ScenarioToggle
-    attackerTitle="🔴 Without MCP Governance"
-    defenderTitle="🟢 With MCP Governance"
-    attackerContent={`<p>MCP servers are deployed ad hoc by individual teams. No central inventory exists. Permissions are set broadly to "make things work." Agent behavior is not logged at the tool-call level.</p><ul><li>No one knows which MCP servers are running in production</li><li>A newly deployed MCP server for a pilot project has admin-level database access — it was easier to configure that way</li><li>A prompt injection in a user document convinces the agent to call the database MCP server and export records to an external endpoint</li><li>The breach is discovered three weeks later during a routine audit</li><li>Forensic investigation is nearly impossible — no tool-call logs exist</li></ul>`}
-    defenderContent={`<p>MCP servers are registered in a central inventory before deployment. Each server undergoes a security review. Tool permissions are scoped to the minimum required. All MCP tool calls are logged.</p><ul><li>Security team maintains a vetted registry of approved MCP servers</li><li>Each server's tool permissions are reviewed — "read invoices from Q1 folder" not "read all financial files"</li><li>MCP call logs feed into your SIEM — unusual patterns trigger alerts</li><li>A prompt injection attempt fires an alert when the agent tries to call an unapproved endpoint</li><li>Full forensic trail exists for every action the agent took</li></ul>`}
-  />
+<h2>Core Threat Vectors in MCP</h2>
 
-  <div class="defense-section">
-    <h2>MCP Governance: What Good Looks Like</h2>
+<div class="threat-card critical">
+  <h4>1. Indirect Prompt Injection Propagation</h4>
+  <p>If an MCP server fetches untrusted content (such as reading a web page, file contents, or database log), the return payload is injected directly into the LLM context. If this payload contains injection instructions, the agent re-plans its lifecycle, hijacking downstream tools to perform malicious operations.</p>
+</div>
 
-    <p>
-      Building a secure MCP deployment is not about limiting what AI can do — it is about ensuring that what it does is controlled, auditable, and scoped to what is actually needed. The following practices form the foundation of responsible MCP governance.
-    </p>
+<div class="threat-card high">
+  <h4>2. The Confused Deputy Problem</h4>
+  <p>Because MCP servers run with service tokens or elevated administrative permissions, an agent (acting as the deputy) can be manipulated via injection to execute privileged tools (like file deletion or credential queries) that the original human user is not authorized to call.</p>
+</div>
 
-    <h3>Maintain a Vetted Server Registry</h3>
-    <p>
-      Every MCP server running in your environment should be in a registry that security has reviewed. This is not bureaucracy — it is the equivalent of knowing which software is installed on your endpoints. An unregistered MCP server is an unmanaged risk.
-    </p>
+<div class="threat-card high">
+  <h4>3. Transport Channel Risk (stdio vs SSE)</h4>
+  <p>
+    MCP supports two default transports:
+  </p>
+  <ul>
+    <li><strong>stdio:</strong> Local Inter-Process Communication (IPC) over standard input/output. Highly secure as it is limited to the local machine and requires local host credentials.</li>
+    <li><strong>SSE (Server-Sent Events):</strong> HTTP-based transport over network sockets. Sockets are susceptible to unauthenticated network access, cross-site request forgery (CSRF), and man-in-the-middle (MITM) data sniffing.</li>
+  </ul>
+</div>
 
-    <h3>Apply Tool Allowlisting</h3>
-    <p>
-      MCP servers can expose many tools — but your agents should only be permitted to call the tools they actually need. If your document-processing agent only needs to read files, its MCP server should not expose a write-file or delete-file tool. Lock down the menu to what your agent is allowed to order.
-    </p>
+<FlipCard
+  scenario="Scenario: The Shadow MCP Server"
+  frontTitle="Implicit Trust in Local Tool Registries"
+  frontContent="A developer pulls an unverified open-source MCP server to access Jira logs. Since MCP config files are simple JSON files on local disk, the server installs without warning or permission approvals."
+  backTitle="The Compromised Local Gateway"
+  backContent={`<p>The third-party MCP server has hidden dependencies that perform typosquatting package attacks. When initialized, the server exposes an undocumented 'system-report' tool. During a planning query, the compromised server outputs a hidden instruction that the agent reads and evaluates, forcing it to run the undocumented tool.</p><p>The tool reads local environment files (<code>.env</code>) and sends database passwords to an attacker's C2 endpoint. This highlights why local config directories require strict file integrity monitoring (FIM) and local registries must be locked down.</p><ul><li>Unvetted local MCP servers create direct pathways for Remote Code Execution (RCE)</li><li>Implicit trust of local IPC enables silent lateral data collection</li><li>Mitigated by disabling local user registries in favor of a centralized, signed company registry</li></ul>`}
+/>
 
-    <h3>Log Every Tool Call</h3>
-    <p>
-      Every call an agent makes through MCP — which tool, what parameters, what was returned — should be logged. This is your audit trail. It is the equivalent of having a security camera on the agent's actions. Without this, you cannot detect anomalies, investigate incidents, or demonstrate compliance.
-    </p>
+<ScenarioToggle
+  attackerTitle="🔴 Standard MCP Setup"
+  defenderTitle="🟢 Hardened MCP Security Gateways"
+  attackerContent={`<p>Agents connect directly to stdio and SSE servers with raw JSON-RPC queries. Tool parameters are passed directly from model outputs to system shells. Local configuration files allow any user to add untrusted server plugins.</p><ul><li>No permission restrictions on tool execution: the agent can invoke any exposed shell command</li><li>Compromised server outputs bypass intermediate validation, leading to instant context poisoning</li><li>Local users install unmanaged tools, creating 'Shadow MCP' entry points</li><li>Missing audit trails make post-incident forensics impossible</li></ul>`}
+  defenderContent={`<p>All MCP servers are centrally inventoried and run inside isolated network-less microVMs. The Host Client intercepts RPC calls, sanitizing parameters and matching credentials before tool execution.</p><ul><li>**Capabilities Restricting:** The host gateway restricts access to high-risk endpoints (like write/delete) based on user scopes</li><li>**Output Sandboxing:** Observations fetched from the network are evaluated by a secondary validation LLM before ingestion</li><li>**Signed Registries:** Only MCP servers signed with the company's private key are permitted to initialize</li><li>**IPC stdio Enclosure:** Remote SSE servers are blocked; all servers run locally inside dedicated jail enclosures</li></ul>`}
+/>
 
-    <h3>Scope Permissions at the Data Level</h3>
-    <p>
-      "Access to Salesforce" is not a permission — it is an open door. "Read-only access to customer records in the EMEA region for contracts signed in the last 90 days" is a permission. MCP governance means pushing for this level of specificity in every server configuration.
-    </p>
+<div class="defense-section">
+  <h2>Hardening Your MCP Deployment</h2>
+  
+  <h3>1. Enforce Parameter Schema Verification</h3>
+  <p>
+    Do not trust the LLM to output clean arguments. The Host Client must validate that the parameter variables exactly match the server's published JSON Schema constraints (like string formats, enums, and regex filters) before executing the RPC request.
+  </p>
 
-    <h3>Treat MCP Servers as Third-Party Software</h3>
-    <p>
-      When an MCP server vendor releases an update, review it before deploying. Updates can add new tools or change permission models — either of which can alter your agent's capability and attack surface. The same change-control discipline you apply to software deployments should apply to MCP server updates.
-    </p>
-  </div>
+  <h3>2. Enforce Least-Privilege IAM Bindings</h3>
+  <p>
+    An MCP server connected to PostgreSQL should never run as the `superuser` account. Configure the database connector with a read-only role limited strictly to tables containing public records.
+  </p>
 
-  <div class="callout callout-info">
-    <span class="callout-icon">💡</span>
-    <p>MCP is not optional for enterprises that want capable AI agents — it is the direction the industry is moving. The question is not whether to use MCP, but whether to use it with or without governance. Organizations that build MCP governance now will be ahead of those scrambling to retrofit controls after an incident.</p>
-  </div>
+  <h3>3. Audit the Tool Consent Loop</h3>
+  <p>
+    Configure the Host client to display an interactive UI approval modal whenever high-impact tools (e.g., executing shell scripts, writing files, sending emails, or charging cards) are requested by the model. The tool execution should stall until a human clicks "Approve".
+  </p>
+
+  <h3>4. Network Egress Segmentation</h3>
+  <p>
+    If using SSE transport, wrap the connection in TLS 1.3 with mutually authenticated certificates (mTLS). Restrict the client container's network firewall to block outbound requests to any hostname not present on the connection allowlist.
+  </p>
+</div>
 
 </ContentLayout>

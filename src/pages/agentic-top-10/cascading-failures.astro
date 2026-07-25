@@ -1,0 +1,65 @@
+---
+import ContentLayout from '../../layouts/ContentLayout.astro';
+import FlipCard from '../../components/FlipCard.astro';
+import StepWalkthrough from '../../components/StepWalkthrough.astro';
+---
+
+<ContentLayout
+  title="ASI08: Cascading Failures"
+  description="How error propagation, uncontrolled reasoning loops, and validation drift in multi-step planning engines cause recursive resource drain and catastrophic state errors."
+  category="Agentic AI Top 10"
+  readingTime="8 min read"
+  severity="high"
+>
+
+<h2>When Small Errors Compound into System Failures</h2>
+
+<p>Passive models output a single text response; if they make an error, the user simply sees a hallucination. Autonomous agents, however, feed their own outputs back into their next step. If an agent encounters a slight parsing error or a minor tool failure, this mistake is written to context and becomes the foundation for the next planning decision. This is the risk of <strong>Cascading Failures</strong>.</p>
+
+<p>In multi-step loops (like the ReAct loop), a minor error can compound exponentially over a dozen iterations. The agent deviates further and further from its original goal, eventually executing dangerous, unpredictable actions in an attempt to recover, or trapping itself in an infinite loop that drains compute budgets and triggers API denial of service.</p>
+
+<FlipCard
+  scenario="Scenario: The Automated File Organizer"
+  frontTitle="Processing Workspace Documents"
+  frontContent="An agent is tasked with classifying and organizing thousands of project files. It reads a file, decides its target directory, and invokes a file movement tool."
+  backTitle="The Recursive Deletion Loop"
+  backContent={`<p>The agent encounters a corrupt PDF that returns an empty string from the text extraction tool. The agent's next Thought is: <em>"The file is empty, meaning it might be a temporary system file. I should clean it up."</em> It invokes the delete tool. However, the deletion returns a permission error.</p><p>Because the agent is programmed to automatically retry failed steps, it attempts to modify directory permissions to bypass the error. It recursively applies a permissions change to the parent directory and tries deleting again, eventually deleting critical configuration files in the root folder before timing out.</p><ul><li>A minor parsing error compounded into an escalation loop</li><li>The agent was allowed to retry destructive actions without human bounds</li><li>No loop-prevention or threshold checks were configured on file tools</li><li>Mitigated by strict iteration caps and non-escalating error handlers</li></ul>`}
+/>
+
+<h2>Cascading Failure Mechanics</h2>
+
+<div class="threat-card critical">
+  <h4>Recursive Planning Loops</h4>
+  <p>The agent enters an infinite reasoning cycle (e.g., repeatedly trying the same tool with slightly different prompts), resulting in massive API billing inflation and resource exhaustion.</p>
+</div>
+
+<div class="threat-card high">
+  <h4>Validation Drift</h4>
+  <p>A small formatting or data-type error propagates through multiple tools. As each tool attempts to parse the corrupted data, it produces increasingly skewed outputs, eventually leading to database corruption.</p>
+</div>
+
+<div class="threat-card medium">
+  <h4>Cascading Agent Failures</h4>
+  <p>A failure in one worker agent (such as an API rate limit) triggers a chain reaction of retries across the entire swarm, crashing the message broker or message queues.</p>
+</div>
+
+<StepWalkthrough
+  title="Building Resilient Planning Cycles"
+  steps={[
+    { title: "Implement Hard Iteration Limits", content: "Limit the maximum number of steps (e.g., max 10 steps) an agent can execute in a single reasoning cycle. Automatically terminate the agent if it exceeds the cap.", icon: "⏱️" },
+    { title: "Deploy Loop Detection Algorithms", content: "Implement run-time checks to track tool invocation history. If the agent calls the same tool with identical arguments three times consecutively, flag a loop error and halt execution.", icon: "🔄" },
+    { title: "Isolate Error Handling Logic", content: "Do not let the model handle core system errors. If a tool returns a `403 Forbidden` or `500 Server Error`, intercept it at the application layer rather than passing the raw stack trace back to the LLM.", icon: "🛡️" },
+    { title: "Configure Circuit Breakers", content: "Set up circuit breakers on API integrations. If external services fail or rate limit the agent, temporarily disable tool invocation to prevent recursive call cascades.", icon: "🔌" },
+  ]}
+/>
+
+<div class="defense-section">
+  <h3>Failure Mitigation Principles</h3>
+  <ol>
+    <li><strong>Budget Enforcement.</strong> Set strict financial and token-consumption budgets per agent session. Terminate execution immediately when thresholds are crossed.</li>
+    <li><strong>Graceful Degradation.</strong> When a tool fails, design the agent to fail safely by logging the error and alerting a human operator, rather than attempting autonomous system recovery.</li>
+    <li><strong>Immutable Sandbox State.</strong> Run code execution steps in transaction-based environments that can be rolled back to a clean state if the script fails.</li>
+  </ol>
+</div>
+
+</ContentLayout>

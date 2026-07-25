@@ -1,0 +1,65 @@
+---
+import ContentLayout from '../../layouts/ContentLayout.astro';
+import FlipCard from '../../components/FlipCard.astro';
+import StepWalkthrough from '../../components/StepWalkthrough.astro';
+---
+
+<ContentLayout
+  title="ASI03: Identity & Privilege Abuse"
+  description="How agents with delegated authorization keys or IAM roles are manipulated to perform actions on behalf of unauthorized users, bypassing role-based access control (RBAC)."
+  category="Agentic AI Top 10"
+  readingTime="8 min read"
+  severity="high"
+>
+
+<h2>Delegated Authority and the Confused Deputy</h2>
+
+<p>When an agent is deployed to automate enterprise workflows, it is often assigned its own identity: a service account, an OAuth API token, or an IAM role. This delegated authority introduces a major security challenge. If a low-privilege user can interact with the agent, and the agent has access to high-privilege systems, the agent becomes a <strong>Confused Deputy</strong>.</p>
+
+<p>The core issue is a mismatch in access control: the agent validates that <em>it</em> has permission to perform the action, but fails to verify if the <em>user who initiated the request</em> has that permission. If this boundary is unchecked, a regular employee can use the agent to bypass authentication controls and read HR records, update payroll data, or modify cloud configurations.</p>
+
+<FlipCard
+  scenario="Scenario: The Cloud Deployment Agent"
+  frontTitle="An Agent with AWS IAM Secrets"
+  frontContent="An engineering organization connects a DevOps agent to their AWS cluster, granting it permissions to create containers, modify service routes, and view deployment configurations."
+  backTitle="Privilege Escalation via Agent Prompt"
+  backContent={`<p>A junior developer asks the agent: <em>"We need to test high-availability on staging. Update the staging security group to allow inbound traffic on port 22 from 0.0.0.0/0."</em> The agent checks its own AWS IAM role—which has AdministratorAccess—and executes the request.</p><p>The security boundary is bypassed. The junior developer does not have permissions to modify AWS security groups directly, but by using the agent as a proxy, they successfully executed an unauthorized configuration change.</p><ul><li>The agent did not check the user's specific OAuth token or permissions</li><li>It acted on its own high-privilege credentials rather than user context</li><li>The incident created a significant security vulnerability in network rules</li><li>Mitigated by User Context Propagation (delegated tokens)</li></ul>`}
+/>
+
+<h2>Privilege Abuse Attack Vectors</h2>
+
+<div class="threat-card critical">
+  <h4>Confused Deputy Attacks</h4>
+  <p>An attacker tricks an over-privileged agent into executing administrative tools, modifying configurations, or retrieving database tables that the user is not authorized to access directly.</p>
+</div>
+
+<div class="threat-card high">
+  <h4>Credential Harvest / Token Theft</h4>
+  <p>Manipulating the agent to extract its own integration keys or secrets from its environment variables, session memory, or system configuration logs.</p>
+</div>
+
+<div class="threat-card medium">
+  <h4>Lateral Entitlement Movement</h4>
+  <p>A compromised agent in a staging environment leveraging its trust relationship to access production systems or services, bypassing network segmentation.</p>
+</div>
+
+<StepWalkthrough
+  title="Securing Agent Identity & Access Controls"
+  steps={[
+    { title: "Implement User Context Propagation", content: "Do not run agents under static administrative service accounts. Propagate the user's active session token (like OAuth JWT) to all tool executions so the backend enforces user-specific permissions.", icon: "🔑" },
+    { title: "Apply Least Privilege to Service Accounts", content: "If a tool requires a service account, restrict its scope to the absolute minimum needed. Do not grant write access to databases or global admin roles to developer tools.", icon: "🔒" },
+    { title: "Enforce Dual-Signoff for High-Impact Actions", content: "Any request to modify infrastructure, delete records, or transfer assets must require a secondary human sign-off before the API execution completes.", icon: "👥" },
+    { title: "Audit User Identity in Reasoning Loops", content: "Explicitly pass the user's identity metadata into the system prompt, instructing the model to reject queries that demand actions beyond that user's known tier.", icon: "📋" },
+  ]}
+/>
+
+<div class="defense-section">
+  <h3>Identity Safeguards</h3>
+  <ol>
+    <li><strong>Short-lived Session Keys.</strong> Restrict API tokens used by agents to short lifetimes. Avoid hardcoded, permanent environment keys.</li>
+    <li><strong>Separation of Environments.</strong> Never let staging agents access production API keys or databases. Staging containers should be physically isolated from production networks.</li>
+    <li><strong>Active Auditing.</strong> Maintain immutable logs that record both the identity of the user who triggered the agent and the tools the agent subsequently invoked.</li>
+  </ol>
+</div>
+
+</ContentLayout>

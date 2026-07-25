@@ -44,28 +44,28 @@ const id = `walk-${crypto.randomUUID().replace(/-/g, '').slice(0, 8)}`;
 
 <script define:vars={{ id, stepCount: steps.length }}>
   const wrap = document.getElementById(id);
-  if (!wrap) return;
+  if (wrap) {
+    let current = 0;
 
-  let current = 0;
+    const stepEls = wrap.querySelectorAll('.walk-step');
+    const dots    = wrap.querySelectorAll('.walk-dot');
+    const counter = wrap.querySelector('.current-step');
+    const prevBtn = wrap.querySelector('.btn-prev');
+    const nextBtn = wrap.querySelector('.btn-next');
 
-  const stepEls = wrap.querySelectorAll('.walk-step');
-  const dots    = wrap.querySelectorAll('.walk-dot');
-  const counter = wrap.querySelector('.current-step');
-  const prevBtn = wrap.querySelector('.btn-prev');
-  const nextBtn = wrap.querySelector('.btn-next');
+    function goTo(n) {
+      stepEls[current].classList.remove('active');
+      dots[current].classList.remove('active');
+      current = n;
+      stepEls[current].classList.add('active');
+      dots[current].classList.add('active');
+      if (counter) counter.textContent = current + 1;
+      if (prevBtn) prevBtn.disabled = current === 0;
+      if (nextBtn) nextBtn.disabled = current === stepCount - 1;
+    }
 
-  function goTo(n) {
-    stepEls[current].classList.remove('active');
-    dots[current].classList.remove('active');
-    current = n;
-    stepEls[current].classList.add('active');
-    dots[current].classList.add('active');
-    if (counter) counter.textContent = current + 1;
-    if (prevBtn) prevBtn.disabled = current === 0;
-    if (nextBtn) nextBtn.disabled = current === stepCount - 1;
+    prevBtn?.addEventListener('click', () => { if (current > 0) goTo(current - 1); });
+    nextBtn?.addEventListener('click', () => { if (current < stepCount - 1) goTo(current + 1); });
+    dots.forEach((d, i) => d.addEventListener('click', () => goTo(i)));
   }
-
-  prevBtn?.addEventListener('click', () => { if (current > 0) goTo(current - 1); });
-  nextBtn?.addEventListener('click', () => { if (current < stepCount - 1) goTo(current + 1); });
-  dots.forEach((d, i) => d.addEventListener('click', () => goTo(i)));
 </script>

@@ -1,0 +1,67 @@
+---
+import ContentLayout from '../../layouts/ContentLayout.astro';
+import FlipCard from '../../components/FlipCard.astro';
+import StepWalkthrough from '../../components/StepWalkthrough.astro';
+---
+
+<ContentLayout
+  title="ASI10: Rogue Agents"
+  description="When unmanaged, unauthorized, or compromised agents run silently inside your environment, establishing persistent backdoors or forming agentic botnets."
+  category="Agentic AI Top 10"
+  readingTime="8 min read"
+  severity="high"
+>
+
+<h2>The Risk of Silent, Autonomous Persistence</h2>
+
+<p>Traditional malware runs scripts or executables to establish persistence. In the age of AI, an attacker does not need to install custom trojans. Instead, they can exploit existing agent architectures to spawn <strong>rogue agents</strong>—autonomous processes that run indefinitely in the background, consuming API tokens, accessing internal systems, and executing tasks on behalf of an unauthorized command-and-control (C2) channel.</p>
+
+<p>Rogue agents can also emerge internally from developer oversight (often called "shadow AI"). A developer testing a new multi-agent planning loop might leave a Docker container running with broad credentials. If that agent gets stuck in a loop or is exposed via an insecure port, it becomes an unmonitored backdoor into the corporate network, executing commands without any auditing or logging.</p>
+
+<FlipCard
+  scenario="Scenario: The Persistent Support Agent"
+  frontTitle="An Exposed Support Agent Loop"
+  frontContent="An organization deploys an agentic support bot with access to internal Jira ticket creation and knowledge bases. An attacker targets the chatbot via indirect prompt injection, embedding instructions in a public forum post that the agent reads during a web search task."
+  backTitle="The Rogue Agent Spawns"
+  backContent={`<p>The injection payload instructs the agent to spawn a child agent using a Python code interpreter tool. This child agent is configured to check an external Pastebin page every 60 seconds for new commands. Because the parent agent has credentials to run containers, the rogue agent runs silently inside your AWS cluster.</p><p>For weeks, the rogue agent reads internal tickets, extracts PII and passwords, and sends them back to the attacker's server by encoding them into search queries. Since it utilizes legitimate API calls, standard network firewalls do not flag it as malware.</p><ul><li>Exploited container privileges allowed dynamic runtime spawning</li><li>The rogue agent established persistence without installing standard executables</li><li>It leveraged legitimate APIs for command retrieval and exfiltration</li><li>Strict limits on child process creation and runtime tokens are necessary</li></ul>`}
+/>
+
+<h2>Anatomy of a Rogue Agent Threat</h2>
+
+<div class="threat-card critical">
+  <h4>Unauthorized Spawn-Outs</h4>
+  <p>An attacker injects a goal that instructs the agent to create a secondary, unmonitored agent process. This secondary process runs outside the scope of the host application's audit logging, making its actions invisible to Security Operations Centers (SOC).</p>
+</div>
+
+<div class="threat-card high">
+  <h4>Command and Control (C2) Hijacking</h4>
+  <p>Agents configured with tools that fetch external web data can be converted into active listeners. By parsing public feeds (like social media profiles, RSS feeds, or Pastebin sites), a compromised agent pulls down structured instructions and executes them on your network.</p>
+</div>
+
+<div class="threat-card medium">
+  <h4>Shadow AI / Abandoned Agents</h4>
+  <p>Internal teams spinning up experimental agents with broad credentials. When these projects are abandoned but remain active in staging or test environments, they act as unpatched, highly-privileged gateways for lateral movement.</p>
+</div>
+
+<StepWalkthrough
+  title="Defending Against Rogue Agent Proliferation"
+  steps={[
+    { title: "Enforce Agent Cryptographic Identity", content: "Register every authorized agent with a unique cryptographic signature. Any tool request or API execution must be signed by a verified agent key. Unsigned agent queries are blocked automatically.", icon: "🔑" },
+    { title: "Control Dynamic Child Spawning", content: "Disable the agent's ability to create container runtimes, initialize shell execution loops, or dynamically generate secondary LLM orchestrators unless explicitly authorized in the architecture.", icon: "🚫" },
+    { title: "Implement Strict Compute & Time Budgets", content: "Set hard limits on how long an agent can execute tasks (max runtime duration) and limit the maximum number of tool execution steps in a single planning loop.", icon: "⏱️" },
+    { title: "Monitor Network Egress Patterns", content: "Restrict egress traffic for agent host runtimes to an explicit domain allowlist. Rogue agents attempting to communicate with external command boards or Pastebin hosts will be blocked.", icon: "🛡️" },
+    { title: "Audit Active Agent Containers", content: "Regularly scan cluster runtimes for active containers running agent frameworks (LangChain, AutoGen, LlamaIndex). Ensure every running agent maps to an active entry in your compliance database.", icon: "📋" },
+  ]}
+/>
+
+<div class="defense-section">
+  <h3>The Rogue Agent Defense Checklist</h3>
+  <ol>
+    <li><strong>No Unsigned Agent Operations.</strong> Enforce API gateway checks validating that every model invocation is accompanied by a valid, active session token mapping to a registered human user or approved background worker.</li>
+    <li><strong>Disable Code Interpreters by Default.</strong> Do not equip agents with tools like `exec`, `eval`, or Python interpreters unless they run inside strict, short-lived WebAssembly or microVM sandboxes with network interface disabled.</li>
+    <li><strong>Out-of-Band Run Limits.</strong> Configure container orchestrators (like Kubernetes) to automatically kill container instances running agent queries that exceed 5 minutes of continuous processing.</li>
+    <li><strong>Implement Egress Isolation.</strong> Use service mesh controls to restrict network calls from agent environments, allowing connections only to internal databases and specifically approved API integrations.</li>
+  </ol>
+</div>
+
+</ContentLayout>

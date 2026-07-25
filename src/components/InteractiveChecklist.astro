@@ -257,120 +257,120 @@ function makeId(gi: number, ii: number) {
 
 <script define:vars={{ id, storageKey, total }}>
   const wrap = document.getElementById(id);
-  if (!wrap) return;
+  if (wrap) {
+    const fill       = wrap.querySelector('.checklist-progress-fill');
+    const count      = wrap.querySelector('.done-count');
+    const boxes      = wrap.querySelectorAll('input[type="checkbox"]');
+    const scoreNum   = document.getElementById(`${id}-score-num`);
+    const gradeBadge = document.getElementById(`${id}-grade-badge`);
+    const gradeTitle = document.getElementById(`${id}-grade-title`);
+    const gradeDesc  = document.getElementById(`${id}-grade-desc`);
+    const btnReset   = document.getElementById(`${id}-btn-reset`);
+    const btnSelectAll = document.getElementById(`${id}-btn-selectall`);
+    const btnPrint   = document.getElementById(`${id}-btn-print`);
 
-  const fill       = wrap.querySelector('.checklist-progress-fill');
-  const count      = wrap.querySelector('.done-count');
-  const boxes      = wrap.querySelectorAll('input[type="checkbox"]');
-  const scoreNum   = document.getElementById(`${id}-score-num`);
-  const gradeBadge = document.getElementById(`${id}-grade-badge`);
-  const gradeTitle = document.getElementById(`${id}-grade-title`);
-  const gradeDesc  = document.getElementById(`${id}-grade-desc`);
-  const btnReset   = document.getElementById(`${id}-btn-reset`);
-  const btnSelectAll = document.getElementById(`${id}-btn-selectall`);
-  const btnPrint   = document.getElementById(`${id}-btn-print`);
+    function load() {
+      let saved = {};
+      try {
+        const raw = localStorage.getItem(storageKey);
+        const parsed = JSON.parse(raw || '{}');
+        if (parsed && typeof parsed === 'object' && !Array.isArray(parsed)) {
+          saved = parsed;
+        }
+      } catch (_) {}
 
-  function load() {
-    let saved = {};
-    try {
-      const raw = localStorage.getItem(storageKey);
-      const parsed = JSON.parse(raw || '{}');
-      if (parsed && typeof parsed === 'object' && !Array.isArray(parsed)) {
-        saved = parsed;
+      boxes.forEach((box) => {
+        const checked = saved[box.dataset.id] === true;
+        box.checked = checked;
+        box.closest('.checklist-item')?.classList.toggle('checked', checked);
+      });
+      update();
+    }
+
+    function update() {
+      const done = Array.from(boxes).filter((b) => b.checked).length;
+      const pct  = Math.round(total > 0 ? (done / total) * 100 : 0);
+
+      if (fill) fill.style.width = pct + '%';
+      if (count) count.textContent = String(done);
+      if (scoreNum) scoreNum.textContent = pct + '%';
+
+      // Grade calculation
+      let grade = 'Grade F';
+      let title = 'Initial / High Risk';
+      let desc = 'Minimal agentic controls in place. Immediate risk of prompt injection or excessive agency.';
+      let gradeClass = '';
+
+      if (pct >= 90) {
+        grade = 'Grade A+';
+        title = 'Resilient Leader';
+        desc = 'World-class agentic security posture with comprehensive sandboxing, MCP governance, and HITL oversight.';
+        gradeClass = 'grade-a';
+      } else if (pct >= 75) {
+        grade = 'Grade A';
+        title = 'Advanced Posture';
+        desc = 'Strong security controls in place. Minor gaps remain in inter-agent isolation or memory guardrails.';
+        gradeClass = 'grade-a';
+      } else if (pct >= 55) {
+        grade = 'Grade B';
+        title = 'Established Posture';
+        desc = 'Basic model controls implemented. Vulnerable to indirect prompt injection or side-channel exfiltration.';
+        gradeClass = 'grade-b';
+      } else if (pct >= 35) {
+        grade = 'Grade C';
+        title = 'Emerging Posture';
+        desc = 'Initial AI guidelines established. Lacks runtime tool sandboxing or granular MCP permissions.';
+        gradeClass = 'grade-c';
       }
-    } catch (_) {}
+
+      if (gradeBadge) {
+        gradeBadge.textContent = grade;
+        gradeBadge.className = 'grade-badge ' + gradeClass;
+      }
+      if (gradeTitle) gradeTitle.textContent = title;
+      if (gradeDesc) gradeDesc.textContent = desc;
+    }
+
+    function save() {
+      try {
+        const data = {};
+        boxes.forEach((b) => { data[b.dataset.id] = b.checked; });
+        localStorage.setItem(storageKey, JSON.stringify(data));
+      } catch (_) {}
+    }
 
     boxes.forEach((box) => {
-      const checked = saved[box.dataset.id] === true;
-      box.checked = checked;
-      box.closest('.checklist-item')?.classList.toggle('checked', checked);
+      box.addEventListener('change', () => {
+        box.closest('.checklist-item')?.classList.toggle('checked', box.checked);
+        save();
+        update();
+      });
     });
-    update();
-  }
 
-  function update() {
-    const done = Array.from(boxes).filter((b) => b.checked).length;
-    const pct  = Math.round(total > 0 ? (done / total) * 100 : 0);
-
-    if (fill) fill.style.width = pct + '%';
-    if (count) count.textContent = String(done);
-    if (scoreNum) scoreNum.textContent = pct + '%';
-
-    // Grade calculation
-    let grade = 'Grade F';
-    let title = 'Initial / High Risk';
-    let desc = 'Minimal agentic controls in place. Immediate risk of prompt injection or excessive agency.';
-    let gradeClass = '';
-
-    if (pct >= 90) {
-      grade = 'Grade A+';
-      title = 'Resilient Leader';
-      desc = 'World-class agentic security posture with comprehensive sandboxing, MCP governance, and HITL oversight.';
-      gradeClass = 'grade-a';
-    } else if (pct >= 75) {
-      grade = 'Grade A';
-      title = 'Advanced Posture';
-      desc = 'Strong security controls in place. Minor gaps remain in inter-agent isolation or memory guardrails.';
-      gradeClass = 'grade-a';
-    } else if (pct >= 55) {
-      grade = 'Grade B';
-      title = 'Established Posture';
-      desc = 'Basic model controls implemented. Vulnerable to indirect prompt injection or side-channel exfiltration.';
-      gradeClass = 'grade-b';
-    } else if (pct >= 35) {
-      grade = 'Grade C';
-      title = 'Emerging Posture';
-      desc = 'Initial AI guidelines established. Lacks runtime tool sandboxing or granular MCP permissions.';
-      gradeClass = 'grade-c';
-    }
-
-    if (gradeBadge) {
-      gradeBadge.textContent = grade;
-      gradeBadge.className = 'grade-badge ' + gradeClass;
-    }
-    if (gradeTitle) gradeTitle.textContent = title;
-    if (gradeDesc) gradeDesc.textContent = desc;
-  }
-
-  function save() {
-    try {
-      const data = {};
-      boxes.forEach((b) => { data[b.dataset.id] = b.checked; });
-      localStorage.setItem(storageKey, JSON.stringify(data));
-    } catch (_) {}
-  }
-
-  boxes.forEach((box) => {
-    box.addEventListener('change', () => {
-      box.closest('.checklist-item')?.classList.toggle('checked', box.checked);
-      save();
-      update();
+    btnReset?.addEventListener('click', () => {
+      if (confirm('Reset all checklist progress?')) {
+        boxes.forEach((box) => {
+          box.checked = false;
+          box.closest('.checklist-item')?.classList.remove('checked');
+        });
+        save();
+        update();
+      }
     });
-  });
 
-  btnReset?.addEventListener('click', () => {
-    if (confirm('Reset all checklist progress?')) {
+    btnSelectAll?.addEventListener('click', () => {
       boxes.forEach((box) => {
-        box.checked = false;
-        box.closest('.checklist-item')?.classList.remove('checked');
+        box.checked = true;
+        box.closest('.checklist-item')?.classList.add('checked');
       });
       save();
       update();
-    }
-  });
-
-  btnSelectAll?.addEventListener('click', () => {
-    boxes.forEach((box) => {
-      box.checked = true;
-      box.closest('.checklist-item')?.classList.add('checked');
     });
-    save();
-    update();
-  });
 
-  btnPrint?.addEventListener('click', () => {
-    window.print();
-  });
+    btnPrint?.addEventListener('click', () => {
+      window.print();
+    });
 
-  load();
+    load();
+  }
 </script>
