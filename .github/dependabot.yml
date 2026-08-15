@@ -20,6 +20,9 @@ updates:
         update-types:
           - minor
           - patch
+    ignore:
+      - dependency-name: "typescript"
+        update-types: ["version-update:semver-major"]
 
   # Keep GitHub Actions up to date
   - package-ecosystem: github-actions
