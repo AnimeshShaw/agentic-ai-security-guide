@@ -6,194 +6,258 @@ import ThreatMatrix from '../components/ThreatMatrix.astro';
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 ---
 
+<!--
+  THESIS: A cold, authoritative threat-intelligence platform — not a SaaS marketing page.
+  The visual language is derived from SIEM dashboards and incident-response tooling.
+  OWN-WORLD: Near-black canvas (#080C14), cold zinc neutrals, electric cyan accent.
+  Geist display + Geist Mono. Corner radius: 6px. No gradient text. No eyebrows.
+  STORY: Visitor understands the scope of agentic AI risk, selects their role, and enters the guide.
+  FIRST VIEWPORT: Left-aligned headline (no eyebrow), right: live threat console panel.
+  FORM: Threat Console direction — security intelligence tool aesthetic.
+  FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, and DESIGN.md
+-->
 <BaseLayout title="Home">
   <div class="site-wrapper">
     <Sidebar currentPath="/" />
     <main class="home-main fade-in">
 
-      <!-- Hero Section -->
+      <!-- ── Hero ──────────────────────────────────────────────── -->
       <section class="hero">
         <div class="hero-inner">
-          <div class="hero-eyebrow">
-            <span class="eyebrow-badge">🔐 Executive & Technical Security Guide</span>
-            <span class="eyebrow-badge outline">2025–2026 Edition</span>
-          </div>
-          <h1 class="hero-title">
-            Agentic AI Security<br/>
-            <span class="hero-accent">Governance & Threat Handbook</span>
-          </h1>
-          <p class="hero-desc">
-            The definitive blueprint for governing autonomous AI agents. Deeply researched guidance for CISOs, CTOs, CIOs, and risk leaders navigating the paradigm shift from passive text generation to autonomous tool execution.
-          </p>
+          <div class="hero-copy">
+            <div class="hero-label">
+              <span class="scan-dot" aria-hidden="true"></span>
+              <span>Agentic AI Security · 2025–2026 Edition</span>
+            </div>
 
-          <div class="hero-cta-row">
-            <a href={base + "/foundations/what-is-agentic-ai"} class="btn-primary">Start Reading →</a>
-            <a href={base + "/governance/leadership-checklist"} class="btn-secondary">Leadership Checklist (50 Qs)</a>
-            <button class="btn-search-hero" data-open-search>
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <circle cx="11" cy="11" r="8"/>
-                <line x1="21" y1="21" x2="16.65" y2="16.65"/>
-              </svg>
-              <span>Search 40+ Topics...</span>
-              <kbd>⌘K</kbd>
-            </button>
+            <h1 class="hero-h1">
+              Autonomous agents execute.<br/>
+              <span class="hero-h1-dim">What stops them from<br/>executing the wrong thing?</span>
+            </h1>
+
+            <p class="hero-p">
+              The definitive governance handbook for CISOs, CTOs, and risk leaders. From prompt injection to rogue agents — every threat explained, every control mapped.
+            </p>
+
+            <div class="hero-actions">
+              <a href={base + "/foundations/what-is-agentic-ai"} class="btn-primary">
+                Start Reading
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+              </a>
+              <a href={base + "/governance/leadership-checklist"} class="btn-ghost">
+                50-Point Audit Checklist
+              </a>
+            </div>
+
+            <dl class="hero-stats">
+              <div class="hero-stat">
+                <dt>40+</dt>
+                <dd>In-depth pages</dd>
+              </div>
+              <div class="hero-stat">
+                <dt>20</dt>
+                <dd>Mapped threats</dd>
+              </div>
+              <div class="hero-stat">
+                <dt>50</dt>
+                <dd>Audit checklist items</dd>
+              </div>
+              <div class="hero-stat">
+                <dt>100%</dt>
+                <dd>Vendor-neutral</dd>
+              </div>
+            </dl>
           </div>
 
-          <div class="hero-stat-row">
-            <div class="hero-stat">
-              <span class="stat-num">40</span>
-              <span class="stat-label">In-depth Pages</span>
+          <!-- Threat console panel — real content, not decorative -->
+          <div class="console-panel" aria-label="Sample threat intelligence panel">
+            <div class="console-header">
+              <span class="console-title">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>
+                Active Threat Indicators
+              </span>
+              <span class="console-live">
+                <span class="live-dot" aria-hidden="true"></span>
+                LIVE
+              </span>
             </div>
-            <div class="hero-stat">
-              <span class="stat-num">20</span>
-              <span class="stat-label">OWASP & Agentic Threats</span>
+            <div class="console-body">
+              <a href={base + "/llm-top-10/prompt-injection"} class="console-row console-row--critical">
+                <span class="console-sev">CRITICAL</span>
+                <span class="console-id">LLM01</span>
+                <span class="console-name">Prompt Injection</span>
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+              </a>
+              <a href={base + "/agentic-top-10/agent-goal-hijack"} class="console-row console-row--critical">
+                <span class="console-sev">CRITICAL</span>
+                <span class="console-id">ASI01</span>
+                <span class="console-name">Agent Goal Hijack</span>
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+              </a>
+              <a href={base + "/llm-top-10/supply-chain"} class="console-row console-row--high">
+                <span class="console-sev">HIGH</span>
+                <span class="console-id">LLM03</span>
+                <span class="console-name">Supply Chain Risks</span>
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+              </a>
+              <a href={base + "/agentic-top-10/memory-poisoning"} class="console-row console-row--high">
+                <span class="console-sev">HIGH</span>
+                <span class="console-id">ASI05</span>
+                <span class="console-name">Memory Poisoning</span>
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+              </a>
+              <a href={base + "/agentic-top-10/supply-chain"} class="console-row console-row--high">
+                <span class="console-sev">HIGH</span>
+                <span class="console-id">ASI04</span>
+                <span class="console-name">MCP Tool Hijacking</span>
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+              </a>
+              <a href={base + "/llm-top-10/misinformation"} class="console-row console-row--medium">
+                <span class="console-sev">MEDIUM</span>
+                <span class="console-id">LLM09</span>
+                <span class="console-name">Misinformation</span>
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+              </a>
             </div>
-            <div class="hero-stat">
-              <span class="stat-num">50</span>
-              <span class="stat-label">Audit Checklist Items</span>
-            </div>
-            <div class="hero-stat">
-              <span class="stat-num">100%</span>
-              <span class="stat-label">Vendor-Neutral & Open</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="hero-visual" aria-hidden="true">
-          <div class="glass-card-stack">
-            <div class="glass-card card-1">
-              <div class="card-tag danger">ASI01: Agent Goal Hijack</div>
-              <div class="card-body">Tool output contains indirect injection payload...</div>
-            </div>
-            <div class="glass-card card-2">
-              <div class="card-tag accent">MCP Protocol Gateway</div>
-              <div class="card-body">Capability negotiation & tool consent bounds enforced.</div>
-            </div>
-            <div class="glass-card card-3">
-              <div class="card-tag defense">eBPF Sandbox Active</div>
-              <div class="card-body">Isolated execution runtime. Zero privilege leak.</div>
+            <div class="console-footer">
+              <a href={base + "/llm-top-10"} class="console-footer-link">View all 20 threats →</a>
+              <button class="console-search-btn" data-open-search>
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                Search ⌘K
+              </button>
             </div>
           </div>
         </div>
       </section>
 
-      <!-- Role-Based Navigation Path Selector -->
-      <section class="role-selector-section">
-        <div class="section-container">
-          <div class="section-header-centered">
-            <span class="section-badge">Targeted Entry Points</span>
-            <h2>Select Your Role for Tailored Reading Paths</h2>
-            <p>Whether you're presenting to the board, auditing MCP tools, or designing guardrails — jump directly to what matters most.</p>
+      <!-- ── Role Selector ──────────────────────────────────────── -->
+      <section class="role-section">
+        <div class="section-wrap">
+          <div class="role-header">
+            <h2 class="section-h2">Select your role</h2>
+            <p class="section-p">Tailored reading paths for each leadership function — jump directly to what matters most for your responsibility area.</p>
           </div>
 
-          <div class="role-tabs-wrapper">
-            <div class="role-buttons">
-              <button class="role-btn active" data-role="ciso">CISO / Security VP</button>
-              <button class="role-btn" data-role="cto">CTO / CIO</button>
-              <button class="role-btn" data-role="board">Board Member</button>
-              <button class="role-btn" data-role="risk">Risk Officer</button>
-              <button class="role-btn" data-role="vendor">Procurement / Vendor</button>
+          <div class="role-ui">
+            <div class="role-tabs" role="tablist" aria-label="Role-based reading paths">
+              <button class="role-tab active" data-role="ciso" role="tab" aria-selected="true">CISO / Security VP</button>
+              <button class="role-tab" data-role="cto" role="tab" aria-selected="false">CTO / CIO</button>
+              <button class="role-tab" data-role="board" role="tab" aria-selected="false">Board Member</button>
+              <button class="role-tab" data-role="risk" role="tab" aria-selected="false">Risk Officer</button>
+              <button class="role-tab" data-role="vendor" role="tab" aria-selected="false">Procurement</button>
             </div>
 
-            <div class="role-content-box" id="role-content">
-              <!-- Content dynamically rendered via inline script -->
+            <div class="role-panel" id="role-content" role="tabpanel">
+              <!-- Rendered by inline script -->
             </div>
           </div>
         </div>
       </section>
 
-      <!-- Threat Matrix Explorer -->
+      <!-- ── Threat Matrix ────────────────────────────────────── -->
       <section class="matrix-section">
-        <div class="section-container">
-          <div class="section-header-centered">
-            <span class="section-badge">Threat Catalog Explorer</span>
-            <h2>OWASP LLM & Agentic Security Risk Matrix</h2>
-            <p>Explore all 20 canonical AI vulnerabilities — categorized by attack domain and severity level.</p>
-          </div>
+        <div class="section-wrap">
+          <h2 class="section-h2">OWASP LLM & Agentic Security Risk Matrix</h2>
+          <p class="section-p">All 20 canonical AI vulnerabilities — categorized by attack domain and severity. Click any entry to read the full breakdown.</p>
           <ThreatMatrix />
         </div>
       </section>
 
-      <!-- Content Map Grid -->
-      <section class="content-map">
-        <div class="section-container">
-          <h2 class="section-heading">Full Guide Overview</h2>
-          <div class="map-grid">
+      <!-- ── Guide Index ──────────────────────────────────────── -->
+      <section class="guide-index">
+        <div class="section-wrap">
+          <h2 class="section-h2">Full Guide Overview</h2>
+          <div class="guide-grid">
 
-            <div class="map-section">
-              <div class="map-icon">🏗️</div>
-              <div class="map-section-title">Part 1 — Foundations</div>
-              <p class="map-section-desc">What agentic AI actually is. How it works under the hood. Why the security risk is categorically different.</p>
-              <ul class="map-links">
-                <li><a href={base + "/foundations/what-is-agentic-ai"}>What is Agentic AI? →</a></li>
-                <li><a href={base + "/foundations/how-agents-work"}>How Agents Work →</a></li>
-                <li><a href={base + "/foundations/why-security-matters"}>Why Security Matters →</a></li>
+            <article class="guide-part">
+              <div class="guide-part-label">
+                <span class="mono-tag">[F]</span>
+                <span>Part 1 — Foundations</span>
+              </div>
+              <p class="guide-part-desc">What agentic AI actually is. How it works under the hood. Why the security risk is categorically different from classic LLM chatbots.</p>
+              <ul class="guide-links">
+                <li><a href={base + "/foundations/what-is-agentic-ai"}>What is Agentic AI?</a></li>
+                <li><a href={base + "/foundations/how-agents-work"}>How Agents Work</a></li>
+                <li><a href={base + "/foundations/why-security-matters"}>Why Security Matters</a></li>
               </ul>
-            </div>
+            </article>
 
-            <div class="map-section threat">
-              <div class="map-icon">⚠️</div>
-              <div class="map-section-title">Part 2 — Threat Landscape</div>
-              <p class="map-section-desc">Where agents are vulnerable. Prompt injection explained plainly. Real incidents that have already happened.</p>
-              <ul class="map-links">
-                <li><a href={base + "/threats/attack-surface"}>Attack Surface →</a></li>
-                <li><a href={base + "/threats/prompt-injection"}>Prompt Injection →</a></li>
-                <li><a href={base + "/threats/real-world-incidents"}>Real-World Incidents →</a></li>
+            <article class="guide-part guide-part--threat">
+              <div class="guide-part-label">
+                <span class="mono-tag mono-tag--danger">[T]</span>
+                <span>Part 2 — Threat Landscape</span>
+              </div>
+              <p class="guide-part-desc">Where agents are vulnerable. Prompt injection explained plainly. Real incidents that have already happened in the wild.</p>
+              <ul class="guide-links">
+                <li><a href={base + "/threats/attack-surface"}>Attack Surface</a></li>
+                <li><a href={base + "/threats/prompt-injection"}>Prompt Injection</a></li>
+                <li><a href={base + "/threats/real-world-incidents"}>Real-World Incidents</a></li>
               </ul>
-            </div>
+            </article>
 
-            <div class="map-section highlight">
-              <div class="map-icon">🔟</div>
-              <div class="map-section-title">OWASP LLM Top 10</div>
-              <p class="map-section-desc">The official OWASP top 10 vulnerabilities for large language models — every one explained with interactive examples.</p>
-              <ul class="map-links">
+            <article class="guide-part guide-part--owasp">
+              <div class="guide-part-label">
+                <span class="mono-tag mono-tag--accent">[O]</span>
+                <span>OWASP LLM Top 10</span>
+              </div>
+              <p class="guide-part-desc">The official OWASP top 10 vulnerabilities for large language models — every one explained with interactive examples.</p>
+              <ul class="guide-links">
                 <li><a href={base + "/llm-top-10"}>Explore OWASP LLM Top 10 →</a></li>
               </ul>
-            </div>
+            </article>
 
-            <div class="map-section highlight">
-              <div class="map-icon">🤖</div>
-              <div class="map-section-title">Agentic AI Top 10</div>
-              <p class="map-section-desc">The 10 critical risks unique to autonomous agents — from memory poisoning to runaway action loops.</p>
-              <ul class="map-links">
+            <article class="guide-part guide-part--agentic">
+              <div class="guide-part-label">
+                <span class="mono-tag mono-tag--accent">[A]</span>
+                <span>Agentic AI Top 10</span>
+              </div>
+              <p class="guide-part-desc">The 10 critical risks unique to autonomous agents — from memory poisoning to runaway action loops.</p>
+              <ul class="guide-links">
                 <li><a href={base + "/agentic-top-10"}>Explore Agentic AI Top 10 →</a></li>
               </ul>
-            </div>
+            </article>
 
-            <div class="map-section">
-              <div class="map-icon">⚙️</div>
-              <div class="map-section-title">Part 3 — Core Technologies</div>
-              <p class="map-section-desc">MCP, LiteLLM, NeMo Guardrails, sandboxing — the tools that exist to protect you, explained simply.</p>
-              <ul class="map-links">
-                <li><a href={base + "/technologies/mcp-protocol"}>MCP Protocol →</a></li>
-                <li><a href={base + "/technologies/litellm-proxy"}>LiteLLM Proxy →</a></li>
-                <li><a href={base + "/technologies/nemo-guardrails"}>NeMo Guardrails →</a></li>
-                <li><a href={base + "/technologies/sandboxing"}>Sandboxing Agents →</a></li>
+            <article class="guide-part">
+              <div class="guide-part-label">
+                <span class="mono-tag">[C]</span>
+                <span>Part 3 — Core Technologies</span>
+              </div>
+              <p class="guide-part-desc">MCP, LiteLLM, NeMo Guardrails, sandboxing — the tools that exist to protect agentic systems, explained for implementers.</p>
+              <ul class="guide-links">
+                <li><a href={base + "/technologies/mcp-protocol"}>MCP Protocol</a></li>
+                <li><a href={base + "/technologies/litellm-proxy"}>LiteLLM Proxy</a></li>
+                <li><a href={base + "/technologies/nemo-guardrails"}>NeMo Guardrails</a></li>
+                <li><a href={base + "/technologies/sandboxing"}>Sandboxing Agents</a></li>
               </ul>
-            </div>
+            </article>
 
-            <div class="map-section">
-              <div class="map-icon">📋</div>
-              <div class="map-section-title">Part 4 — Governance</div>
-              <p class="map-section-desc">NIST AI RMF, EU AI Act, ISO 42001. What you must govern. 50 questions every leader should be asking.</p>
-              <ul class="map-links">
-                <li><a href={base + "/governance/compliance-frameworks"}>Compliance Frameworks →</a></li>
-                <li><a href={base + "/governance/leadership-checklist"}>Interactive Readiness Checklist →</a></li>
+            <article class="guide-part">
+              <div class="guide-part-label">
+                <span class="mono-tag">[G]</span>
+                <span>Part 4 — Governance</span>
+              </div>
+              <p class="guide-part-desc">NIST AI RMF, EU AI Act, ISO 42001. What you must govern. 50 questions every security leader should be asking today.</p>
+              <ul class="guide-links">
+                <li><a href={base + "/governance/compliance-frameworks"}>Compliance Frameworks</a></li>
+                <li><a href={base + "/governance/leadership-checklist"}>Interactive Readiness Checklist</a></li>
               </ul>
-            </div>
+            </article>
 
           </div>
         </div>
       </section>
 
-      <!-- Bottom CTA -->
+      <!-- ── Bottom CTA ───────────────────────────────────────── -->
       <section class="bottom-cta">
         <div class="bottom-cta-inner">
-          <h2>Ready to govern autonomous AI in your organization?</h2>
-          <p>Start with the foundations or evaluate your security posture with our 50-question leadership checklist.</p>
-          <div class="cta-btns">
-            <a href={base + "/foundations/what-is-agentic-ai"} class="btn-primary large">Begin with Part 1 →</a>
-            <a href={base + "/governance/leadership-checklist"} class="btn-secondary">Run Readiness Check</a>
+          <p class="cta-pre">Ready to govern autonomous AI in your organization?</p>
+          <h2 class="cta-h2">Start with foundations or run the 50-point readiness audit.</h2>
+          <div class="cta-actions">
+            <a href={base + "/foundations/what-is-agentic-ai"} class="btn-primary btn-primary--lg">
+              Begin Part 1
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </a>
+            <a href={base + "/governance/leadership-checklist"} class="btn-ghost">Run Readiness Check</a>
           </div>
         </div>
       </section>
@@ -212,89 +276,174 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
     .home-main { margin-left: 0; }
   }
 
-  /* ─── Hero Section ─────────────────────────────────────────── */
-  .hero {
-    background: linear-gradient(135deg, #0B1120 0%, #162036 50%, #070D1A 100%);
-    color: var(--zone-text);
-    padding: 5rem 4rem 4.5rem;
-    display: flex;
-    align-items: center;
-    gap: 3rem;
-    position: relative;
-    overflow: hidden;
-    min-height: 540px;
-    border-bottom: 1px solid var(--zone-border);
+  /* ── Shared Section Wrapper ──────────────────────────────── */
+  .section-wrap {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 3rem;
   }
 
+  @media (max-width: 768px) {
+    .section-wrap { padding: 0 1.25rem; }
+  }
+
+  .section-h2 {
+    font-size: clamp(1.5rem, 2.8vw, 2rem);
+    font-weight: 700;
+    letter-spacing: -0.025em;
+    margin-bottom: 0.6rem;
+    margin-top: 0;
+  }
+
+  .section-p {
+    color: var(--text-secondary);
+    font-size: 1rem;
+    max-width: 60ch;
+    margin-bottom: 0;
+  }
+
+  /* ── Buttons ─────────────────────────────────────────────── */
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.7rem 1.5rem;
+    background: var(--accent);
+    color: #000;
+    border-radius: var(--radius);
+    font-weight: 700;
+    font-size: 0.9rem;
+    transition: all var(--transition);
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+  }
+
+  .btn-primary:hover {
+    background: var(--accent-hover);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 18px var(--accent-glow);
+    text-decoration: none;
+    color: #000;
+  }
+
+  .btn-primary--lg {
+    padding: 0.85rem 2rem;
+    font-size: 0.95rem;
+  }
+
+  .btn-ghost {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.7rem 1.4rem;
+    background: transparent;
+    color: var(--zone-text-secondary);
+    border: 1px solid var(--zone-border-2);
+    border-radius: var(--radius);
+    font-weight: 500;
+    font-size: 0.9rem;
+    transition: all var(--transition);
+    text-decoration: none;
+  }
+
+  .btn-ghost:hover {
+    border-color: var(--zone-accent);
+    color: var(--zone-accent);
+    text-decoration: none;
+  }
+
+  /* ── Hero ────────────────────────────────────────────────── */
+  .hero {
+    background: var(--zone-bg);
+    color: var(--zone-text);
+    padding: 4.5rem 3rem 4rem;
+    border-bottom: 1px solid var(--zone-border);
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* Scan-line top bar — single, disciplined accent use */
   .hero::before {
     content: '';
     position: absolute;
     top: 0; left: 0; right: 0;
-    height: 3px;
-    background: linear-gradient(90deg, #6366F1, #38BDF8, #22C55E);
+    height: 2px;
+    background: var(--zone-accent);
+    opacity: 0.9;
   }
 
+  /* Subtle ambient glow — restrained, not AI-blob */
   .hero::after {
     content: '';
     position: absolute;
-    inset: 0;
-    background: radial-gradient(ellipse at 75% 40%, rgba(99,102,241,0.18) 0%, transparent 60%);
+    bottom: -60px;
+    right: -60px;
+    width: 420px;
+    height: 420px;
+    background: radial-gradient(circle, rgba(0,212,255,0.05) 0%, transparent 65%);
     pointer-events: none;
   }
 
-  .hero-inner { flex: 1; max-width: 650px; position: relative; z-index: 1; }
+  .hero-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 380px;
+    gap: 4rem;
+    align-items: center;
+    position: relative;
+    z-index: 1;
+  }
 
-  .hero-eyebrow {
+  /* ── Hero Copy ───────────────────────────────────────────── */
+  .hero-label {
     display: flex;
+    align-items: center;
     gap: 0.5rem;
-    margin-bottom: 1.25rem;
-    flex-wrap: wrap;
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    color: var(--zone-accent);
+    letter-spacing: 0.04em;
+    margin-bottom: 1.5rem;
   }
 
-  .eyebrow-badge {
+  .scan-dot {
     display: inline-block;
-    font-size: 0.75rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    padding: 0.3rem 0.8rem;
-    border-radius: 99px;
-    background: rgba(99,102,241,0.2);
-    color: #A5B4FC;
-    border: 1px solid rgba(99,102,241,0.3);
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--zone-accent);
+    animation: pulse 2s ease-in-out infinite;
   }
 
-  .eyebrow-badge.outline {
-    background: transparent;
-    color: var(--zone-text-muted);
-    border-color: var(--zone-border);
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
   }
 
-  .hero-title {
-    font-family: var(--font-display);
-    font-size: clamp(2.3rem, 4.5vw, 3.4rem);
+  .hero-h1 {
+    font-size: clamp(2.2rem, 4vw, 3.2rem);
     font-weight: 800;
     line-height: 1.1;
+    letter-spacing: -0.03em;
     color: var(--zone-text);
     margin-bottom: 1.25rem;
-    letter-spacing: -0.03em;
   }
 
-  .hero-accent {
-    background: linear-gradient(135deg, #6366F1, #38BDF8, #22C55E);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
-
-  .hero-desc {
-    font-size: 1.15rem;
+  .hero-h1-dim {
     color: var(--zone-text-secondary);
-    line-height: 1.75;
+  }
+
+  .hero-p {
+    font-size: 1.05rem;
+    color: var(--zone-text-secondary);
+    line-height: 1.7;
+    max-width: 52ch;
     margin-bottom: 2rem;
   }
 
-  .hero-cta-row {
+  .hero-actions {
     display: flex;
     gap: 0.75rem;
     flex-wrap: wrap;
@@ -302,273 +451,347 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
     margin-bottom: 2.5rem;
   }
 
-  .btn-primary {
-    display: inline-flex;
-    align-items: center;
-    padding: 0.75rem 1.75rem;
-    background: var(--accent);
-    color: white;
-    border-radius: var(--radius);
-    font-weight: 600;
-    font-size: 0.95rem;
-    transition: all var(--transition);
-    text-decoration: none;
+  .hero-stats {
+    display: flex;
+    gap: 2.5rem;
+    flex-wrap: wrap;
+    padding-top: 1.75rem;
+    border-top: 1px solid var(--zone-border);
   }
-  .btn-primary:hover { background: var(--accent-hover); transform: translateY(-1px); box-shadow: 0 8px 20px rgba(99,102,241,0.4); text-decoration: none; }
-  .btn-primary.large { padding: 1rem 2.25rem; font-size: 1.05rem; }
 
-  .btn-secondary {
-    display: inline-flex;
-    align-items: center;
-    padding: 0.75rem 1.5rem;
-    background: rgba(255,255,255,0.08);
+  .hero-stat {
+    display: flex;
+    flex-direction: column;
+    gap: 0.1rem;
+  }
+
+  .hero-stat dt {
+    font-family: var(--font-display);
+    font-size: 1.75rem;
+    font-weight: 800;
     color: var(--zone-text);
-    border: 1px solid rgba(255,255,255,0.15);
-    border-radius: var(--radius);
-    font-weight: 500;
-    font-size: 0.95rem;
-    transition: all var(--transition);
-    text-decoration: none;
+    line-height: 1;
+    letter-spacing: -0.03em;
   }
-  .btn-secondary:hover { background: rgba(255,255,255,0.14); text-decoration: none; }
 
-  .btn-search-hero {
-    display: inline-flex;
+  .hero-stat dd {
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    color: var(--zone-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  /* ── Console Panel ───────────────────────────────────────── */
+  .console-panel {
+    background: var(--zone-surface);
+    border: 1px solid var(--zone-border-2);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    box-shadow: 0 24px 48px rgba(0,0,0,0.5), 0 0 0 1px rgba(0,212,255,0.06);
+  }
+
+  .console-header {
+    display: flex;
     align-items: center;
-    gap: 0.5rem;
-    padding: 0.75rem 1.25rem;
-    background: rgba(15, 23, 42, 0.7);
-    border: 1px solid var(--zone-border);
-    border-radius: var(--radius);
-    color: var(--zone-text-secondary);
-    font-size: 0.9rem;
-    cursor: pointer;
-    transition: all var(--transition);
+    justify-content: space-between;
+    padding: 0.75rem 1rem;
+    background: var(--zone-surface-2);
+    border-bottom: 1px solid var(--zone-border);
   }
 
-  .btn-search-hero:hover {
-    border-color: var(--accent);
-    color: var(--zone-text);
-  }
-
-  .btn-search-hero kbd {
+  .console-title {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
     font-family: var(--font-mono);
     font-size: 0.7rem;
-    padding: 0.15rem 0.4rem;
-    background: rgba(255,255,255,0.1);
-    border-radius: 4px;
-  }
-
-  .hero-stat-row {
-    display: flex;
-    gap: 2.25rem;
-    flex-wrap: wrap;
-    border-top: 1px solid rgba(255,255,255,0.1);
-    padding-top: 1.75rem;
-  }
-
-  .hero-stat { display: flex; flex-direction: column; gap: 0.1rem; }
-  .stat-num  { font-family: var(--font-display); font-size: 1.85rem; font-weight: 800; color: var(--zone-text); line-height: 1; }
-  .stat-label{ font-size: 0.75rem; color: var(--zone-text-muted); text-transform: uppercase; letter-spacing: 0.06em; }
-
-  /* Hero Visual Cards Stack */
-  .hero-visual {
-    position: relative;
-    width: 310px;
-    height: 310px;
-    flex-shrink: 0;
-    z-index: 1;
-  }
-
-  .glass-card-stack {
-    position: relative;
-    width: 100%; height: 100%;
-  }
-
-  .glass-card {
-    position: absolute;
-    width: 270px;
-    padding: 1.25rem;
-    border-radius: var(--radius-lg);
-    background: rgba(19, 28, 46, 0.85);
-    backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 255, 255, 0.12);
-    box-shadow: 0 20px 40px rgba(0,0,0,0.5);
-    transition: transform 0.3s ease;
-  }
-
-  .card-1 { top: 0; left: 0; z-index: 3; }
-  .card-2 { top: 65px; left: 35px; z-index: 2; opacity: 0.85; }
-  .card-3 { top: 130px; left: 70px; z-index: 1; opacity: 0.7; }
-
-  .glass-card:hover { transform: translateY(-5px); z-index: 4; opacity: 1; }
-
-  .card-tag {
-    font-size: 0.7rem;
-    font-weight: 800;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    margin-bottom: 0.5rem;
-  }
-  .card-tag.danger { color: #EF4444; }
-  .card-tag.accent { color: #38BDF8; }
-  .card-tag.defense { color: #22C55E; }
-
-  .card-body {
-    font-size: 0.85rem;
     color: var(--zone-text-secondary);
-    line-height: 1.45;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  .console-live {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    color: #4ADE80;
+    letter-spacing: 0.08em;
+  }
+
+  .live-dot {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: #4ADE80;
+    animation: pulse 1.5s ease-in-out infinite;
+  }
+
+  .console-body {
+    padding: 0.375rem 0;
+  }
+
+  .console-row {
+    display: grid;
+    grid-template-columns: 62px 48px 1fr 16px;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.6rem 1rem;
+    border-left: 2px solid transparent;
+    text-decoration: none;
+    transition: background 0.12s ease, border-color 0.12s ease;
+  }
+
+  .console-row:hover {
+    background: rgba(255,255,255,0.03);
+    text-decoration: none;
+  }
+
+  .console-row svg { color: var(--zone-text-muted); opacity: 0; transition: opacity 0.12s ease; }
+  .console-row:hover svg { opacity: 1; color: var(--zone-accent); }
+
+  .console-row--critical { border-left-color: #E53935; }
+  .console-row--high     { border-left-color: #F57C00; }
+  .console-row--medium   { border-left-color: #EAB308; }
+
+  .console-sev {
+    font-family: var(--font-mono);
+    font-size: 0.58rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+  }
+
+  .console-row--critical .console-sev { color: #EF5350; }
+  .console-row--high .console-sev     { color: #FF7043; }
+  .console-row--medium .console-sev   { color: #FDD835; }
+
+  .console-id {
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    color: var(--zone-accent);
+    font-weight: 600;
+  }
+
+  .console-name {
+    font-size: 0.8rem;
+    color: var(--zone-text);
+    font-weight: 500;
+  }
+
+  .console-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.65rem 1rem;
+    border-top: 1px solid var(--zone-border);
+    background: var(--zone-surface-2);
+  }
+
+  .console-footer-link {
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    color: var(--zone-accent);
+    text-decoration: none;
+  }
+
+  .console-footer-link:hover {
+    text-decoration: underline;
+  }
+
+  .console-search-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.25rem 0.6rem;
+    background: transparent;
+    border: 1px solid var(--zone-border-2);
+    border-radius: var(--radius-sm);
+    color: var(--zone-text-muted);
+    font-family: var(--font-mono);
+    font-size: 0.62rem;
+    cursor: pointer;
+    transition: all 0.12s ease;
+  }
+
+  .console-search-btn:hover {
+    border-color: var(--zone-accent);
+    color: var(--zone-accent);
   }
 
   @media (max-width: 960px) {
-    .hero { padding: 3rem 2rem; flex-direction: column; }
-    .hero-visual { display: none; }
+    .hero { padding: 3.5rem 1.5rem 3rem; }
+    .hero-inner { grid-template-columns: 1fr; gap: 2.5rem; }
+    .console-panel { max-width: 100%; }
   }
 
-  /* ─── Role Selector ────────────────────────────────────────── */
-  .role-selector-section {
-    padding: 4.5rem 4rem;
+  @media (max-width: 640px) {
+    .hero-stats { gap: 1.5rem; }
+    .hero-actions { flex-direction: column; align-items: flex-start; }
+  }
+
+  /* ── Role Selector ───────────────────────────────────────── */
+  .role-section {
+    padding: 4rem 0;
     background: var(--surface);
     border-bottom: 1px solid var(--border);
   }
 
-  .section-container { max-width: 1080px; margin: 0 auto; }
-
-  .section-header-centered {
-    text-align: center;
-    max-width: 680px;
-    margin: 0 auto 2.5rem;
-  }
-
-  .section-badge {
-    display: inline-block;
-    font-size: 0.72rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    color: var(--accent);
-    background: var(--accent-bg);
-    padding: 0.3rem 0.8rem;
-    border-radius: 99px;
-    margin-bottom: 0.75rem;
-  }
-
-  .section-header-centered h2 {
-    font-size: clamp(1.6rem, 3vw, 2.2rem);
-    margin-bottom: 0.75rem;
-  }
-
-  .section-header-centered p {
-    color: var(--text-secondary);
-    font-size: 1.05rem;
-  }
-
-  .role-buttons {
-    display: flex;
-    justify-content: center;
-    gap: 0.5rem;
-    flex-wrap: wrap;
+  .role-header {
     margin-bottom: 2rem;
   }
 
-  .role-btn {
-    padding: 0.6rem 1.25rem;
-    font-size: 0.9rem;
-    font-weight: 600;
-    border-radius: 99px;
-    border: 1px solid var(--border);
-    background: var(--bg);
-    color: var(--text-secondary);
-    cursor: pointer;
-    transition: all 0.2s ease;
-  }
-
-  .role-btn:hover,
-  .role-btn.active {
-    background: var(--accent);
-    color: white;
-    border-color: var(--accent);
-  }
-
-  .role-content-box {
+  .role-ui {
     background: var(--bg);
     border: 1px solid var(--border);
     border-radius: var(--radius-lg);
-    padding: 2.25rem;
-    box-shadow: var(--shadow-md);
+    overflow: hidden;
+  }
+
+  .role-tabs {
+    display: flex;
+    gap: 0;
+    border-bottom: 1px solid var(--border);
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .role-tabs::-webkit-scrollbar { display: none; }
+
+  .role-tab {
+    flex-shrink: 0;
+    padding: 0.65rem 1.2rem;
+    font-size: 0.82rem;
+    font-weight: 600;
+    border: none;
+    border-bottom: 2px solid transparent;
+    background: transparent;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all 0.15s ease;
+    white-space: nowrap;
+  }
+
+  .role-tab:hover {
+    color: var(--text-primary);
+    background: var(--surface-2);
+  }
+
+  .role-tab.active {
+    color: var(--accent);
+    border-bottom-color: var(--accent);
+    background: transparent;
+  }
+
+  .role-panel {
+    padding: 1.75rem 2rem;
   }
 
   @media (max-width: 768px) {
-    .role-selector-section { padding: 3rem 1.5rem; }
+    .role-section { padding: 3rem 0; }
+    .role-panel { padding: 1.25rem 1rem; }
   }
 
-  /* ─── Threat Matrix Section ────────────────────────────────── */
+  /* ── Threat Matrix ───────────────────────────────────────── */
   .matrix-section {
-    padding: 4.5rem 4rem;
+    padding: 4rem 0;
     background: var(--bg);
     border-bottom: 1px solid var(--border);
   }
 
+  .matrix-section .section-h2 { margin-bottom: 0.5rem; }
+  .matrix-section .section-p  { margin-bottom: 2rem; }
+
   @media (max-width: 768px) {
-    .matrix-section { padding: 3rem 1.5rem; }
+    .matrix-section { padding: 3rem 0; }
   }
 
-  /* ─── Content Map ──────────────────────────────────────────── */
-  .content-map {
-    padding: 4.5rem 4rem;
+  /* ── Guide Index ─────────────────────────────────────────── */
+  .guide-index {
+    padding: 4rem 0;
     background: var(--surface);
+    border-bottom: 1px solid var(--border);
   }
 
-  .map-grid {
+  .guide-index .section-h2 { margin-bottom: 2rem; }
+
+  .guide-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
-    gap: 1.5rem;
-  }
-
-  .map-section {
-    background: var(--bg);
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1px;
+    background: var(--border);
     border: 1px solid var(--border);
     border-radius: var(--radius-lg);
-    padding: 1.75rem;
-    transition: all var(--transition);
+    overflow: hidden;
   }
 
-  .map-section:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); }
+  .guide-part {
+    background: var(--bg);
+    padding: 1.75rem;
+    transition: background 0.15s ease;
+  }
 
-  .map-section.threat { border-top: 3px solid var(--danger); }
-  .map-section.highlight { border-top: 3px solid var(--accent); }
+  .guide-part:hover { background: var(--surface-2); }
 
-  .map-icon { font-size: 1.75rem; margin-bottom: 0.75rem; }
+  .guide-part--threat .guide-part-label .mono-tag--danger { color: var(--danger); }
+  .guide-part--owasp .guide-part-label .mono-tag--accent,
+  .guide-part--agentic .guide-part-label .mono-tag--accent { color: var(--accent); }
 
-  .map-section-title {
-    font-family: var(--font-display);
-    font-size: 1.1rem;
+  .guide-part-label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.8rem;
     font-weight: 700;
     color: var(--text-primary);
-    margin-bottom: 0.6rem;
+    margin-bottom: 0.75rem;
   }
 
-  .map-section-desc {
+  .mono-tag {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--text-muted);
+  }
+
+  .guide-part-desc {
     font-size: 0.875rem;
     color: var(--text-secondary);
-    line-height: 1.6;
-    margin-bottom: 1rem;
+    line-height: 1.65;
+    margin-bottom: 1.1rem;
   }
 
-  .map-links { list-style: none; padding: 0; margin: 0; }
-  .map-links li { padding: 0.25rem 0; }
-  .map-links a { font-size: 0.875rem; color: var(--accent); font-weight: 600; }
-  .map-links a:hover { text-decoration: underline; }
+  .guide-links {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    border-top: 1px solid var(--border);
+    padding-top: 0.85rem;
+  }
+
+  .guide-links li { margin-bottom: 0.3rem; }
+
+  .guide-links a {
+    font-size: 0.82rem;
+    font-weight: 500;
+    color: var(--accent);
+  }
+
+  .guide-links a:hover {
+    text-decoration: underline;
+  }
 
   @media (max-width: 768px) {
-    .content-map { padding: 3rem 1.5rem; }
+    .guide-index { padding: 3rem 0; }
+    .guide-grid { grid-template-columns: 1fr; }
   }
 
-  /* ─── Bottom CTA ──────────────────────────────────────────── */
+  /* ── Bottom CTA ──────────────────────────────────────────── */
   .bottom-cta {
     background: var(--zone-bg);
-    padding: 4.5rem 4rem;
-    text-align: center;
+    padding: 5rem 3rem;
+    border-top: 1px solid var(--zone-border);
     position: relative;
     overflow: hidden;
   }
@@ -577,33 +800,42 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
     content: '';
     position: absolute;
     top: 0; left: 0; right: 0;
-    height: 3px;
-    background: linear-gradient(90deg, var(--accent), var(--info), var(--defense));
+    height: 2px;
+    background: var(--zone-accent);
+    opacity: 0.6;
   }
 
-  .bottom-cta-inner { max-width: 580px; margin: 0 auto; }
+  .bottom-cta-inner {
+    max-width: 680px;
+  }
 
-  .bottom-cta h2 {
-    color: var(--zone-text);
-    font-size: 1.85rem;
+  .cta-pre {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    color: var(--zone-accent);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
     margin-bottom: 0.75rem;
   }
 
-  .bottom-cta p {
-    color: var(--zone-text-secondary);
+  .cta-h2 {
+    font-size: clamp(1.65rem, 3vw, 2.2rem);
+    font-weight: 700;
+    color: var(--zone-text);
+    letter-spacing: -0.025em;
     margin-bottom: 2rem;
-    font-size: 1.05rem;
+    margin-top: 0;
   }
 
-  .cta-btns {
+  .cta-actions {
     display: flex;
     gap: 1rem;
-    justify-content: center;
     flex-wrap: wrap;
   }
 
   @media (max-width: 768px) {
-    .bottom-cta { padding: 3rem 1.5rem; }
+    .bottom-cta { padding: 3rem 1.25rem; }
+    .cta-actions { flex-direction: column; }
   }
 </style>
 
@@ -611,91 +843,186 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
   (function() {
     var roleData = {
       ciso: {
-        title: 'Recommended Path for CISOs & Security Executives',
-        time: '⏱ Estimated Time: 3–4 Hours',
-        desc: 'Focus on strategic risk assessment, OWASP LLM vs Agentic threat taxonomy, supply chain posture, and governance frameworks.',
+        title: 'CISO & Security VP Reading Path',
+        time: '3–4 hours',
+        desc: 'Strategic risk assessment, OWASP LLM vs Agentic threat taxonomy, supply chain posture, and governance frameworks.',
         steps: [
-          { name: 'Threat Landscape & Attack Surface', href: '/threats/attack-surface' },
-          { name: 'Agentic AI Top 10 Deep Dive', href: '/agentic-top-10' },
-          { name: 'Compliance & Framework Mapping (NIST, EU AI Act, ISO 42001)', href: '/governance/compliance-frameworks' },
-          { name: 'Executive Leadership Checklist & Readiness Score', href: '/governance/leadership-checklist' }
+          { id: '01', name: 'Threat Landscape & Attack Surface', href: '/threats/attack-surface' },
+          { id: '02', name: 'Agentic AI Top 10 Deep Dive', href: '/agentic-top-10' },
+          { id: '03', name: 'Compliance & Framework Mapping (NIST, EU AI Act, ISO 42001)', href: '/governance/compliance-frameworks' },
+          { id: '04', name: 'Executive Leadership Checklist & Readiness Score', href: '/governance/leadership-checklist' }
         ]
       },
       cto: {
-        title: 'Recommended Path for CTOs, CIOs & System Architects',
-        time: '⏱ Estimated Time: 2 Hours',
-        desc: 'Focus on runtime isolation, sandboxing architecture, API gateway control, and MCP (Model Context Protocol) tool integration.',
+        title: 'CTO, CIO & System Architect Reading Path',
+        time: '2 hours',
+        desc: 'Runtime isolation, sandboxing architecture, API gateway control, and MCP (Model Context Protocol) tool integration.',
         steps: [
-          { name: 'How Agents Work Under the Hood', href: '/foundations/how-agents-work' },
-          { name: 'Model Context Protocol (MCP) Security Specs', href: '/technologies/mcp-protocol' },
-          { name: 'Sandboxing Agentic Execution (eBPF, Wasm, microVMs)', href: '/technologies/sandboxing' },
-          { name: '12-Month Technology Implementation Roadmap', href: '/future/action-plan' }
+          { id: '01', name: 'How Agents Work Under the Hood', href: '/foundations/how-agents-work' },
+          { id: '02', name: 'Model Context Protocol (MCP) Security Specs', href: '/technologies/mcp-protocol' },
+          { id: '03', name: 'Sandboxing Agentic Execution (eBPF, Wasm, microVMs)', href: '/technologies/sandboxing' },
+          { id: '04', name: '12-Month Technology Implementation Roadmap', href: '/future/action-plan' }
         ]
       },
       board: {
-        title: 'Recommended Path for Board Members & C-Suite',
-        time: '⏱ Estimated Time: 30 Minutes',
+        title: 'Board Member & C-Suite Reading Path',
+        time: '30 minutes',
         desc: 'High-level orientation on why autonomous agentic security differs from classic LLM chatbots and key fiduciary responsibilities.',
         steps: [
-          { name: 'What is Agentic AI & Executive Summary', href: '/foundations/what-is-agentic-ai' },
-          { name: 'Why Security Matters for Autonomous AI', href: '/foundations/why-security-matters' },
-          { name: 'Leadership Assessment Checklist', href: '/governance/leadership-checklist' }
+          { id: '01', name: 'What is Agentic AI & Executive Summary', href: '/foundations/what-is-agentic-ai' },
+          { id: '02', name: 'Why Security Matters for Autonomous AI', href: '/foundations/why-security-matters' },
+          { id: '03', name: 'Leadership Assessment Checklist', href: '/governance/leadership-checklist' }
         ]
       },
       risk: {
-        title: 'Recommended Path for Risk Officers & Compliance Managers',
-        time: '⏱ Estimated Time: 90 Minutes',
-        desc: 'Focus on regulatory obligations, EU AI Act enforcement tiers, audit logging, and risk mitigation checklists.',
+        title: 'Risk Officer & Compliance Manager Reading Path',
+        time: '90 minutes',
+        desc: 'Regulatory obligations, EU AI Act enforcement tiers, audit logging, and risk mitigation checklists.',
         steps: [
-          { name: 'AI Governance Basics & Risk Allocation', href: '/governance/ai-governance-basics' },
-          { name: 'Compliance Frameworks (NIST AI RMF 1.0 & ISO 42001)', href: '/governance/compliance-frameworks' },
-          { name: 'Interactive Risk Maturity Score Calculator', href: '/governance/leadership-checklist' }
+          { id: '01', name: 'AI Governance Basics & Risk Allocation', href: '/governance/ai-governance-basics' },
+          { id: '02', name: 'Compliance Frameworks (NIST AI RMF 1.0 & ISO 42001)', href: '/governance/compliance-frameworks' },
+          { id: '03', name: 'Interactive Risk Maturity Score Calculator', href: '/governance/leadership-checklist' }
         ]
       },
       vendor: {
-        title: 'Recommended Path for Procurement & Third-Party Evaluators',
-        time: '⏱ Estimated Time: 45 Minutes',
-        desc: 'Focus on third-party tool permissions, supply chain vulnerabilities, and vendor security verification.',
+        title: 'Procurement & Third-Party Evaluator Reading Path',
+        time: '45 minutes',
+        desc: 'Third-party tool permissions, supply chain vulnerabilities, and vendor security verification.',
         steps: [
-          { name: 'LLM Supply Chain Risks (LLM03)', href: '/llm-top-10/supply-chain' },
-          { name: 'Agentic Tool & MCP Supply Chain (ASI04)', href: '/agentic-top-10/supply-chain' },
-          { name: 'Vendor AI Security Review Guidelines', href: '/governance/ai-governance-basics' }
+          { id: '01', name: 'LLM Supply Chain Risks (LLM03)', href: '/llm-top-10/supply-chain' },
+          { id: '02', name: 'Agentic Tool & MCP Supply Chain (ASI04)', href: '/agentic-top-10/supply-chain' },
+          { id: '03', name: 'Vendor AI Security Review Guidelines', href: '/governance/ai-governance-basics' }
         ]
       }
     };
 
-    var buttons = document.querySelectorAll('.role-btn');
-    var container = document.getElementById('role-content');
+    var tabs = document.querySelectorAll('.role-tab');
+    var panel = document.getElementById('role-content');
 
-    function renderRole(roleKey) {
-      var data = roleData[roleKey] || roleData.ciso;
-      if (!container) return;
+    function render(roleKey) {
+      var d = roleData[roleKey] || roleData.ciso;
+      if (!panel) return;
 
-      var html = '<h3 style="margin-top:0; font-family:var(--font-display); font-size:1.25rem; color:var(--text-primary);">' + data.title + '</h3>' +
-        '<div style="font-size:0.8rem; font-weight:700; color:var(--accent); margin-bottom:0.75rem;">' + data.time + '</div>' +
-        '<p style="color:var(--text-secondary); margin-bottom:1.5rem; font-size:0.95rem;">' + data.desc + '</p>' +
-        '<div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(220px, 1fr)); gap:1rem;">';
-
-      data.steps.forEach(function(s, idx) {
-        html += '<a href="' + baseUrl + s.href + '" style="display:block; padding:1rem; background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); text-decoration:none; transition:all 0.15s ease;">' +
-          '<div style="font-size:0.7rem; font-weight:700; color:var(--text-muted); text-transform:uppercase; margin-bottom:0.25rem;">Step ' + (idx + 1) + '</div>' +
-          '<div style="font-size:0.9rem; font-weight:600; color:var(--text-primary); line-height:1.4;">' + s.name + ' →</div>' +
+      var stepsHtml = d.steps.map(function(s) {
+        return '<a href="' + baseUrl + s.href + '" class="role-step">' +
+          '<span class="role-step-id">' + s.id + '</span>' +
+          '<span class="role-step-name">' + s.name + '</span>' +
+          '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>' +
         '</a>';
-      });
+      }).join('');
 
-      html += '</div>';
-      container.innerHTML = html;
+      panel.innerHTML =
+        '<div class="role-panel-header">' +
+          '<div class="role-panel-title">' + d.title + '</div>' +
+          '<div class="role-panel-meta">' +
+            '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>' +
+            d.time +
+          '</div>' +
+        '</div>' +
+        '<p class="role-panel-desc">' + d.desc + '</p>' +
+        '<div class="role-steps">' + stepsHtml + '</div>';
     }
 
-    buttons.forEach(function(btn) {
-      btn.addEventListener('click', function() {
-        buttons.forEach(function(b) { b.classList.remove('active'); });
-        btn.classList.add('active');
-        var role = btn.getAttribute('data-role') || 'ciso';
-        renderRole(role);
+    tabs.forEach(function(tab) {
+      tab.addEventListener('click', function() {
+        tabs.forEach(function(t) {
+          t.classList.remove('active');
+          t.setAttribute('aria-selected', 'false');
+        });
+        tab.classList.add('active');
+        tab.setAttribute('aria-selected', 'true');
+        render(tab.getAttribute('data-role') || 'ciso');
       });
     });
 
-    renderRole('ciso');
+    render('ciso');
   })();
 </script>
+
+<style is:global>
+  /* Role panel content styles (injected via JS) */
+  .role-panel-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 0.6rem;
+  }
+
+  .role-panel-title {
+    font-weight: 700;
+    font-size: 1rem;
+    color: var(--text-primary);
+  }
+
+  .role-panel-meta {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    color: var(--accent);
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .role-panel-desc {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    margin-bottom: 1.25rem;
+    max-width: 65ch;
+  }
+
+  .role-steps {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 0.5rem;
+  }
+
+  .role-step {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem 1rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    text-decoration: none;
+    transition: all 0.15s ease;
+  }
+
+  .role-step:hover {
+    border-color: var(--accent);
+    background: var(--accent-bg);
+    text-decoration: none;
+  }
+
+  .role-step:hover svg { color: var(--accent); }
+
+  .role-step-id {
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    font-weight: 700;
+    color: var(--text-muted);
+    flex-shrink: 0;
+  }
+
+  .role-step-name {
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    flex: 1;
+    line-height: 1.35;
+  }
+
+  .role-step svg {
+    color: var(--text-muted);
+    flex-shrink: 0;
+    transition: color 0.15s ease;
+  }
+
+  @media (max-width: 640px) {
+    .role-steps { grid-template-columns: 1fr; }
+    .role-panel-header { flex-direction: column; gap: 0.25rem; }
+  }
+</style>
