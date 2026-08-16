@@ -12,13 +12,14 @@
 [![CI](https://img.shields.io/github/actions/workflow/status/AnimeshShaw/agentic-ai-security-guide/ci.yml?label=CI&logo=githubactions&logoColor=white&style=flat-square)](https://github.com/AnimeshShaw/agentic-ai-security-guide/actions/workflows/ci.yml)
 [![Security](https://img.shields.io/github/actions/workflow/status/AnimeshShaw/agentic-ai-security-guide/security.yml?label=Security%20Scan&logo=dependabot&style=flat-square)](https://github.com/AnimeshShaw/agentic-ai-security-guide/actions/workflows/security.yml)
 [![0 CVEs](https://img.shields.io/badge/npm%20audit-0%20vulnerabilities-brightgreen?style=flat-square&logo=npm)](https://github.com/AnimeshShaw/agentic-ai-security-guide/actions)
-[![Built with Astro](https://img.shields.io/badge/Astro-6.x-FF5D01?style=flat-square&logo=astro&logoColor=white)](https://astro.build)
+[![Built with Astro](https://img.shields.io/badge/Astro-7.x-FF5D01?style=flat-square&logo=astro&logoColor=white)](https://astro.build)
+[![Changelog](https://img.shields.io/badge/Changelog-v1.2.0-blue?style=flat-square)](CHANGELOG.md)
 [![40 Pages](https://img.shields.io/badge/40%20pages-of%20content-6366F1?style=flat-square)](https://animeshshaw.github.io/agentic-ai-security-guide)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square)](LICENSE)
 
 <br/>
 
-[**Live Site**](https://animeshshaw.github.io/agentic-ai-security-guide) · [Foundations](#-foundations) · [Threat Landscape](#-threat-landscape) · [Governance](#-governance--frameworks) · [Reading Paths](#-reading-paths)
+[**Live Site**](https://animeshshaw.github.io/agentic-ai-security-guide) · [Foundations](#-foundations) · [Threat Landscape](#-threat-landscape) · [Governance](#-governance--frameworks) · [Reading Paths](#-reading-paths) · [Changelog](CHANGELOG.md)
 
 <br/>
 
@@ -53,11 +54,11 @@ Built around real attack patterns: prompt injection, tool abuse, supply chain co
 </td>
 <td width="50%">
 
-### Interactive Learning
-Flip cards for adversarial/defensive scenarios, guided step walkthroughs, a 50-question leadership checklist with persistent state (saves your progress), and a full searchable glossary.
+### Interactive Leadership Tools
+Threat Console with electric cyan terminal UI, Global `Cmd+K` instant search, Threat Matrix Explorer, Maturity Score Calculator, adversarial/defensive FlipCards, and a 50-question persistent leadership checklist.
 
 ### Production-Grade Security Posture
-Zero npm vulnerabilities. CodeQL static analysis. Trufflehog secret scanning. CSP headers. Weekly Dependabot updates. This guide about AI security is itself built securely.
+Zero npm vulnerabilities (blocking CI gates), CodeQL static analysis, CSP headers, strict HTTP security headers, and weekly automated Dependabot maintenance. This guide about AI security is itself built securely.
 
 </td>
 </tr>
@@ -213,7 +214,6 @@ This project practices what it teaches.
 |---------|--------|
 | npm audit (moderate+) | Blocks CI & deployment |
 | CodeQL static analysis | Weekly + every PR |
-| Trufflehog secret scanning | Full git history on every PR |
 | Dependabot | Weekly updates, Monday 09:00 IST |
 | Content Security Policy | Strict CSP header via `_headers` |
 | HTTP Security Headers | HSTS, X-Frame-Options, Referrer-Policy, Permissions-Policy |
@@ -233,12 +233,11 @@ This project practices what it teaches.
 
 | Technology | Role |
 |-----------|------|
-| [Astro 6.x](https://astro.build) | Static site generator — zero JS by default, island architecture |
+| [Astro 7.x](https://astro.build) | Static site generator — zero JS by default, island architecture |
 | TypeScript | Type-safe components, data schemas, and navigation config |
 | Custom CSS | Full design system with CSS variables, dark/light theme, zone tokens |
 | GitHub Actions | CI (audit → build → typecheck), Pages deployment, Security scanning |
 | CodeQL | Static analysis for JavaScript/TypeScript security vulnerabilities |
-| Trufflehog | Verified secret scanning across full git history |
 | Dependabot | Automated dependency update PRs |
 
 No frameworks were harmed in the making of this site. No React, no Vue, no Tailwind — just Astro, TypeScript, and CSS that you can actually read.
@@ -261,9 +260,9 @@ Push to main
     │   └── GitHub Pages deployment
     │
     └── Security Workflow (also runs weekly)
-        ├── npm audit --audit-level=high
-        ├── CodeQL analysis
-        └── Trufflehog secret scan
+        ├── npm audit --audit-level=high (fail on high+)
+        ├── npm audit --audit-level=info (informational report)
+        └── CodeQL static analysis (javascript-typescript)
 ```
 
 ---
