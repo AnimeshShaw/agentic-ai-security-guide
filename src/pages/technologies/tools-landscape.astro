@@ -33,6 +33,7 @@ import StepWalkthrough from '../../components/StepWalkthrough.astro';
   <p><strong>What it gives you:</strong> Consistent policy enforcement, audit trails of policy decisions, protection against known jailbreak patterns, regulatory compliance demonstration.</p>
   <p><strong>Who needs it:</strong> Customer-facing AI deployments, regulated industries (finance, healthcare, legal), any AI where specific claims or topics require controlled handling.</p>
   <p><strong>What it doesn't do:</strong> Guardrails miss novel attacks not in their rules. They are a layer, not a complete solution. They must be actively maintained as new attack patterns emerge.</p>
+  <p><strong>Action-control boundary:</strong> Prompt and response guardrails do not automatically govern what an agent can execute. For agents with tools, treat pre-execution action authorization as a separate control: verify which consequential actions can be observed, blocked, or sent for approval before they run. This <a href="https://hol.org/guard/guides/ai-agent-security-layers">AI agent security decision guide</a> shows how that boundary differs from gateways, native permissions, sandboxes, supply-chain checks, and monitoring.</p>
 </div>
 
 <div class="threat-card info">
